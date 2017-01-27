@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.components;
+
 import java.nio.ByteBuffer;
-import org.usfirst.frc.team334.robot.comms.I2C;
+import edu.wpi.first.wpilibj.I2C;
 
 public class LedRing {
 	I2C ringWriter = new I2C(I2C.Port.kOnboard, 8); //hook up pins A4 to SCL on RoboRio, A5 to SDA on RoboRio, and GND to ground on RoboRio

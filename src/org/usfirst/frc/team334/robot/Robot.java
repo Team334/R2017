@@ -7,9 +7,9 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class Robot extends IterativeRobot {
-    DriveTrain driveTrain = new DriveTrain(0,1,2,3,4,5);;
-    Controls controls= new Controls(0,1,2);
-    PowerDistributionPanel powerDistributionPanel = new PowerDistributionPanel();
+    private DriveTrain driveTrain = new DriveTrain(0, 1, 2, 3, 4, 5);
+    private Controls controls = new Controls(0, 1, 2);
+    private PowerDistributionPanel powerDistributionPanel = new PowerDistributionPanel();
 
     @Override
     public void robotInit() {

@@ -43,5 +43,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="NetworkTables-sources" level="project" />
   </component>
 </module>

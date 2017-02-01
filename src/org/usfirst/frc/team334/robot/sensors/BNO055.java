@@ -90,6 +90,9 @@ public class BNO055 {
 	private volatile long turns = 0;
 	private volatile double[] xyz = new double[3];
 
+	// heading offset used to reset the returned heading
+	private volatile double headingOffset = 0.0;
+
 	public class SystemStatus {
 		public int system_status;
 		public int self_test_result;
@@ -755,7 +758,22 @@ public class BNO055 {
 	 * @return heading in degrees
 	 */
 	public double getHeading() {
-		return xyz[0] + turns * 360;
+		return (xyz[0] + turns * 360) - headingOffset;
+	}
+
+	/**
+	 * Resets the heading to 0 degrees
+	 */
+	public void resetHeading() {
+		this.headingOffset = getHeading();
+	}
+
+	/**
+	 * Changes the heading back to its true value (as if
+	 * resetHeading() was never called).
+	 */
+	public void trueHeading() {
+		this.headingOffset = 0.0;
 	}
 	
 	/**

@@ -7,12 +7,17 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class Robot extends IterativeRobot {
-    private DriveTrain driveTrain = new DriveTrain(0, 1, 2, 3, 4, 5);
+    private DriveTrain driveTrain = new DriveTrain(0, 1, 2, 7, 8, 9);
     private Controls controls = new Controls(0, 1, 2);
     private PowerDistributionPanel powerDistributionPanel = new PowerDistributionPanel();
 
+    private double stickCalLeft;
+    private double stickCalRight;
+
     @Override
     public void robotInit() {
+        stickCalLeft = controls.getLeftDrive();
+        stickCalRight = controls.getRightDrive();
     }
 
     @Override
@@ -34,9 +39,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Total Current Draw", powerDistributionPanel.getTotalCurrent());
-        driveTrain.setLeftMotors(controls.getLeftDrive());
-        driveTrain.setRightMotors(controls.getRightDrive());
+        driveTrain.setLeftMotors(controls.getLeftDrive() - stickCalLeft);
+        driveTrain.setRightMotors(controls.getRightDrive() - stickCalRight);
     }
 
     @Override

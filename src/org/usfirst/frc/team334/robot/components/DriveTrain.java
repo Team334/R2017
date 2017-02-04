@@ -14,33 +14,17 @@ public class DriveTrain {
         for (VictorSP m : leftMotors) {
             m.setInverted(true);
         }
-//        rightMotors[0].setInverted(true);
-//        rightMotors[1].setInverted(true);
-//        rightMotors[2].setInverted(true);
-//        leftMotors[0].setInverted(true);
-//        leftMotors[1].setInverted(true);
-//        leftMotors[2].setInverted(true);
-
-
     }
 
     public void setRightMotors (double speed) {
-        System.out.println("Right = " + speed);
         for (VictorSP m : rightMotors) {
             m.set(speed);
         }
-//        rightMotors[0].set(speed);
-//        rightMotors[1].set(speed);
-//        rightMotors[2].set(speed);
     }
 
     public void setLeftMotors (double speed) {
-        System.out.println("Left = " + speed);
         for (VictorSP m : leftMotors) {
             m.set(speed);
         }
-//        leftMotors[0].set(speed);
-//        leftMotors[1].set(speed);
-//        leftMotors[2].set(speed);
     }
 }

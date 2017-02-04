@@ -2,6 +2,7 @@ package org.usfirst.frc.team334.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import org.usfirst.frc.team334.robot.components.Ramp;
 
 public class Controls {
     Joystick leftJoystick;
@@ -15,11 +16,15 @@ public class Controls {
     }
 
     public double getLeftDrive() {
-        return leftJoystick.getY();
+       return leftJoystick.getY();
     }
 
     public double getRightDrive() {
         return rightJoystick.getY();
+    }
+
+    public boolean getSlowRampButton(Ramp.SIDE side) {
+        return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
     }
 
     public boolean getClimbUp() {
@@ -37,4 +42,5 @@ public class Controls {
     public boolean getIntakeOut() {
         return xboxController.getYButton();
     }
+
 }

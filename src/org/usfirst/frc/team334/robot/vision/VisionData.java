@@ -9,10 +9,12 @@ public class VisionData {
     private static final String AREA_KEY = "area";
     private static final String OFFSET_KEY = "x_offset";
     private static final String SKEW_KEY = "skew";
+    private static final String ANGLE_KEY = "angle";
 
     private static double area;
     private static double offset;
     private static double skew;
+    private static double angle;
 
     // call once!!!
     public static void init() {
@@ -26,6 +28,8 @@ public class VisionData {
                     offset = (Double) value;
                 } else if(key.equals(SKEW_KEY)) {
                     skew = (Double) value;
+                } else if(key.equals(ANGLE_KEY)) {
+                    angle = (Double) value;
                 }
             }
         });
@@ -43,6 +47,8 @@ public class VisionData {
         return skew;
     }
 
-
+    public static double getAngle() {
+        return angle;
+    }
 
 }

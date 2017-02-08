@@ -3,14 +3,18 @@ package org.usfirst.frc.team334.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team334.robot.components.DriveTrain;
-import org.usfirst.frc.team334.robot.components.Ramp;
+import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
-    private DriveTrain driveTrain = new DriveTrain(0, 1, 2, 7, 8, 9);
-    private Controls controls = new Controls(0, 1, 2);
+    private DriveTrain driveTrain;
+    private Controls controls;
+    private Intake intake;
+    private Indexer indexer;
+    private Climber climber;
+    private Gear gear;
+    private Shooter shooter;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
@@ -20,13 +24,22 @@ public class Robot extends IterativeRobot {
     private double stickCalLeft;
     private double stickCalRight;
 
-
     @Override
     public void robotInit() {
-        fastRamp = new Ramp(10);
-        slowRamp = new Ramp(50);
+        driveTrain = new DriveTrain(0, 1);
+        controls = new Controls(0, 1, 2);
+
+        // UPDATE PORTS
+        intake = new Intake(0);
+        indexer = new Indexer(0);
+        climber = new Climber(0);
+        gear = new Gear(0, 1);
+        shooter = new Shooter(0);
 
         VisionData.init();
+
+        fastRamp = new Ramp(10);
+        slowRamp = new Ramp(50);
     }
 
     @Override
@@ -36,6 +49,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+
     }
 
     @Override
@@ -76,15 +90,15 @@ public class Robot extends IterativeRobot {
 //            slowRamp.reset(Ramp.SIDE.LEFT);
 //
 //        if (controls.getSlowRampButton(Ramp.SIDE.RIGHT))
-//            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
+//":$pl.            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
-
-
-        SmartDashboard.putNumber("fastL ramp", fastRamp.getRamp(Ramp.SIDE.LEFT));
-        SmartDashboard.putNumber("fastR ramp", fastRamp.getRamp(Ramp.SIDE.RIGHT));
-        SmartDashboard.putNumber("slowL ramp", slowRamp.getRamp(Ramp.SIDE.LEFT));
-        SmartDashboard.putNumber("slowR ramp", slowRamp.getRamp(Ramp.SIDE.RIGHT));
+//
+//
+//        SmartDashboard.putNumber("fastL ramp", fastRamp.getRamp(Ramp.SIDE.LEFT));
+//        SmartDashboard.putNumber("fastR ramp", fastRamp.getRamp(Ramp.SIDE.RIGHT));
+//        SmartDashboard.putNumber("slowL ramp", slowRamp.getRamp(Ramp.SIDE.LEFT));
+//        SmartDashboard.putNumber("slowR ramp", slowRamp.getRamp(Ramp.SIDE.RIGHT));
 
         SmartDashboard.putNumber("Left speed", leftSpeed);
         SmartDashboard.putNumber("Right speed", rightSpeed);

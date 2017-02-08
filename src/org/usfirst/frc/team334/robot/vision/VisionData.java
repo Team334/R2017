@@ -26,9 +26,9 @@ public class VisionData {
                     area = (Double) value;
                 } else if (key.equals(OFFSET_KEY)) {
                     offset = (Double) value;
-                } else if(key.equals(SKEW_KEY)) {
+                } else if (key.equals(SKEW_KEY)) {
                     skew = (Double) value;
-                } else if(key.equals(ANGLE_KEY)) {
+                } else if (key.equals(ANGLE_KEY)) {
                     angle = (Double) value;
                 }
             }

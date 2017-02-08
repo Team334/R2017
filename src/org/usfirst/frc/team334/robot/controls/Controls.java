@@ -57,10 +57,6 @@ public class Controls {
         return xboxController.getBackButton();
     }
 
-    public boolean getGearReset() {
-        return xboxController.getBackButton();
-    }
-
     public boolean getShooterButton() {
         return xboxController.getBackButton();
     }

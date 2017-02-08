@@ -85,9 +85,18 @@ public class Robot extends IterativeRobot {
         }
 
         // INTAKE LISTENER
-        if(controls.getIntakeIn() && !controls.getIntakeOut()) {
+        if (controls.getIntakeIn() && !controls.getIntakeOut()) {
             intake.pull_in();
         } else if (controls.getIntakeOut()) {
+            intake.push_out();
+        } else {
+            intake.stop();
+        }
+
+        // INTAKE LISTENER
+        if (controls.getIndexerIn() && !controls.getIndexerOut()) {
+            intake.pull_in();
+        } else if (controls.getIndexerOut()) {
             intake.push_out();
         } else {
             intake.stop();
@@ -105,15 +114,6 @@ public class Robot extends IterativeRobot {
             gear.pushOutGear();
         } else {
             gear.resetServos();
-        }
-
-        // INDEXER LISTENER
-        if(controls.getIntakeIn()) {
-            intake.pull_in();
-        } else if (controls.getIntakeOut()) {
-            intake.push_out();
-        } else {
-            intake.stop();
         }
 
         // DRIVETRAIN LISTENER

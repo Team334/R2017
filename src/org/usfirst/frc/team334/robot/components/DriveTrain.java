@@ -12,7 +12,6 @@ public class DriveTrain {
 
         rightMotors.setInverted(true);
         leftMotors.setInverted(true);
-
     }
 
     public void setRightMotors (double speed) {

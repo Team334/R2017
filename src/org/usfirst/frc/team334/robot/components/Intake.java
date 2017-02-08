@@ -17,4 +17,8 @@ public class Intake {
     public void push_out() {
         intakeMotor.set(-.5);
     }
+
+    public void stop() {
+        intakeMotor.set(0);
+    }
 }

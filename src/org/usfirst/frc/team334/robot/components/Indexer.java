@@ -17,4 +17,8 @@ public class Indexer {
     public void pushOutOfShooter() {
         indexerMotor.set(-0.5);
     }
+
+    public void stop() {
+        indexerMotor.set(0);
+    }
 }

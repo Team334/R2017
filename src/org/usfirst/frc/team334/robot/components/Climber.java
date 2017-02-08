@@ -20,4 +20,8 @@ public class Climber {
     public void climbDown() {
         climberMotor.set(-.5);
     }
+
+    public void stop() {
+        climberMotor.set(0);
+    }
 }

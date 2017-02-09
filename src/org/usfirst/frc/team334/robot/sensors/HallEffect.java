@@ -1,4 +1,4 @@
-package org.usfirst.frc.team334.robot.components;
+package org.usfirst.frc.team334.robot.sensors;
 
 import edu.wpi.first.wpilibj.Counter;
 

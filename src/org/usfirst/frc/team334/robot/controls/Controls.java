@@ -15,16 +15,16 @@ public class Controls {
         xboxController = new XboxController(xbox);
     }
 
+    public boolean getSlowRampButton(Ramp.SIDE side) {
+        return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
+    }
+
     public double getLeftDrive() {
        return leftJoystick.getY();
     }
 
     public double getRightDrive() {
         return rightJoystick.getY();
-    }
-
-    public boolean getSlowRampButton(Ramp.SIDE side) {
-        return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
     }
 
     public boolean getClimbUp() {
@@ -41,6 +41,24 @@ public class Controls {
 
     public boolean getIntakeOut() {
         return xboxController.getYButton();
+    }
+
+    // ------------------------------ UPDATE VALUES -----------------------------
+
+    public boolean getIndexerIn() {
+        return xboxController.getBackButton();
+    }
+
+    public boolean getIndexerOut() {
+        return xboxController.getBackButton();
+    }
+
+    public boolean getGearOut() {
+        return xboxController.getBackButton();
+    }
+
+    public boolean getShooterButton() {
+        return xboxController.getBackButton();
     }
 
 }

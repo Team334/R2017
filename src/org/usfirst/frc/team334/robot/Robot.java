@@ -1,7 +1,6 @@
 package org.usfirst.frc.team334.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
@@ -23,8 +22,6 @@ public class Robot extends IterativeRobot {
 
     private Ramp fastRamp;
     private Ramp slowRamp;
-
-    private PowerDistributionPanel powerDistributionPanel = new PowerDistributionPanel();
 
     private double stickCalLeft;
     private double stickCalRight;

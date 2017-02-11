@@ -19,5 +19,4 @@ public class VisionAreaSource implements PIDSource {
     @Override
     public void setPIDSourceType(PIDSourceType pidSource) {}
 
-
 }

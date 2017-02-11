@@ -27,4 +27,5 @@ public class LedRing {
         // Transfers bytes to RioDuino
         ringWriter.writeBulk(buf, bufSize);
     }
+
 }

@@ -3,8 +3,9 @@ package org.usfirst.frc.team334.robot.components;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveTrain {
-    VictorSP rightMotors;
-    VictorSP leftMotors;
+
+    private VictorSP rightMotors;
+    private VictorSP leftMotors;
 
     public DriveTrain (int rightMotor, int leftMotor) {
         rightMotors = new VictorSP(rightMotor);
@@ -21,4 +22,5 @@ public class DriveTrain {
     public void setLeftMotors (double speed) {
         leftMotors.set(speed);
     }
+
 }

@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import org.usfirst.frc.team334.robot.components.Ramp;
 
 public class Controls {
-    Joystick leftJoystick;
-    Joystick rightJoystick;
-    XboxController xboxController;
+
+    private Joystick leftJoystick;
+    private Joystick rightJoystick;
+    private XboxController xboxController;
 
     public Controls(int leftJoy, int rightJoy, int xbox) {
         leftJoystick = new Joystick(leftJoy);

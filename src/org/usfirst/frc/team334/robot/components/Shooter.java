@@ -13,4 +13,5 @@ public class Shooter {
     public void setShooterSpeed(double speed) {
         shooterMotor.set(speed);
     }
+
 }

@@ -21,4 +21,5 @@ public class Intake {
     public void stop() {
         intakeMotor.set(0);
     }
+
 }

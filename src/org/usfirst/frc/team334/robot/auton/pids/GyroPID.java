@@ -24,4 +24,16 @@ public class GyroPID {
         gyroPID.enable();
     }
 
+    public double getInput() {
+        return gyroSource.pidGet();
+    }
+
+    public double getOutput() {
+        return gyroPID.get();
+    }
+
+    public PIDController getController() {
+        return gyroPID;
+    }
+
 }

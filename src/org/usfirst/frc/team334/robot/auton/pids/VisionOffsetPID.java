@@ -24,4 +24,16 @@ public class VisionOffsetPID {
         offsetPID.enable();
     }
 
+    public double getInput() {
+        return visionOffsetSource.pidGet();
+    }
+
+    public double getOutput() {
+        return offsetPID.get();
+    }
+
+    public PIDController getController() {
+        return offsetPID;
+    }
+
 }

@@ -22,5 +22,17 @@ public class VisionAreaPID {
         areaPID.setOutputRange(-areaCap, areaCap);
         areaPID.enable();
     }
-    
+
+    public double getInput() {
+        return visionAreaSource.pidGet();
+    }
+
+    public double getOutput() {
+        return areaPID.get();
+    }
+
+    public PIDController getController() {
+        return areaPID;
+    }
+
 }

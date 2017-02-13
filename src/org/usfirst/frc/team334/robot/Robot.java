@@ -1,6 +1,9 @@
 package org.usfirst.frc.team334.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
@@ -22,6 +25,9 @@ public class Robot extends IterativeRobot {
 
     private Ramp fastRamp;
     private Ramp slowRamp;
+
+    SendableChooser<Command> autoChoose;
+    Command autoCommand;
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -57,6 +63,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        Scheduler.getInstance().removeAll(); // clear old commands
 
     }
 
@@ -144,12 +151,6 @@ public class Robot extends IterativeRobot {
 //":$pl.            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
-//
-//
-//        SmartDashboard.putNumber("fastL ramp", fastRamp.getRamp(Ramp.SIDE.LEFT));
-//        SmartDashboard.putNumber("fastR ramp", fastRamp.getRamp(Ramp.SIDE.RIGHT));
-//        SmartDashboard.putNumber("slowL ramp", slowRamp.getRamp(Ramp.SIDE.LEFT));
-//        SmartDashboard.putNumber("slowR ramp", slowRamp.getRamp(Ramp.SIDE.RIGHT));
 
         SmartDashboard.putNumber("Left speed", leftSpeed);
         SmartDashboard.putNumber("Right speed", rightSpeed);

@@ -33,28 +33,25 @@ public class Straight extends Command {
         double distancePerPulse = 0.1; // in feet
         enc.setDistancePerPulse(distancePerPulse);
         enc.reset();
-
-        System.out.println("Initialized");
     }
 
     /*
      * Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
-     *      1) Set degrees to turn
-     *      2) Turn to degrees
-     *      3) Done
+     *      1) Go straight until you reach distance
      */
     public void execute() {
-            double speed = 0.4;
+        System.out.println("STRAIGHT");
 
-            if (distance >= enc.getDistance()) {
-                straightDone = true;
-            } else {
-                driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-                driveTrain.setLeftMotors(speed - gyroPID.getOutput());
-            }
+        double speed = 0.4;
+        if (distance >= enc.getDistance()) {
+            straightDone = true;
+        } else {
+            driveTrain.setLeftMotors(speed + gyroPID.getOutput());
+            driveTrain.setRightMotors(speed - gyroPID.getOutput());
         }
+    }
 
     // Stops program when returns true
     @Override

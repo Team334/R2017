@@ -24,8 +24,6 @@ public class Turn extends Command {
 
         gyroPID.getController().setSetpoint(angle);
         gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
-
-        System.out.println("Initialized");
     }
 
     /*
@@ -37,13 +35,14 @@ public class Turn extends Command {
      *      3) Done
      */
     public void execute() {
+        System.out.println("TURN");
         double speed = 0.1;
 
         if (gyroPID.getController().onTarget()) {
             turnDone = true;
         } else {
             driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-            driveTrain.setLeftMotors(speed - gyroPID.getOutput());
+            driveTrain.setRightMotors(speed - gyroPID.getOutput());
         }
     }
 

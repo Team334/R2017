@@ -1,7 +1,6 @@
 package org.usfirst.frc.team334.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +14,7 @@ import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 class Robot extends IterativeRobot {
+    // COMPONENTS
     private DriveTrain driveTrain;
     private Controls controls;
     private Intake intake;
@@ -23,12 +23,14 @@ class Robot extends IterativeRobot {
     private Gear gear;
     private Shooter shooter;
 
+    // SENSORS
     private HallEffect hallFX;
     private BNO055 imu;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
 
+    // AUTON COMMANDS
     private Turn turnLeft;
     private Turn turnRight;
     private Straight straight;

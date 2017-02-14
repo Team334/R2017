@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team334.robot.auton.Scenario;
 import org.usfirst.frc.team334.robot.auton.movement.Straight;
 import org.usfirst.frc.team334.robot.auton.movement.Turn;
 import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
@@ -40,9 +41,7 @@ public class Robot extends IterativeRobot {
     private ManualAutonSelect manualAutonSelect;
 
     private SendableChooser<Scenario> autoChoose;
-    public enum Scenario {
-        LEFT_SIDE, RIGHT_SIDE, MIDDLE, MANUAL, NOTHING
-    }
+
     Scenario autonScenario;
 
     private double stickCalLeft;
@@ -82,7 +81,7 @@ public class Robot extends IterativeRobot {
         manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
-        autoChoose = new SendableChooser<Scenario>();
+        autoChoose = new SendableChooser<>();
         autoChoose.addObject("Turn Left", Scenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", Scenario.RIGHT_SIDE);
         autoChoose.addObject("Go Straight", Scenario.MIDDLE);
@@ -118,8 +117,6 @@ public class Robot extends IterativeRobot {
             case MIDDLE:
                 Scheduler.getInstance().add(straight);
                 Scheduler.getInstance().add(visionGear);
-                break;
-            default:
                 break;
         }
     }

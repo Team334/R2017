@@ -39,8 +39,7 @@ class Robot extends IterativeRobot {
     private final String LEFT_SIDE = "LEFT",
                          RIGHT_SIDE = "RIGHT",
                          MIDDLE = "MIDDLE",
-                         MANUAL = "MANUAL",
-                         NONE = "NONE";
+                         MANUAL = "MANUAL";
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -74,6 +73,7 @@ class Robot extends IterativeRobot {
         turnLeft = new Turn(-angleToPeg, driveTrain);
         turnRight = new Turn(angleToPeg, driveTrain);
         straight = new Straight(distanceToBaseLine, driveTrain);
+        manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<String>();
@@ -110,7 +110,7 @@ class Robot extends IterativeRobot {
             case MIDDLE:
                 Scheduler.getInstance().add(straight);
                 break;
-            case NONE:
+            default:
                 break;
         }
     }

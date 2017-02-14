@@ -14,6 +14,7 @@ public class ManualAutonSelect {
     private final static int DI_1_CHANNEL = 0,
                              DI_2_CHANNEL = 1,
                              DI_3_CHANNEL = 2;
+    public final static String[] MODES = {"NONE", "LEFT", "RIGHT", "MIDDLE"};
 
     private DigitalInput di1, di2, di3;
 
@@ -34,19 +35,7 @@ public class ManualAutonSelect {
 
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
 
-        String auton = "NONE";
-        switch (selection) {
-            case 1:
-                auton = "LEFT";
-                break;
-            case 2:
-                auton = "RIGHT";
-                break;
-            case 3:
-                auton = "MIDDLE";
-                break;
-        }
-
+        String auton = MODES[selection];
         return auton;
     }
 }

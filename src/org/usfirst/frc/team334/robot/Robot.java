@@ -101,7 +101,7 @@ public class Robot extends IterativeRobot {
 
         autonScenario = autoChoose.getSelected();
         if (autonScenario == Scenario.MANUAL) {
-            autonScenario = manualAutonSelect.getSelection();
+            autonScenario = manualAutonSelect.getScenario();
         }
 
         switch (autonScenario) {

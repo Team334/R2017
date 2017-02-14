@@ -29,12 +29,18 @@ public class ManualAutonSelect {
      * Get the auton selection
      * @return an integer between 0 and 7
      */
-    public Robot.Scenario getSelection() {
+    public int getSelection() {
         int bit1 = di1.get() ? 1 : 0;
         int bit2 = di2.get() ? 1 : 0;
         int bit3 = di3.get() ? 1 : 0;
 
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
+
+        return selection;
+    }
+
+    public Robot.Scenario getScenario() {
+        int selection = getSelection();
 
         Robot.Scenario autonScenario;
         switch (selection) {
@@ -52,5 +58,6 @@ public class ManualAutonSelect {
         }
         return autonScenario;
     }
+
 
 }

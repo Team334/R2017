@@ -7,13 +7,13 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Straight extends Command {
     
-    double distance;
-    Encoder enc;
+    private double distance;
+    private Encoder enc;
 
-    boolean straightDone;
+    private boolean straightDone;
 
-    GyroPID gyroPID;
-    DriveTrain driveTrain;
+    private GyroPID gyroPID;
+    private DriveTrain driveTrain;
 
     public Straight(double distance, DriveTrain driveTrain) {
         this.distance = distance;
@@ -41,7 +41,7 @@ public class Straight extends Command {
      * Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
-     *  	1) Set degrees to turn
+     *      1) Set degrees to turn
      *      2) Turn to degrees
      *      3) Done
      */

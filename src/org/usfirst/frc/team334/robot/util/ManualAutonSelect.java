@@ -27,12 +27,26 @@ public class ManualAutonSelect {
      * Get the auton selection
      * @return an integer between 0 and 7
      */
-    public int getSelection() {
+    public String getSelection() {
         int bit1 = di1.get() ? 1 : 0;
         int bit2 = di2.get() ? 1 : 0;
         int bit3 = di3.get() ? 1 : 0;
 
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
-        return selection;
+
+        String auton = "NONE";
+        switch (selection) {
+            case 1:
+                auton = "LEFT";
+                break;
+            case 2:
+                auton = "RIGHT";
+                break;
+            case 3:
+                auton = "MIDDLE";
+                break;
+        }
+
+        return auton;
     }
 }

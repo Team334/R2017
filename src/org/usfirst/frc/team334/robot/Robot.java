@@ -5,13 +5,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team334.robot.auton.movement.Straight;
+import org.usfirst.frc.team334.robot.auton.movement.Turn;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
 import org.usfirst.frc.team334.robot.sensors.BNO055;
 import org.usfirst.frc.team334.robot.sensors.HallEffect;
+import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
-public class Robot extends IterativeRobot {
+class Robot extends IterativeRobot {
     private DriveTrain driveTrain;
     private Controls controls;
     private Intake intake;
@@ -26,8 +29,18 @@ public class Robot extends IterativeRobot {
     private Ramp fastRamp;
     private Ramp slowRamp;
 
-    SendableChooser<Command> autoChoose;
-    Command autoCommand;
+    private Turn turnLeft;
+    private Turn turnRight;
+    private Straight straight;
+    private ManualAutonSelect manualAutonSelect;
+
+    private SendableChooser<String> autoChoose;
+    private String autonScenario;
+    private final String LEFT_SIDE = "LEFT",
+                         RIGHT_SIDE = "RIGHT",
+                         MIDDLE = "MIDDLE",
+                         MANUAL = "MANUAL",
+                         NONE = "NONE";
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -54,6 +67,21 @@ public class Robot extends IterativeRobot {
 
         // INIT VISION
         VisionData.init();
+
+        // AUTON COMMAND
+        double distanceToBaseLine = 9.4;
+        double angleToPeg = 60;
+        turnLeft = new Turn(-angleToPeg, driveTrain);
+        turnRight = new Turn(angleToPeg, driveTrain);
+        straight = new Straight(distanceToBaseLine, driveTrain);
+
+        // ADD OBJECTS TO SENDABLE CHOOSER
+        autoChoose = new SendableChooser<String>();
+        autoChoose.addObject("Turn Left", LEFT_SIDE);
+        autoChoose.addObject("Turn Right", RIGHT_SIDE);
+        autoChoose.addObject("Go Straight", MIDDLE);
+        autoChoose.addDefault("Default", MANUAL);
+        SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
     @Override
@@ -63,12 +91,34 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        Scheduler.getInstance().removeAll(); // clear old commands
+        Scheduler.getInstance().removeAll(); // clear old command
 
+        autonScenario = autoChoose.getSelected();
+        if (autonScenario.equals(MANUAL)) {
+            autonScenario = manualAutonSelect.getSelection();
+        }
+
+        switch (autonScenario) {
+            case LEFT_SIDE:
+                Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(turnLeft);
+                break;
+            case RIGHT_SIDE:
+                Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(turnRight);
+                break;
+            case MIDDLE:
+                Scheduler.getInstance().add(straight);
+                break;
+            case NONE:
+                break;
+        }
     }
 
     @Override
     public void autonomousPeriodic() {
+        // RUN COMMANDS IF ANY
+        Scheduler.getInstance().run();
     }
 
     @Override
@@ -99,11 +149,11 @@ public class Robot extends IterativeRobot {
 
         // INTAKE LISTENER
         if (controls.getIndexerIn() && !controls.getIndexerOut()) {
-            intake.pull_in();
+            indexer.pushIntoShooter();
         } else if (controls.getIndexerOut()) {
-            intake.push_out();
+            indexer.pushOutOfShooter();
         } else {
-            intake.stop();
+            indexer.stop();
         }
 
         // SHOOTER LISTENER
@@ -148,7 +198,7 @@ public class Robot extends IterativeRobot {
 //            slowRamp.reset(Ramp.SIDE.LEFT);
 //
 //        if (controls.getSlowRampButton(Ramp.SIDE.RIGHT))
-//":$pl.            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
+//            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
 

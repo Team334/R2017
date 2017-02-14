@@ -50,10 +50,6 @@ public class Controls {
         return xboxController.getBackButton();
     }
 
-    public boolean getIndexerOut() {
-        return xboxController.getBackButton();
-    }
-
     public boolean getGearOut() {
         return xboxController.getBackButton();
     }

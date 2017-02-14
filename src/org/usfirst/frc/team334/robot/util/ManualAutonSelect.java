@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import org.usfirst.frc.team334.robot.Robot;
 
 /**
  * Class for manually selecting auton mode via toggle
@@ -14,7 +15,7 @@ public class ManualAutonSelect {
     private final static int DI_1_CHANNEL = 0,
                              DI_2_CHANNEL = 1,
                              DI_3_CHANNEL = 2;
-    public final static String[] MODES = {"NONE", "LEFT", "RIGHT", "MIDDLE"};
+
 
     private DigitalInput di1, di2, di3;
 
@@ -28,14 +29,28 @@ public class ManualAutonSelect {
      * Get the auton selection
      * @return an integer between 0 and 7
      */
-    public String getSelection() {
+    public Robot.Scenario getSelection() {
         int bit1 = di1.get() ? 1 : 0;
         int bit2 = di2.get() ? 1 : 0;
         int bit3 = di3.get() ? 1 : 0;
 
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
 
-        String auton = MODES[selection];
-        return auton;
+        Robot.Scenario autonScenario;
+        switch (selection) {
+            case 1:
+                autonScenario = Robot.Scenario.LEFT_SIDE;
+                break;
+            case 2:
+                autonScenario = Robot.Scenario.RIGHT_SIDE;
+                break;
+            case 3:
+                autonScenario = Robot.Scenario.MIDDLE;
+                break;
+            default:
+                autonScenario = Robot.Scenario.NOTHING;
+        }
+        return autonScenario;
     }
+
 }

@@ -30,8 +30,8 @@ public class Straight extends Command {
 
         gyroPID.getController().setSetpoint(0);
 
-        double distancePerPulse = 0.1; // in feet
-        enc.setDistancePerPulse(distancePerPulse);
+        final double DOUBLE_PER_PULSE = 0.1; // in feet
+        enc.setDistancePerPulse(DOUBLE_PER_PULSE);
         enc.reset();
     }
 

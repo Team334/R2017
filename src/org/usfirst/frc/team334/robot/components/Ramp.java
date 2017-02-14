@@ -1,8 +1,5 @@
 package org.usfirst.frc.team334.robot.components;
 
-/**
- * Created by eric on 2/3/2017.
- */
 public class Ramp {
     double[] valuesL;
     double[] valuesR;
@@ -43,19 +40,7 @@ public class Ramp {
                 total += values[i];
             }
         }
-//        if (side == SIDE.LEFT && counterL >= valuesL.length) {
-//            length = valuesL.length;
-//            for(int i = 0; i < valuesL.length; i++) {
-//                total += valuesL[i];
-//            }
-//        }
-//        else if (side == SIDE.RIGHT && counterR >= valuesR.length) {
-//            length = valuesR.length;
-//            for(int i = 0; i < valuesR.length; i++) {
-//                total += valuesR[i];
-//            }
-//        }
-//        // System.out.println("total = " + total + " " + "length = " + length);
+
         return total / length;
     }
 

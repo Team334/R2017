@@ -14,7 +14,7 @@ import org.usfirst.frc.team334.robot.sensors.HallEffect;
 import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
-class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot {
     // COMPONENTS
     private DriveTrain driveTrain;
     private Controls controls;
@@ -39,12 +39,11 @@ class Robot extends IterativeRobot {
     private VisionAuton visionBoiler;
     private ManualAutonSelect manualAutonSelect;
 
-    private SendableChooser<String> autoChoose;
-    private String autonScenario;
-    private final String LEFT_SIDE = "LEFT",
-                         RIGHT_SIDE = "RIGHT",
-                         MIDDLE = "MIDDLE",
-                         MANUAL = "MANUAL";
+    private SendableChooser<Scenario> autoChoose;
+    public enum Scenario {
+        LEFT_SIDE, RIGHT_SIDE, MIDDLE, MANUAL, NOTHING
+    }
+    Scenario autonScenario;
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -78,16 +77,16 @@ class Robot extends IterativeRobot {
         turnLeft = new Turn(-angleToPeg, driveTrain);
         turnRight = new Turn(angleToPeg, driveTrain);
         straight = new Straight(distanceToBaseLine, driveTrain);
-        visionGear = new VisionAuton(VisionAuton.TARGET.GEAR, driveTrain);
-        visionBoiler = new VisionAuton(VisionAuton.TARGET.BOILER, driveTrain);
+        visionGear = new VisionAuton(VisionAuton.Target.GEAR, driveTrain);
+        visionBoiler = new VisionAuton(VisionAuton.Target.BOILER, driveTrain);
         manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
-        autoChoose = new SendableChooser<String>();
-        autoChoose.addObject("Turn Left", LEFT_SIDE);
-        autoChoose.addObject("Turn Right", RIGHT_SIDE);
-        autoChoose.addObject("Go Straight", MIDDLE);
-        autoChoose.addDefault("Default", MANUAL);
+        autoChoose = new SendableChooser<Scenario>();
+        autoChoose.addObject("Turn Left", Scenario.LEFT_SIDE);
+        autoChoose.addObject("Turn Right", Scenario.RIGHT_SIDE);
+        autoChoose.addObject("Go Straight", Scenario.MIDDLE);
+        autoChoose.addDefault("Default", Scenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
@@ -101,7 +100,7 @@ class Robot extends IterativeRobot {
         Scheduler.getInstance().removeAll(); // clear old command
 
         autonScenario = autoChoose.getSelected();
-        if (autonScenario.equals(MANUAL)) {
+        if (autonScenario == Scenario.MANUAL) {
             autonScenario = manualAutonSelect.getSelection();
         }
 
@@ -142,7 +141,7 @@ class Robot extends IterativeRobot {
         // CLIMBER LISTENER
         if (controls.getClimbUp() && !controls.getClimbDown()) {
             climber.climbUp();
-        } else if (controls.getClimbDown()) {
+        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
             climber.climbDown();
         } else {
             climber.stop();
@@ -151,17 +150,15 @@ class Robot extends IterativeRobot {
         // INTAKE LISTENER
         if (controls.getIntakeIn() && !controls.getIntakeOut()) {
             intake.pull_in();
-        } else if (controls.getIntakeOut()) {
+        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
             intake.push_out();
         } else {
             intake.stop();
         }
 
         // INTAKE LISTENER
-        if (controls.getIndexerIn() && !controls.getIndexerOut()) {
+        if (controls.getIndexerIn()) {
             indexer.pushIntoShooter();
-        } else if (controls.getIndexerOut()) {
-            indexer.pushOutOfShooter();
         } else {
             indexer.stop();
         }

@@ -9,10 +9,10 @@ import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class VisionAuton extends Command {
 
-    public enum TARGET {
+    public enum Target {
         GEAR, BOILER
     }
-    TARGET target;
+    Target target;
 
     private boolean visionDone;
 
@@ -23,9 +23,12 @@ public class VisionAuton extends Command {
     private DriveTrain driveTrain;
 
     private final double GEAR_TARGET = 450;
-    private final double BOILER_TARGET = 300;
+    private final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
 
-    public VisionAuton(TARGET target, DriveTrain driveTrain) {
+    private final double BOILER_TARGET = 300;
+    private final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
+
+    public VisionAuton(Target target, DriveTrain driveTrain) {
         this.target = target;
         this.driveTrain = driveTrain;
 
@@ -36,12 +39,12 @@ public class VisionAuton extends Command {
 
     // Called once at start of command
     public void initialize() {
-        if (target == TARGET.GEAR) {
+        if (target == Target.GEAR) {
             areaPID.getController().setSetpoint(GEAR_TARGET);
-            areaPID.getController().setAbsoluteTolerance(GEAR_TARGET * 0.05); // 5% tolerance
-        } else if (target == TARGET.BOILER) {
+            areaPID.getController().setAbsoluteTolerance(GEAR_TOLERANCE); // 5% tolerance
+        } else if (target == Target.BOILER) {
             areaPID.getController().setSetpoint(BOILER_TARGET);
-            areaPID.getController().setAbsoluteTolerance(BOILER_TARGET * 0.05);
+            areaPID.getController().setAbsoluteTolerance(BOILER_TOLERANCE);
         }
 
         visionDone = false;

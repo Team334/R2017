@@ -37,13 +37,15 @@ public class Turn extends Command {
     public void execute() {
         System.out.println("TURN");
         double speed = 0.1;
-
+        double leftSpeed = 0, rightSpeed = 0;
         if (gyroPID.getController().onTarget()) {
             turnDone = true;
         } else {
-            driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-            driveTrain.setRightMotors(speed - gyroPID.getOutput());
+            leftSpeed = speed + gyroPID.getOutput();
+            rightSpeed = speed - gyroPID.getOutput();
         }
+        driveTrain.setLeftMotors(leftSpeed);
+        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true

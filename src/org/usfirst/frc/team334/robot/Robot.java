@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.movement.Straight;
 import org.usfirst.frc.team334.robot.auton.movement.Turn;
+import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
 import org.usfirst.frc.team334.robot.sensors.BNO055;
@@ -34,6 +35,8 @@ class Robot extends IterativeRobot {
     private Turn turnLeft;
     private Turn turnRight;
     private Straight straight;
+    private VisionAuton visionGear;
+    private VisionAuton visionBoiler;
     private ManualAutonSelect manualAutonSelect;
 
     private SendableChooser<String> autoChoose;
@@ -75,6 +78,8 @@ class Robot extends IterativeRobot {
         turnLeft = new Turn(-angleToPeg, driveTrain);
         turnRight = new Turn(angleToPeg, driveTrain);
         straight = new Straight(distanceToBaseLine, driveTrain);
+        visionGear = new VisionAuton(VisionAuton.TARGET.GEAR, driveTrain);
+        visionBoiler = new VisionAuton(VisionAuton.TARGET.BOILER, driveTrain);
         manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
@@ -104,13 +109,16 @@ class Robot extends IterativeRobot {
             case LEFT_SIDE:
                 Scheduler.getInstance().add(straight);
                 Scheduler.getInstance().add(turnLeft);
+                Scheduler.getInstance().add(visionGear);
                 break;
             case RIGHT_SIDE:
                 Scheduler.getInstance().add(straight);
                 Scheduler.getInstance().add(turnRight);
+                Scheduler.getInstance().add(visionGear);
                 break;
             case MIDDLE:
                 Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(visionGear);
                 break;
             default:
                 break;

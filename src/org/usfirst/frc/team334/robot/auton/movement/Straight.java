@@ -45,12 +45,16 @@ public class Straight extends Command {
         System.out.println("STRAIGHT");
 
         double speed = 0.4;
+        double leftSpeed = 0, rightSpeed = 0;
         if (distance >= enc.getDistance()) {
             straightDone = true;
         } else {
-            driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-            driveTrain.setRightMotors(speed - gyroPID.getOutput());
+            leftSpeed = speed + gyroPID.getOutput();
+            rightSpeed = speed - gyroPID.getOutput();
         }
+
+        driveTrain.setLeftMotors(leftSpeed);
+        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true

@@ -9,7 +9,7 @@ import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class VisionAuton extends Command {
 
-    enum TARGET {
+    public enum TARGET {
         GEAR, BOILER
     }
     TARGET target;
@@ -22,6 +22,9 @@ public class VisionAuton extends Command {
 
     private DriveTrain driveTrain;
 
+    private final double GEAR_TARGET = 450;
+    private final double BOILER_TARGET = 300;
+
     public VisionAuton(TARGET target, DriveTrain driveTrain) {
         this.target = target;
         this.driveTrain = driveTrain;
@@ -31,10 +34,27 @@ public class VisionAuton extends Command {
         this.offsetPID = new VisionOffsetPID();
     }
 
+    // Called once at start of command
     public void initialize() {
+        if (target == TARGET.GEAR) {
+            areaPID.getController().setSetpoint(GEAR_TARGET);
+            areaPID.getController().setAbsoluteTolerance(GEAR_TARGET * 0.05); // 5% tolerance
+        } else if (target == TARGET.BOILER) {
+            areaPID.getController().setSetpoint(BOILER_TARGET);
+            areaPID.getController().setAbsoluteTolerance(BOILER_TARGET * 0.05);
+        }
+
         visionDone = false;
     }
 
+    /*
+     * Continues looping until isFinished returns true(non-Javadoc)
+     *
+     *  Steps:
+     *      1) Finds target
+     *      2) Move towards target until close enough
+     *      3) Stop
+     */
     public void execute() {
         System.out.println("VISION");
         double speedLeft = 0;
@@ -60,6 +80,7 @@ public class VisionAuton extends Command {
         driveTrain.setRightMotors(speedRight);
     }
 
+    // Stops command when returns true
     @Override
     protected boolean isFinished() {
         return visionDone;

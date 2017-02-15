@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team334.robot.auton.Scenario;
+import org.usfirst.frc.team334.robot.auton.AutonScenario;
 import org.usfirst.frc.team334.robot.auton.movement.Straight;
 import org.usfirst.frc.team334.robot.auton.movement.Turn;
 import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
@@ -40,9 +40,9 @@ public class Robot extends IterativeRobot {
     private VisionAuton visionBoiler;
     private ManualAutonSelect manualAutonSelect;
 
-    private SendableChooser<Scenario> autoChoose;
+    private SendableChooser<AutonScenario> autoChoose;
 
-    Scenario autonScenario;
+    AutonScenario autonScenario;
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -82,10 +82,10 @@ public class Robot extends IterativeRobot {
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
-        autoChoose.addObject("Turn Left", Scenario.LEFT_SIDE);
-        autoChoose.addObject("Turn Right", Scenario.RIGHT_SIDE);
-        autoChoose.addObject("Go Straight", Scenario.MIDDLE);
-        autoChoose.addDefault("Default", Scenario.MANUAL);
+        autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
+        autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
+        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
+        autoChoose.addDefault("Default", AutonScenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
@@ -99,7 +99,7 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().removeAll(); // clear old command
 
         autonScenario = autoChoose.getSelected();
-        if (autonScenario == Scenario.MANUAL) {
+        if (autonScenario == AutonScenario.MANUAL) {
             autonScenario = manualAutonSelect.getScenario();
         }
 

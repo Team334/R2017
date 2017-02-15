@@ -1,7 +1,7 @@
 package org.usfirst.frc.team334.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import org.usfirst.frc.team334.robot.auton.Scenario;
+import org.usfirst.frc.team334.robot.auton.AutonScenario;
 
 /**
  * Class for manually selecting auton mode via toggle
@@ -43,22 +43,22 @@ public class ManualAutonSelect {
      * Select scenario based on
      * @return
      */
-    public Scenario getScenario() {
+    public AutonScenario getScenario() {
         int selection = getSelection();
 
-        Scenario autonScenario;
+        AutonScenario autonScenario;
         switch (selection) {
             case 1:
-                autonScenario = Scenario.LEFT_SIDE;
+                autonScenario = AutonScenario.LEFT_SIDE;
                 break;
             case 2:
-                autonScenario = Scenario.RIGHT_SIDE;
+                autonScenario = AutonScenario.RIGHT_SIDE;
                 break;
             case 3:
-                autonScenario = Scenario.MIDDLE;
+                autonScenario = AutonScenario.MIDDLE;
                 break;
             default:
-                autonScenario = Scenario.NOTHING;
+                autonScenario = AutonScenario.NOTHING;
         }
         return autonScenario;
     }

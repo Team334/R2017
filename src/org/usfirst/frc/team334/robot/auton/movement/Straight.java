@@ -7,13 +7,13 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Straight extends Command {
     
-    double distance;
-    Encoder enc;
+    private double distance;
+    private Encoder enc;
 
-    boolean straightDone;
+    private boolean straightDone;
 
-    GyroPID gyroPID;
-    DriveTrain driveTrain;
+    private GyroPID gyroPID;
+    private DriveTrain driveTrain;
 
     public Straight(double distance, DriveTrain driveTrain) {
         this.distance = distance;
@@ -30,31 +30,32 @@ public class Straight extends Command {
 
         gyroPID.getController().setSetpoint(0);
 
-        double distancePerPulse = 0.1; // in feet
-        enc.setDistancePerPulse(distancePerPulse);
+        final double DOUBLE_PER_PULSE = 0.1; // in feet
+        enc.setDistancePerPulse(DOUBLE_PER_PULSE);
         enc.reset();
-
-        System.out.println("Initialized");
     }
 
     /*
      * Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
-     *  	1) Set degrees to turn
-     *      2) Turn to degrees
-     *      3) Done
+     *      1) Go straight until you reach distance
      */
     public void execute() {
-            double speed = 0.4;
+        System.out.println("STRAIGHT");
 
-            if (distance >= enc.getDistance()) {
-                straightDone = true;
-            } else {
-                driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-                driveTrain.setLeftMotors(speed - gyroPID.getOutput());
-            }
+        double speed = 0.4;
+        double leftSpeed = 0, rightSpeed = 0;
+        if (distance >= enc.getDistance()) {
+            straightDone = true;
+        } else {
+            leftSpeed = speed + gyroPID.getOutput();
+            rightSpeed = speed - gyroPID.getOutput();
         }
+
+        driveTrain.setLeftMotors(leftSpeed);
+        driveTrain.setRightMotors(rightSpeed);
+    }
 
     // Stops program when returns true
     @Override

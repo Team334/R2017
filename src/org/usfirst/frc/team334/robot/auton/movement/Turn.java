@@ -6,12 +6,11 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Turn extends Command {
 
-    double angle;
-    boolean turnDone;
+    private double angle;
+    private boolean turnDone;
 
-    GyroPID gyroPID;
-
-    DriveTrain driveTrain;
+    private GyroPID gyroPID;
+    private DriveTrain driveTrain;
 
     public Turn(double angle, DriveTrain driveTrain) {
         this.angle = angle;
@@ -25,27 +24,28 @@ public class Turn extends Command {
 
         gyroPID.getController().setSetpoint(angle);
         gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
-
-        System.out.println("Initialized");
     }
 
     /*
      *  Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
-     *  	1) Set degrees to turn
+     *      1) Set degrees to turn
      *      2) Turn to degrees
      *      3) Done
      */
     public void execute() {
+        System.out.println("TURN");
         double speed = 0.1;
-
+        double leftSpeed = 0, rightSpeed = 0;
         if (gyroPID.getController().onTarget()) {
             turnDone = true;
         } else {
-            driveTrain.setLeftMotors(speed + gyroPID.getOutput());
-            driveTrain.setLeftMotors(speed - gyroPID.getOutput());
+            leftSpeed = speed + gyroPID.getOutput();
+            rightSpeed = speed - gyroPID.getOutput();
         }
+        driveTrain.setLeftMotors(leftSpeed);
+        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true

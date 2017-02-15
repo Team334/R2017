@@ -55,9 +55,13 @@ echo "Downloading $PLUGIN_JAR and unzipping resources/java.zip"
 wget -qnc $PLUGIN_URL -P $TMP_DIR
 unzip -q $TMP_DIR/$PLUGIN_JAR resources/java.zip -d $TMP_DIR
 
-#unzip java.zip to wpilib in current directory
+# unzip java.zip to wpilib in current directory
 echo "Unzipping ant/ and lib/ from resources/java.zip to wpilib/" 
 unzip -q $TMP_DIR/resources/java.zip ant/* lib/* -d wpilib
+
+# make javac use 1.8 in all cases
+sed -i "s/\${ant.java.version}/1.8/g" wpilib/ant/build.xml
+sed -i "/compiler/d" wpilib/ant/build.xml
 
 # delete temporary directory
 rm -rf $TMP_DIR/*

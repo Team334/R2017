@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import org.usfirst.frc.team334.robot.auton.AutonScenario;
 
 /**
  * Class for manually selecting auton mode via toggle
@@ -14,6 +15,7 @@ public class ManualAutonSelect {
     private final static int DI_1_CHANNEL = 0,
                              DI_2_CHANNEL = 1,
                              DI_3_CHANNEL = 2;
+
 
     private DigitalInput di1, di2, di3;
 
@@ -33,6 +35,33 @@ public class ManualAutonSelect {
         int bit3 = di3.get() ? 1 : 0;
 
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
+
         return selection;
     }
+
+    /**
+     * Select scenario based on
+     * @return
+     */
+    public AutonScenario getScenario() {
+        int selection = getSelection();
+
+        AutonScenario autonScenario;
+        switch (selection) {
+            case 1:
+                autonScenario = AutonScenario.LEFT_SIDE;
+                break;
+            case 2:
+                autonScenario = AutonScenario.RIGHT_SIDE;
+                break;
+            case 3:
+                autonScenario = AutonScenario.MIDDLE;
+                break;
+            default:
+                autonScenario = AutonScenario.NOTHING;
+        }
+        return autonScenario;
+    }
+
+
 }

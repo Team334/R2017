@@ -1,17 +1,22 @@
 package org.usfirst.frc.team334.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team334.robot.auton.AutonScenario;
+import org.usfirst.frc.team334.robot.auton.movement.Straight;
+import org.usfirst.frc.team334.robot.auton.movement.Turn;
+import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
 import org.usfirst.frc.team334.robot.sensors.BNO055;
 import org.usfirst.frc.team334.robot.sensors.HallEffect;
+import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
+    // COMPONENTS
     private DriveTrain driveTrain;
     private Controls controls;
     private Intake intake;
@@ -20,14 +25,24 @@ public class Robot extends IterativeRobot {
     private Gear gear;
     private Shooter shooter;
 
+    // SENSORS
     private HallEffect hallFX;
     private BNO055 imu;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
 
-    SendableChooser<Command> autoChoose;
-    Command autoCommand;
+    // AUTON COMMANDS
+    private Turn turnLeft;
+    private Turn turnRight;
+    private Straight straight;
+    private VisionAuton visionGear;
+    private VisionAuton visionBoiler;
+    private ManualAutonSelect manualAutonSelect;
+
+    private SendableChooser<AutonScenario> autoChoose;
+
+    AutonScenario autonScenario;
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -54,6 +69,24 @@ public class Robot extends IterativeRobot {
 
         // INIT VISION
         VisionData.init();
+
+        // AUTON COMMAND
+        double distanceToBaseLine = 9.4;
+        double angleToPeg = 60;
+        turnLeft = new Turn(-angleToPeg, driveTrain);
+        turnRight = new Turn(angleToPeg, driveTrain);
+        straight = new Straight(distanceToBaseLine, driveTrain);
+        visionGear = new VisionAuton(VisionAuton.Target.GEAR, driveTrain);
+        visionBoiler = new VisionAuton(VisionAuton.Target.BOILER, driveTrain);
+        manualAutonSelect = new ManualAutonSelect();
+
+        // ADD OBJECTS TO SENDABLE CHOOSER
+        autoChoose = new SendableChooser<>();
+        autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
+        autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
+        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
+        autoChoose.addDefault("Default", AutonScenario.MANUAL);
+        SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
     @Override
@@ -63,12 +96,35 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        Scheduler.getInstance().removeAll(); // clear old commands
+        Scheduler.getInstance().removeAll(); // clear old command
 
+        autonScenario = autoChoose.getSelected();
+        if (autonScenario == AutonScenario.MANUAL) {
+            autonScenario = manualAutonSelect.getScenario();
+        }
+
+        switch (autonScenario) {
+            case LEFT_SIDE:
+                Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(turnLeft);
+                Scheduler.getInstance().add(visionGear);
+                break;
+            case RIGHT_SIDE:
+                Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(turnRight);
+                Scheduler.getInstance().add(visionGear);
+                break;
+            case MIDDLE:
+                Scheduler.getInstance().add(straight);
+                Scheduler.getInstance().add(visionGear);
+                break;
+        }
     }
 
     @Override
     public void autonomousPeriodic() {
+        // RUN COMMANDS IF ANY
+        Scheduler.getInstance().run();
     }
 
     @Override
@@ -82,7 +138,7 @@ public class Robot extends IterativeRobot {
         // CLIMBER LISTENER
         if (controls.getClimbUp() && !controls.getClimbDown()) {
             climber.climbUp();
-        } else if (controls.getClimbDown()) {
+        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
             climber.climbDown();
         } else {
             climber.stop();
@@ -91,19 +147,17 @@ public class Robot extends IterativeRobot {
         // INTAKE LISTENER
         if (controls.getIntakeIn() && !controls.getIntakeOut()) {
             intake.pull_in();
-        } else if (controls.getIntakeOut()) {
+        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
             intake.push_out();
         } else {
             intake.stop();
         }
 
         // INTAKE LISTENER
-        if (controls.getIndexerIn() && !controls.getIndexerOut()) {
-            intake.pull_in();
-        } else if (controls.getIndexerOut()) {
-            intake.push_out();
+        if (controls.getIndexerIn()) {
+            indexer.pushIntoShooter();
         } else {
-            intake.stop();
+            indexer.stop();
         }
 
         // SHOOTER LISTENER
@@ -148,7 +202,7 @@ public class Robot extends IterativeRobot {
 //            slowRamp.reset(Ramp.SIDE.LEFT);
 //
 //        if (controls.getSlowRampButton(Ramp.SIDE.RIGHT))
-//":$pl.            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
+//            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
 

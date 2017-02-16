@@ -4,33 +4,25 @@ import java.util.Arrays;
 
 public class TrackTarget {
 
-    private boolean[] targetFound;
+    // tracks # of frames that lost target
+    private int counter = 0;
+    private int nFrames;
 
-    public TrackTarget(int nImages) {
-        this.targetFound = new boolean[nImages];
-        Arrays.fill(targetFound, true);
+    public TrackTarget(int nFrames) {
+        this.nFrames = nFrames;
     }
 
-    // add value to front of array
-    public void addTargetFound(boolean value) {
-        for (int i = 1; i < targetFound.length; i++) {
-            targetFound[i] = targetFound[i - 1];
-        }
-        targetFound[0] = value;
+    // calculate number of frames target has been lost
+    public void addTargetFound(boolean found) {
+        counter = (!found) ? counter++ : 0;
     }
 
     /**
-     * Checks if target was seen in last nImages
+     * Checks if target was seen in last nFrames
      *
-     * @returns true if target was seen recently, else false
+     * @returns true number of frames lost was more than nFrames
       */
-
     public boolean lostTarget() {
-        for (boolean found : targetFound) {
-            if (found) {
-                return true;
-            }
-        }
-        return false;
+        return counter >= nFrames;
     }
 }

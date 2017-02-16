@@ -25,9 +25,6 @@ public class Robot extends IterativeRobot {
     private Gear gear;
     private Shooter shooter;
 
-    // SENSORS
-    private HallEffect hallFX;
-
     private Ramp fastRamp;
     private Ramp slowRamp;
 
@@ -48,9 +45,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-        // INIT SENSORS
-        hallFX = new HallEffect(0);
-
         // INIT SUBSYSTEMS
         driveTrain = new DriveTrain(0, 1);
         controls = new Controls(0, 1, 2);
@@ -185,8 +179,8 @@ public class Robot extends IterativeRobot {
 
         if (controls.getSlowRampButton(Ramp.SIDE.LEFT) && controls.getSlowRampButton(Ramp.SIDE.RIGHT)) {
             double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-            leftSpeed = controls.getLeftDrive() / sens;
-            rightSpeed = controls.getRightDrive() / sens;
+            leftSpeed /= sens;
+            rightSpeed /= sens;
         }
 
         driveTrain.setLeftMotors(leftSpeed);

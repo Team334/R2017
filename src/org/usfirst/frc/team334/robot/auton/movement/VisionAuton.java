@@ -5,6 +5,7 @@ import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.util.TrackTarget;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class VisionAuton extends Command {
@@ -22,6 +23,8 @@ public class VisionAuton extends Command {
 
     private DriveTrain driveTrain;
 
+    private TrackTarget tracker;
+
     private final double GEAR_TARGET = 450;
     private final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
     private final double GEAR_AREA_CAP = 80_000;
@@ -31,13 +34,14 @@ public class VisionAuton extends Command {
     private final double BOILER_AREA_CAP = 40_000;
 
     public VisionAuton(Target target, DriveTrain driveTrain) {
-
         this.target = target;
         this.driveTrain = driveTrain;
 
         this.gyroPID = new GyroPID();
         this.areaPID = new VisionAreaPID();
         this.offsetPID = new VisionOffsetPID();
+
+        this.tracker = new TrackTarget(10);
     }
 
     // Called once at start of command
@@ -52,6 +56,7 @@ public class VisionAuton extends Command {
 
         // MAKE SURE VISION IS ON!!!!
         if (!VisionData.isVisionInit()) {
+            System.out.println("VISION DISABLED");
             cancel();
         }
 
@@ -68,7 +73,9 @@ public class VisionAuton extends Command {
      */
     public void execute() {
         // Stop if we lose target for more than 5 frames
-        if (!VisionData.foundTarget()) {
+        tracker.addTargetFound(VisionData.foundTarget());
+        if (tracker.lostTarget()) {
+            System.out.println("LOST TARGET");
             cancel();
         }
         System.out.println("VISION");
@@ -106,6 +113,7 @@ public class VisionAuton extends Command {
     // Stops command when returns true
     @Override
     protected boolean isFinished() {
+        driveTrain.stop();
         return visionDone;
     }
 }

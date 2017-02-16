@@ -24,11 +24,14 @@ public class VisionAuton extends Command {
 
     private final double GEAR_TARGET = 450;
     private final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
+    private final double GEAR_AREA_CAP = 80_000;
 
     private final double BOILER_TARGET = 300;
     private final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
+    private final double BOILER_AREA_CAP = 40_000;
 
     public VisionAuton(Target target, DriveTrain driveTrain) {
+
         this.target = target;
         this.driveTrain = driveTrain;
 
@@ -47,6 +50,11 @@ public class VisionAuton extends Command {
             areaPID.getController().setAbsoluteTolerance(BOILER_TOLERANCE);
         }
 
+        // MAKE SURE VISION IS ON!!!!
+        if (!VisionData.isVisionInit()) {
+            cancel();
+        }
+
         visionDone = false;
     }
 
@@ -59,12 +67,17 @@ public class VisionAuton extends Command {
      *      3) Stop
      */
     public void execute() {
+        // Stop if we lose target for more than 5 frames
+        if (!VisionData.foundTarget()) {
+            cancel();
+        }
         System.out.println("VISION");
+
         double speedLeft = 0;
         double speedRight = 0;
-        final double AREA_CAP = 80_000;
+        double areaCap = (target == Target.GEAR) ? GEAR_AREA_CAP : BOILER_AREA_CAP;
 
-        if (areaPID.getInput() < AREA_CAP) { // Area increases as we get closer
+        if (areaPID.getInput() < areaCap) { // Area increases as we get closer
 //            double div = 0.85 * (1 + Math.abs(offsetPID.getOutput())/30.0);
 //            speedLeft = -offsetPID.getOutput() + areaPID.getOutput() / div;
 //            speedRight = offsetPID.getOutput() + areaPID.getOutput() / div;
@@ -72,6 +85,7 @@ public class VisionAuton extends Command {
             gyroPID.getController().setPID(0.005, 0.0, 0.0);
             gyroPID.getController().setSetpoint(gyroPID.getInput() + angle);
 
+            // slow down when turning
             double div = (1 + Math.abs(gyroPID.getOutput()));
             speedLeft = +gyroPID.getOutput() + areaPID.getOutput() / div;
             speedRight = -gyroPID.getOutput() + areaPID.getOutput() / div;
@@ -81,6 +95,12 @@ public class VisionAuton extends Command {
 
         driveTrain.setLeftMotors(speedLeft);
         driveTrain.setRightMotors(speedRight);
+    }
+
+    // If vision is canceled, stop the robot
+    protected void interrupted() {
+        System.out.println("CANCELED");
+        driveTrain.stop();
     }
 
     // Stops command when returns true

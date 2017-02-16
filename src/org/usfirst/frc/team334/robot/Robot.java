@@ -8,9 +8,9 @@ import org.usfirst.frc.team334.robot.auton.AutonScenario;
 import org.usfirst.frc.team334.robot.auton.movement.Straight;
 import org.usfirst.frc.team334.robot.auton.movement.Turn;
 import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
+import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
-import org.usfirst.frc.team334.robot.sensors.BNO055;
 import org.usfirst.frc.team334.robot.sensors.HallEffect;
 import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
@@ -27,7 +27,6 @@ public class Robot extends IterativeRobot {
 
     // SENSORS
     private HallEffect hallFX;
-    private BNO055 imu;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
@@ -51,7 +50,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // INIT SENSORS
         hallFX = new HallEffect(0);
-        imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
 
         // INIT SUBSYSTEMS
         driveTrain = new DriveTrain(0, 1);
@@ -96,7 +94,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        Scheduler.getInstance().removeAll(); // clear old command
+        // Vision code will update to true if it initialized successfully
+        VisionData.getNt().putBoolean("init", false);
+
+        // reset gyro
+        GyroSource.imu.resetHeading();
+
+        // clear old commands
+        Scheduler.getInstance().removeAll();
 
         autonScenario = autoChoose.getSelected();
         if (autonScenario == AutonScenario.MANUAL) {

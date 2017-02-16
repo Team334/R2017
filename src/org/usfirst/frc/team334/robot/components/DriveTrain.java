@@ -23,4 +23,9 @@ public class DriveTrain {
         leftMotors.set(speed);
     }
 
+    public void stop() {
+        setLeftMotors(0);
+        setRightMotors(0);
+    }
+
 }

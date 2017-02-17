@@ -11,7 +11,6 @@ import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
 import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
-import org.usfirst.frc.team334.robot.sensors.HallEffect;
 import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
@@ -24,6 +23,7 @@ public class Robot extends IterativeRobot {
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
+    private VisionAutoAlign visionAutoAlign;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
@@ -38,14 +38,17 @@ public class Robot extends IterativeRobot {
 
     private SendableChooser<AutonScenario> autoChoose;
 
-    AutonScenario autonScenario;
+    private AutonScenario autonScenario;
 
     private double stickCalLeft;
     private double stickCalRight;
 
     @Override
     public void robotInit() {
-        // INIT SUBSYSTEMS
+        // INIT VISION
+        VisionData.init();
+
+        // INIT COMPONENETS
         driveTrain = new DriveTrain(0, 1);
         controls = new Controls(0, 1, 2);
 
@@ -55,21 +58,19 @@ public class Robot extends IterativeRobot {
         climber = new Climber(0);
         gear = new Gear(0, 1);
         shooter = new Shooter(0);
+        visionAutoAlign = new VisionAutoAlign();
 
         fastRamp = new Ramp(10);
         slowRamp = new Ramp(50);
 
-        // INIT VISION
-        VisionData.init();
-
         // AUTON COMMAND
-        double distanceToBaseLine = 9.4;
-        double angleToPeg = 60;
-        turnLeft = new Turn(-angleToPeg, driveTrain);
-        turnRight = new Turn(angleToPeg, driveTrain);
-        straight = new Straight(distanceToBaseLine, driveTrain);
-        visionGear = new VisionAuton(VisionAuton.Target.GEAR, driveTrain);
-        visionBoiler = new VisionAuton(VisionAuton.Target.BOILER, driveTrain);
+        final double DISTANCE_TO_BASELINE = 9.4;
+        final double ANGLE_TO_PEG = 60;
+        turnLeft = new Turn(-ANGLE_TO_PEG, driveTrain);
+        turnRight = new Turn(ANGLE_TO_PEG, driveTrain);
+        straight = new Straight(DISTANCE_TO_BASELINE, driveTrain);
+        visionGear = new VisionAuton(visionAutoAlign, Target.GEAR, driveTrain);
+        visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER, driveTrain);
         manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
@@ -160,7 +161,7 @@ public class Robot extends IterativeRobot {
         }
 
         // SHOOTER LISTENER
-        if (controls.getShooterButton()) {
+        if (controls.getShoot()) {
             shooter.setShooterSpeed(0.6);
         } else {
             shooter.setShooterSpeed(0);
@@ -174,13 +175,28 @@ public class Robot extends IterativeRobot {
         }
 
         // DRIVETRAIN LISTENER
-        double leftSpeed = controls.getLeftDrive();
-        double rightSpeed = controls.getRightDrive();
-
-        if (controls.getSlowRampButton(Ramp.SIDE.LEFT) && controls.getSlowRampButton(Ramp.SIDE.RIGHT)) {
-            double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-            leftSpeed /= sens;
-            rightSpeed /= sens;
+        double leftSpeed;
+        double rightSpeed;
+        if (controls.getAutoAlign(Target.GEAR)) {
+            visionAutoAlign.setTarget(Target.GEAR);
+            double[] speeds = visionAutoAlign.autoAlign();
+            leftSpeed = speeds[0];
+            rightSpeed = speeds[1];
+        }
+        else if (controls.getAutoAlign(Target.BOILER)) {
+            visionAutoAlign.setTarget(Target.BOILER);
+            double[] speeds = visionAutoAlign.autoAlign();
+            leftSpeed = speeds[0];
+            rightSpeed = speeds[1];
+        }
+        else { // joystick controlled
+            leftSpeed = controls.getLeftDrive();
+            rightSpeed = controls.getRightDrive();
+            if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
+                double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
+                leftSpeed /= sens;
+                rightSpeed /= sens;
+            }
         }
 
         driveTrain.setLeftMotors(leftSpeed);

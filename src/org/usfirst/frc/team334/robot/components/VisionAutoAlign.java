@@ -10,6 +10,8 @@ public class VisionAutoAlign {
 
     private Target target;
 
+    private DriveTrain driveTrain;
+
     private GyroPID gyroPID;
     private VisionAreaPID areaPID;
     private VisionOffsetPID offsetPID;
@@ -28,7 +30,8 @@ public class VisionAutoAlign {
     private final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
     private final double BOILER_AREA_CAP = 40_000;
 
-    public VisionAutoAlign(GyroPID gyroPID, VisionAreaPID areaPID, VisionOffsetPID offsetPID) {
+    public VisionAutoAlign(DriveTrain driveTrain, GyroPID gyroPID, VisionAreaPID areaPID, VisionOffsetPID offsetPID) {
+        this.driveTrain = driveTrain;
         this.gyroPID = gyroPID;
         this.areaPID = areaPID;
         this.offsetPID = offsetPID;
@@ -60,21 +63,20 @@ public class VisionAutoAlign {
     /**
      * calculates amount to turn and move forward to align to target
      *
-     *  @return speeds for each side double[] = (speedLeft, speedRight)
+     * STOPS ROBOT IF TARGET LOST OR IN RANGE
      */
-    public double[] autoAlign() {
-        double speedLeft = 0;
-        double speedRight = 0;
+    public void autoAlign() {
+        isRunning = true;
 
         tracker.addTargetFound(VisionData.foundTarget());
         if (tracker.lostTarget()) {
             isRunning = false;
-            return new double[]{0,0};
+            driveTrain.stop();
+            return;
         }
 
-        isRunning = true;
-        // go until we are in range or too close
-        if (areaPID.getInput() < areaCap || areaPID.getController().onTarget()) {
+        // move if we're not too close and not in range
+        if (areaPID.getInput() < areaCap && !areaPID.getController().onTarget()) {
             System.out.println("VISION ALIGN");
 //            double div = 0.85 * (1 + Math.abs(offsetPID.getOutput())/30.0);
 //            speedLeft = -offsetPID.getOutput() + areaPID.getOutput() / div;
@@ -85,12 +87,14 @@ public class VisionAutoAlign {
 
             // slow down when turning
             double div = (1 + Math.abs(gyroPID.getOutput()));
-            speedLeft = gyroPID.getOutput() + areaPID.getOutput() / div;
-            speedRight = -gyroPID.getOutput() + areaPID.getOutput() / div;
+            double speedLeft = gyroPID.getOutput() + areaPID.getOutput() / div;
+            double speedRight = -gyroPID.getOutput() + areaPID.getOutput() / div;
+            driveTrain.setLeftMotors(speedLeft);
+            driveTrain.setRightMotors(speedRight);
+        } else {
+            isRunning = false;
+            driveTrain.stop();
         }
-
-        double[] speeds = {speedLeft, speedRight};
-        return speeds;
     }
 
     /**

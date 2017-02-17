@@ -43,14 +43,9 @@ public class VisionAuton extends Command {
      */
     public void execute() {
         if (visionAutoAlign.isRunning()) {
-            double[] speeds = visionAutoAlign.autoAlign();
-            double speedL = speeds[0];
-            double speedR = speeds[1];
-            driveTrain.setLeftMotors(speedL);
-            driveTrain.setRightMotors(speedR);
+            visionAutoAlign.autoAlign();
         } else {
             visionDone = true;
-            driveTrain.stop();
         }
     }
 

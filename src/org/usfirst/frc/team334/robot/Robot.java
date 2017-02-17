@@ -71,7 +71,7 @@ public class Robot extends IterativeRobot {
         climber = new Climber(0);
         gear = new Gear(0, 1);
         shooter = new Shooter(0);
-        visionAutoAlign = new VisionAutoAlign(gyroPID, areaPID, offsetPID);
+        visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
 
         fastRamp = new Ramp(10);
         slowRamp = new Ramp(50);
@@ -188,32 +188,27 @@ public class Robot extends IterativeRobot {
         }
 
         // DRIVETRAIN LISTENER
-        double leftSpeed;
-        double rightSpeed;
         if (controls.getAutoAlign(Target.GEAR)) {
             visionAutoAlign.setTarget(Target.GEAR);
-            double[] speeds = visionAutoAlign.autoAlign();
-            leftSpeed = speeds[0];
-            rightSpeed = speeds[1];
-        }
-        else if (controls.getAutoAlign(Target.BOILER)) {
+            visionAutoAlign.autoAlign();
+        } else if (controls.getAutoAlign(Target.BOILER)) {
             visionAutoAlign.setTarget(Target.BOILER);
-            double[] speeds = visionAutoAlign.autoAlign();
-            leftSpeed = speeds[0];
-            rightSpeed = speeds[1];
-        }
-        else { // joystick controlled
-            leftSpeed = controls.getLeftDrive();
-            rightSpeed = controls.getRightDrive();
+            visionAutoAlign.autoAlign();
+        } else {
+            // joystick controlled
+            double leftSpeed = controls.getLeftDrive();
+            double rightSpeed = controls.getRightDrive();
             if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
                 double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
                 leftSpeed /= sens;
                 rightSpeed /= sens;
             }
-        }
+            driveTrain.setLeftMotors(leftSpeed);
+            driveTrain.setRightMotors(rightSpeed);
 
-        driveTrain.setLeftMotors(leftSpeed);
-        driveTrain.setRightMotors(rightSpeed);
+            SmartDashboard.putNumber("Left speed", leftSpeed);
+            SmartDashboard.putNumber("Right speed", rightSpeed);
+        }
 
 //        fastRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
 //        fastRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
@@ -233,9 +228,6 @@ public class Robot extends IterativeRobot {
 //            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
-
-        SmartDashboard.putNumber("Left speed", leftSpeed);
-        SmartDashboard.putNumber("Right speed", rightSpeed);
 
         SmartDashboard.putNumber("LeftJoy", controls.getLeftDrive());
         SmartDashboard.putNumber("Right Joy", controls.getRightDrive());

@@ -16,6 +16,10 @@ public class VisionAutoAlign {
 
     private TrackTarget tracker;
 
+    private double areaCap;
+    private boolean isRunning = false;
+    private final int N_FRAMES = 10;
+
     private final double GEAR_TARGET = 450;
     private final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
     private final double GEAR_AREA_CAP = 80_000;
@@ -24,14 +28,10 @@ public class VisionAutoAlign {
     private final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
     private final double BOILER_AREA_CAP = 40_000;
 
-    private double areaCap;
-    private boolean isRunning = false;
-    private final int N_FRAMES = 10;
-
-    public VisionAutoAlign() {
-        this.gyroPID = new GyroPID();
-        this.areaPID = new VisionAreaPID();
-        this.offsetPID = new VisionOffsetPID();
+    public VisionAutoAlign(GyroPID gyroPID, VisionAreaPID areaPID, VisionOffsetPID offsetPID) {
+        this.gyroPID = gyroPID;
+        this.areaPID = areaPID;
+        this.offsetPID = offsetPID;
 
         this.tracker = new TrackTarget(N_FRAMES);
     }

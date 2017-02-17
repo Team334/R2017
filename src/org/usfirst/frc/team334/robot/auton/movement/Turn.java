@@ -2,6 +2,8 @@ package org.usfirst.frc.team334.robot.auton.movement;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Turn extends Command {
@@ -12,9 +14,9 @@ public class Turn extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Turn(double angle, DriveTrain driveTrain) {
+    public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
         this.angle = angle;
-        this.gyroPID = new GyroPID();
+        this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
     }
 

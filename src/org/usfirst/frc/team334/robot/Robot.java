@@ -8,6 +8,9 @@ import org.usfirst.frc.team334.robot.auton.AutonScenario;
 import org.usfirst.frc.team334.robot.auton.movement.Straight;
 import org.usfirst.frc.team334.robot.auton.movement.Turn;
 import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
+import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
 import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Controls;
@@ -27,6 +30,11 @@ public class Robot extends IterativeRobot {
 
     private Ramp fastRamp;
     private Ramp slowRamp;
+
+    // PIDS
+    private GyroPID gyroPID;
+    private VisionAreaPID areaPID;
+    private VisionOffsetPID offsetPID;
 
     // AUTON COMMANDS
     private Turn turnLeft;
@@ -52,13 +60,18 @@ public class Robot extends IterativeRobot {
         driveTrain = new DriveTrain(0, 1);
         controls = new Controls(0, 1, 2);
 
+        // INIT PIDS
+        gyroPID = new GyroPID();
+        areaPID = new VisionAreaPID();
+        offsetPID = new VisionOffsetPID();
+
         // UPDATE PORTS AND VALUES
         intake = new Intake(0);
         indexer = new Indexer(0);
         climber = new Climber(0);
         gear = new Gear(0, 1);
         shooter = new Shooter(0);
-        visionAutoAlign = new VisionAutoAlign();
+        visionAutoAlign = new VisionAutoAlign(gyroPID, areaPID, offsetPID);
 
         fastRamp = new Ramp(10);
         slowRamp = new Ramp(50);
@@ -66,9 +79,9 @@ public class Robot extends IterativeRobot {
         // AUTON COMMAND
         final double DISTANCE_TO_BASELINE = 9.4;
         final double ANGLE_TO_PEG = 60;
-        turnLeft = new Turn(-ANGLE_TO_PEG, driveTrain);
-        turnRight = new Turn(ANGLE_TO_PEG, driveTrain);
-        straight = new Straight(DISTANCE_TO_BASELINE, driveTrain);
+        turnLeft = new Turn(-ANGLE_TO_PEG, driveTrain, gyroPID);
+        turnRight = new Turn(ANGLE_TO_PEG, driveTrain, gyroPID);
+        straight = new Straight(DISTANCE_TO_BASELINE, driveTrain, gyroPID);
         visionGear = new VisionAuton(visionAutoAlign, Target.GEAR, driveTrain);
         visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER, driveTrain);
         manualAutonSelect = new ManualAutonSelect();

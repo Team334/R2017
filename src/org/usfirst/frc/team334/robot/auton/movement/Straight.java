@@ -15,9 +15,9 @@ public class Straight extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Straight(double distance, DriveTrain driveTrain) {
+    public Straight(double distance, DriveTrain driveTrain, GyroPID gyroPID) {
         this.distance = distance;
-        this.gyroPID = new GyroPID();
+        this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
         // update

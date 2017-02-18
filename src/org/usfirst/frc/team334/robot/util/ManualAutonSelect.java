@@ -2,6 +2,7 @@ package org.usfirst.frc.team334.robot.util;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.usfirst.frc.team334.robot.auton.AutonScenario;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 /**
  * Class for manually selecting auton mode via toggle
@@ -11,18 +12,12 @@ import org.usfirst.frc.team334.robot.auton.AutonScenario;
  */
 public class ManualAutonSelect {
 
-    // channels for the inputs
-    private final static int DI_1_CHANNEL = 0,
-                             DI_2_CHANNEL = 1,
-                             DI_3_CHANNEL = 2;
-
-
     private DigitalInput di1, di2, di3;
 
     public ManualAutonSelect() {
-//        this.di1 = new DigitalInput(DI_1_CHANNEL);
-//        this.di2 = new DigitalInput(DI_2_CHANNEL);
-//        this.di3 = new DigitalInput(DI_3_CHANNEL);
+        this.di1 = new DigitalInput(Constants.DI_1_CHANNEL);
+        this.di2 = new DigitalInput(Constants.DI_2_CHANNEL);
+        this.di3 = new DigitalInput(Constants.DI_3_CHANNEL);
     }
 
     /**

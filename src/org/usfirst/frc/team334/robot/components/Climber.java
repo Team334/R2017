@@ -1,15 +1,16 @@
 package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class Climber {
 
     private VictorSP climberMotor1, climberMotor2;
 
-    public Climber(int port1, int port2) {
-        climberMotor1 = new VictorSP(port1);
-        climberMotor2 = new VictorSP(port2);
+    public Climber() {
+        climberMotor1 = new VictorSP(Constants.CLIMBER_1);
+        climberMotor2 = new VictorSP(Constants.CLIMBER_2);
     }
 
     public void climbUp() {

@@ -57,8 +57,8 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT COMPONENETS
-        driveTrain = new DriveTrain(0, 1);
-        controls = new Controls(0, 1, 2);
+        driveTrain = new DriveTrain();
+        controls = new Controls();
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -66,11 +66,11 @@ public class Robot extends IterativeRobot {
         offsetPID = new VisionOffsetPID();
 
 //        // UPDATE PORTS AND VALUES
-//        intake = new Intake(0);
-//        indexer = new Indexer(0);
-//        climber = new Climber(0, 1);
-//        gear = new Gear(0, 1);
-//        shooter = new Shooter(0);
+//        intake = new Intake();
+//        indexer = new Indexer();
+//        climber = new Climber();
+//        gear = new Gear();
+//        shooter = new Shooter();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
 //
 //        fastRamp = new Ramp(10);

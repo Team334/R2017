@@ -1,13 +1,14 @@
 package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Indexer {
 
     private VictorSP indexerMotor;
 
-    public Indexer(int port) {
-        indexerMotor = new VictorSP(port);
+    public Indexer() {
+        indexerMotor = new VictorSP(Constants.INDEXER);
     }
 
     public void pushIntoShooter() {

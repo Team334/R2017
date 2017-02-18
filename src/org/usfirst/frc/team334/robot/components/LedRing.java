@@ -2,13 +2,12 @@ package org.usfirst.frc.team334.robot.components;
 
 import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.I2C;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class LedRing {
 
-    private static final int ADDRESS = 8;
-
     // hook up pins A4 to SCL on RoboRio, A5 to SDA on RoboRio, and GND to ground on RoboRio
-    private I2C ringWriter = new I2C(I2C.Port.kOnboard, ADDRESS);
+    private I2C ringWriter = new I2C(I2C.Port.kOnboard, Constants.LED_RINGS);
 
     // SendRGB method takes a led start position, led stop position,
     // red value, green value, and blue value

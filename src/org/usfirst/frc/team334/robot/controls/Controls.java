@@ -11,10 +11,10 @@ public class Controls {
     private Joystick rightJoystick;
     private XboxController xboxController;
 
-    public Controls(int leftJoy, int rightJoy, int xbox) {
-        leftJoystick = new Joystick(leftJoy);
-        rightJoystick = new Joystick(rightJoy);
-        xboxController = new XboxController(xbox);
+    public Controls() {
+        leftJoystick = new Joystick(Constants.JOYSTICK_LEFT);
+        rightJoystick = new Joystick(Constants.JOYSTICK_RIGHT);
+        xboxController = new XboxController(Constants.XBOX);
     }
 
     // JOYSTICKS

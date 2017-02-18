@@ -1,15 +1,16 @@
 package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.Servo;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Gear {
 
     private Servo left;
     private Servo right;
 
-    public Gear(int leftPort, int rightPort) {
-        left = new Servo(leftPort);
-        right = new Servo(rightPort);
+    public Gear() {
+        left = new Servo(Constants.GEAR_LEFT);
+        right = new Servo(Constants.GEAR_RIGHT);
     }
 
     public void pushOutGear() {

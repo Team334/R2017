@@ -1,13 +1,14 @@
 package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Intake {
 
     private VictorSP intakeMotor;
 
-    public Intake(int port) {
-        intakeMotor = new VictorSP(port);
+    public Intake() {
+        intakeMotor = new VictorSP(Constants.INTAKE);
     }
 
     public void pull_in() {

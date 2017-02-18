@@ -8,7 +8,6 @@ public class HallEffect {
 
     public HallEffect(int port) {
         hallEffect = new Counter(port);
-        hallEffect.setSemiPeriodMode(true);
     }
 
     public double getRPM() {

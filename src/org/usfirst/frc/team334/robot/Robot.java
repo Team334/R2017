@@ -133,16 +133,20 @@ public class Robot extends IterativeRobot {
                 Scheduler.getInstance().add(visionGear);
                 break;
         }
+        System.out.println("AUTON INIT");
     }
 
     @Override
     public void autonomousPeriodic() {
         // RUN COMMANDS IF ANY
-        //Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
+
+        SmartDashboard.putNumber("Area", VisionData.getArea());
+        SmartDashboard.putNumber("offset", VisionData.getOffset());
+        SmartDashboard.putNumber("angle", VisionData.getAngle());
+
         SmartDashboard.putBoolean("Running", VisionData.visionRunning());
         SmartDashboard.putBoolean("Found Target", VisionData.foundTarget());
-
-        System.out.println("Scenario " + autonScenario);
     }
 
     @Override

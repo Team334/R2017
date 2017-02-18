@@ -8,10 +8,14 @@ public class VisionData {
 
     private static final String VISION_RUNNING_KEY = "running";
     private static final String FOUND_TARGET_KEY = "found";
+
     private static final String AREA_KEY = "area";
     private static final String OFFSET_KEY = "x_offset";
     private static final String SKEW_KEY = "skew";
     private static final String ANGLE_KEY = "angle";
+
+    private static boolean visionRunning;
+    private static boolean foundTarget;
 
     private static double area;
     private static double offset;
@@ -27,6 +31,9 @@ public class VisionData {
             @Override
             public void valueChanged(ITable source, String key, Object value, boolean isNew) {
                 switch (key) {
+                    case FOUND_TARGET_KEY:
+                        foundTarget = (Boolean) value;
+                        break;
                     case AREA_KEY:
                         area = (Double) value;
                         break;
@@ -48,12 +55,13 @@ public class VisionData {
         return nt;
     }
 
+    // Can't use listener because networktables doesn't listen for server side changes
     public static boolean visionRunning() {
-        return nt.getBoolean(VISION_RUNNING_KEY, false);
+        return VisionData.getNt().getBoolean(VISION_RUNNING_KEY, false);
     }
 
     public static boolean foundTarget() {
-        return nt.getBoolean(FOUND_TARGET_KEY, false);
+        return foundTarget;
     }
 
     public static double getArea() {

@@ -1,11 +1,9 @@
 package org.usfirst.frc.team334.robot.util;
 
-import java.util.Arrays;
-
 public class TrackTarget {
 
     // tracks # of frames that lost target
-    private int counter = 0;
+    private int lostFrames = 0;
     private int nFrames;
 
     public TrackTarget(int nFrames) {
@@ -14,7 +12,7 @@ public class TrackTarget {
 
     // calculate number of frames target has been lost
     public void addTargetFound(boolean found) {
-        counter = (!found) ? counter++ : 0;
+        lostFrames = (found) ? 0 : ++lostFrames;
     }
 
     /**
@@ -23,6 +21,6 @@ public class TrackTarget {
      * @returns true number of frames lost was more than nFrames
       */
     public boolean lostTarget() {
-        return counter >= nFrames;
+        return lostFrames >= nFrames;
     }
 }

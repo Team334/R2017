@@ -69,14 +69,18 @@ public class VisionAutoAlign {
      * @return true if pids ran successfully, false if vision done or interrupted
      */
     public boolean autoAlign() {
+        System.out.println("VisionData running " + VisionData.visionRunning());
+        System.out.println("Too close = " + (areaPID.getInput() > areaCap));
+        System.out.println("On target " + areaPID.getController().onTarget());
+
         // stop if no target or too close or at destination
         tracker.addTargetFound(VisionData.foundTarget());
         if (tracker.lostTarget() || !VisionData.visionRunning() || areaPID.getInput() > areaCap || areaPID.getController().onTarget()) {
             driveTrain.stop();
+            System.out.println("Done");
+            SmartDashboard.putString("Mode", "FINISHED");
             return false;
         }
-
-        System.out.println("AUTO-ALIGNING");
 
 //        double div = 0.85 * (1 + Math.abs(offsetPID.getOutput())/30.0);
 //        speedLeft = -offsetPID.getOutput() + areaPID.getOutput() / div;

@@ -65,17 +65,17 @@ public class Robot extends IterativeRobot {
         areaPID = new VisionAreaPID();
         offsetPID = new VisionOffsetPID();
 
-        // UPDATE PORTS AND VALUES
-        intake = new Intake(0);
-        indexer = new Indexer(0);
-        climber = new Climber(0);
-        gear = new Gear(0, 1);
-        shooter = new Shooter(0);
+//        // UPDATE PORTS AND VALUES
+//        intake = new Intake(0);
+//        indexer = new Indexer(0);
+//        climber = new Climber(0, 1);
+//        gear = new Gear(0, 1);
+//        shooter = new Shooter(0);
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
-
-        fastRamp = new Ramp(10);
-        slowRamp = new Ramp(50);
-
+//
+//        fastRamp = new Ramp(10);
+//        slowRamp = new Ramp(50);
+//
         // AUTON COMMAND
         final double DISTANCE_TO_BASELINE = 9.4;
         final double ANGLE_TO_PEG = 60;
@@ -84,14 +84,14 @@ public class Robot extends IterativeRobot {
         straight = new Straight(DISTANCE_TO_BASELINE, driveTrain, gyroPID);
         visionGear = new VisionAuton(visionAutoAlign, Target.GEAR, driveTrain);
         visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER, driveTrain);
-        manualAutonSelect = new ManualAutonSelect();
+        // manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
         autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
-        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
-        autoChoose.addDefault("Default", AutonScenario.MANUAL);
+        autoChoose.addDefault("Go Straight", AutonScenario.MIDDLE);
+        // autoChoose.addDefault("Default", AutonScenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
@@ -103,7 +103,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         // Vision code will update to true if it initialized successfully
-        VisionData.getNt().putBoolean("init", false);
+        VisionData.getNt().putBoolean("running", false);
 
         // reset gyro
         GyroSource.imu.resetHeading();
@@ -112,23 +112,24 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().removeAll();
 
         autonScenario = autoChoose.getSelected();
-        if (autonScenario == AutonScenario.MANUAL) {
-            autonScenario = manualAutonSelect.getScenario();
-        }
+
+//        if (autonScenario == AutonScenario.MANUAL) {
+//            autonScenario = manualAutonSelect.getScenario();
+//        }
 
         switch (autonScenario) {
             case LEFT_SIDE:
                 Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(turnLeft);
-                Scheduler.getInstance().add(visionGear);
+                // Scheduler.getInstance().add(turnLeft);
+                // Scheduler.getInstance().add(visionGear);
                 break;
             case RIGHT_SIDE:
-                Scheduler.getInstance().add(straight);
+                // Scheduler.getInstance().add(straight);
                 Scheduler.getInstance().add(turnRight);
-                Scheduler.getInstance().add(visionGear);
+                //Scheduler.getInstance().add(visionGear);
                 break;
             case MIDDLE:
-                Scheduler.getInstance().add(straight);
+                // Scheduler.getInstance().add(straight);
                 Scheduler.getInstance().add(visionGear);
                 break;
         }
@@ -137,7 +138,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         // RUN COMMANDS IF ANY
-        Scheduler.getInstance().run();
+        //Scheduler.getInstance().run();
+        SmartDashboard.putBoolean("Running", VisionData.visionRunning());
+        SmartDashboard.putBoolean("Found Target", VisionData.foundTarget());
+
+        System.out.println("Scenario " + autonScenario);
     }
 
     @Override

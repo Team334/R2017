@@ -6,15 +6,13 @@ import edu.wpi.first.wpilibj.tables.ITableListener;
 
 public class VisionData {
 
-    private static final String VISION_INIT_KEY = "init";
+    private static final String VISION_RUNNING_KEY = "running";
     private static final String FOUND_TARGET_KEY = "found";
     private static final String AREA_KEY = "area";
     private static final String OFFSET_KEY = "x_offset";
     private static final String SKEW_KEY = "skew";
     private static final String ANGLE_KEY = "angle";
 
-    private static boolean visionInit;
-    private static boolean foundTarget;
     private static double area;
     private static double offset;
     private static double skew;
@@ -29,12 +27,6 @@ public class VisionData {
             @Override
             public void valueChanged(ITable source, String key, Object value, boolean isNew) {
                 switch (key) {
-                    case VISION_INIT_KEY:
-                        visionInit = (Boolean) value;
-                        break;
-                    case FOUND_TARGET_KEY:
-                        foundTarget = (Boolean) value;
-                        break;
                     case AREA_KEY:
                         area = (Double) value;
                         break;
@@ -56,12 +48,12 @@ public class VisionData {
         return nt;
     }
 
-    public static boolean isVisionInit() {
-        return visionInit;
+    public static boolean visionRunning() {
+        return nt.getBoolean(VISION_RUNNING_KEY, false);
     }
 
     public static boolean foundTarget() {
-        return foundTarget;
+        return nt.getBoolean(FOUND_TARGET_KEY, false);
     }
 
     public static double getArea() {
@@ -72,12 +64,11 @@ public class VisionData {
         return offset;
     }
 
-    public static double getSkew() {
-        return skew;
-    }
-
     public static double getAngle() {
         return angle;
     }
 
+    public static double getSkew() {
+        return skew;
+    }
 }

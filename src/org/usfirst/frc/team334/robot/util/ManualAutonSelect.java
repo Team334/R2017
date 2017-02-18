@@ -20,9 +20,9 @@ public class ManualAutonSelect {
     private DigitalInput di1, di2, di3;
 
     public ManualAutonSelect() {
-        this.di1 = new DigitalInput(DI_1_CHANNEL);
-        this.di2 = new DigitalInput(DI_2_CHANNEL);
-        this.di3 = new DigitalInput(DI_3_CHANNEL);
+//        this.di1 = new DigitalInput(DI_1_CHANNEL);
+//        this.di2 = new DigitalInput(DI_2_CHANNEL);
+//        this.di3 = new DigitalInput(DI_3_CHANNEL);
     }
 
     /**

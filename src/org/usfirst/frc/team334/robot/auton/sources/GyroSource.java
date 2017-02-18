@@ -24,9 +24,9 @@ public class GyroSource implements PIDSource {
 
     @Override
     public double pidGet() {
-        double h = imu.getHeading();
-        SmartDashboard.putNumber("Gyro Angle", h);
-        return h;
+        double angle = imu.getHeading();
+        SmartDashboard.putNumber("Gyro Angle", angle);
+        return angle;
     }
 
 }

@@ -1,10 +1,10 @@
 package org.usfirst.frc.team334.robot.auton.movement;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.components.Target;
 import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
-import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class VisionAuton extends Command {
 
@@ -13,46 +13,28 @@ public class VisionAuton extends Command {
     private boolean visionDone;
 
     private VisionAutoAlign visionAutoAlign;
-    private DriveTrain driveTrain;
 
     public VisionAuton(VisionAutoAlign visionAutoAlign, Target target, DriveTrain driveTrain) {
         this.visionAutoAlign = visionAutoAlign;
         this.target = target;
-        this.driveTrain = driveTrain;
     }
 
     // Called once at start of command
     public void initialize() {
-        // MAKE SURE VISION IS ON!!!!
-        if (!VisionData.isVisionInit()) {
-            System.out.println("VISION DISABLED");
-            cancel();
-        }
-        visionAutoAlign.setTarget(target);
-
         visionDone = false;
+
+        visionAutoAlign.setTarget(target);
     }
 
-    /*
+    /**
      * Continues looping until isFinished returns true(non-Javadoc)
-     *
-     *  Steps:
-     *      1) Finds target
-     *      2) Move towards target until close enough
-     *      3) Stop
+     * Move using vision until vision lost or at destination
      */
     public void execute() {
-        if (visionAutoAlign.isRunning()) {
-            visionAutoAlign.autoAlign();
-        } else {
-            visionDone = true;
-        }
-    }
+        SmartDashboard.putString("Mode", "VISION");
 
-    // If vision is canceled, stop the robot
-    protected void interrupted() {
-        System.out.println("CANCELED");
-        driveTrain.stop();
+        boolean running = visionAutoAlign.autoAlign();
+        visionDone = !running;
     }
 
     // Stops command when returns true

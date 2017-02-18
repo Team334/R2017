@@ -2,6 +2,7 @@ package org.usfirst.frc.team334.robot.auton.movement;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 
@@ -35,14 +36,12 @@ public class Straight extends Command {
         enc.reset();
     }
 
-    /*
+    /**
      * Continues looping until isFinished returns true(non-Javadoc)
-     *
-     *  Steps:
-     *      1) Go straight until you reach distance
+     * Go straight until you reach distance
      */
     public void execute() {
-        System.out.println("STRAIGHT");
+        SmartDashboard.putString("Mode", "STRAIGHT");
 
         double speed = 0.4;
         double leftSpeed = 0, rightSpeed = 0;
@@ -52,9 +51,8 @@ public class Straight extends Command {
             leftSpeed = speed + gyroPID.getOutput();
             rightSpeed = speed - gyroPID.getOutput();
         }
-
-        driveTrain.setLeftMotors(leftSpeed);
-        driveTrain.setRightMotors(rightSpeed);
+//        driveTrain.setLeftMotors(leftSpeed);
+//        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true

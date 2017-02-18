@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.auton.movement;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
@@ -28,7 +29,7 @@ public class Turn extends Command {
         gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
     }
 
-    /*
+    /**
      *  Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
@@ -37,7 +38,8 @@ public class Turn extends Command {
      *      3) Done
      */
     public void execute() {
-        System.out.println("TURN");
+        SmartDashboard.putString("Mode", "TURN");
+
         double speed = 0.1;
         double leftSpeed = 0, rightSpeed = 0;
         if (gyroPID.getController().onTarget()) {
@@ -46,8 +48,8 @@ public class Turn extends Command {
             leftSpeed = speed + gyroPID.getOutput();
             rightSpeed = speed - gyroPID.getOutput();
         }
-        driveTrain.setLeftMotors(leftSpeed);
-        driveTrain.setRightMotors(rightSpeed);
+//        driveTrain.setLeftMotors(leftSpeed);
+//        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true

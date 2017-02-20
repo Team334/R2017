@@ -64,4 +64,8 @@ public class Controls {
         return xboxController.getBackButton();
     }
 
+    public boolean getToggleCamera() { 
+	return rightJoystick.getRawButton(1); 
+    }
+
 }

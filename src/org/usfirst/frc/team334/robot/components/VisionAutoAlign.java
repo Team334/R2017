@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
+import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.util.TrackTarget;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
@@ -21,14 +22,6 @@ public class VisionAutoAlign {
 
     // chechk if target was found in last # of frames
     private final int N_FRAMES = 10;
-
-    private final double GEAR_TARGET = 300;
-    private final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
-    private final double GEAR_AREA_CAP = 350;
-
-    private final double BOILER_TARGET = 300;
-    private final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
-    private final double BOILER_AREA_CAP = 350;
 
     private double areaCap;
 
@@ -52,14 +45,14 @@ public class VisionAutoAlign {
         this.target = target;
 
         if (target == Target.GEAR) {
-            areaPID.getController().setSetpoint(GEAR_TARGET);
-            areaPID.getController().setAbsoluteTolerance(GEAR_TOLERANCE); // 5% tolerance
-            areaCap = GEAR_AREA_CAP;
+            areaPID.getController().setSetpoint(Constants.GEAR_TARGET);
+            areaPID.getController().setAbsoluteTolerance(Constants.GEAR_TOLERANCE); // 5% tolerance
+            areaCap = Constants.GEAR_AREA_CAP;
             SmartDashboard.putString("Target", "GEAR");
         } else if (target == Target.BOILER) {
-            areaPID.getController().setSetpoint(BOILER_TARGET);
-            areaPID.getController().setAbsoluteTolerance(BOILER_TOLERANCE);
-            areaCap = BOILER_AREA_CAP;
+            areaPID.getController().setSetpoint(Constants.BOILER_TARGET);
+            areaPID.getController().setAbsoluteTolerance(Constants.BOILER_TOLERANCE);
+            areaCap = Constants.BOILER_AREA_CAP;
             SmartDashboard.putString("Target", "BOILER");
         }
     }

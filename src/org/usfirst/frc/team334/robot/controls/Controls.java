@@ -65,7 +65,7 @@ public class Controls {
     }
 
     public boolean getToggleCamera() { 
-	return rightJoystick.getRawButton(1); 
+	    return rightJoystick.getRawButton(1);
     }
 
 }

@@ -6,11 +6,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.controls.Constants;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Straight extends Command {
     
     private double distance;
     private boolean straightDone;
+
+    private Timer time;
+    int straightTime = 3;
 
     private Encoder enc;
 
@@ -31,9 +35,10 @@ public class Straight extends Command {
 
         gyroPID.getController().setSetpoint(0);
 
-        final double DOUBLE_PER_PULSE = 0.1; // in feet
-        enc.setDistancePerPulse(DOUBLE_PER_PULSE);
+        enc.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
         enc.reset();
+
+        time = new Timer();
     }
 
     /**
@@ -42,16 +47,20 @@ public class Straight extends Command {
      */
     public void execute() {
         SmartDashboard.putString("Mode", "STRAIGHT");
-
-        double speed = 0.4;
-        double leftSpeed = 0, rightSpeed = 0;
-        if (enc.getDistance() <= distance) {
-            driveTrain.stop();
+        if (time.get() > straightTime) {
             straightDone = true;
-        } else {
-            leftSpeed = speed + gyroPID.getOutput();
-            rightSpeed = speed - gyroPID.getOutput();
         }
+        System.out.println("STRAIGHT");
+//        double speed = 0.4;
+//        double leftSpeed = 0, rightSpeed = 0;
+//        if (enc.getDistance() <= distance) {
+//            driveTrain.stop();
+//            straightDone = true;
+//        } else {
+//            leftSpeed = speed + gyroPID.getOutput();
+//            rightSpeed = speed - gyroPID.getOutput();
+//        }
+
 //        driveTrain.setLeftMotors(leftSpeed);
 //        driveTrain.setRightMotors(rightSpeed);
     }

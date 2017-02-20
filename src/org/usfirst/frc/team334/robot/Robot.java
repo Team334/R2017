@@ -13,6 +13,7 @@ import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
 import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
+import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
 import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
@@ -20,6 +21,9 @@ import org.usfirst.frc.team334.robot.vision.VisionData;
 public class Robot extends IterativeRobot {
     // COMPONENTS
     private DriveTrain driveTrain;
+    private double stickCalLeft;
+    private double stickCalRight;
+
     private Controls controls;
     private Intake intake;
     private Indexer indexer;
@@ -27,6 +31,7 @@ public class Robot extends IterativeRobot {
     private Gear gear;
     private Shooter shooter;
     private VisionAutoAlign visionAutoAlign;
+    private CameraSet cameraSet;
 
     private Ramp fastRamp;
     private Ramp slowRamp;
@@ -46,13 +51,6 @@ public class Robot extends IterativeRobot {
 
     private SendableChooser<AutonScenario> autoChoose;
     private AutonScenario autonScenario;
-
-    final double DISTANCE_TO_BASELINE = 9.4;
-    final double ANGLE_TO_PEG = 60;
-    public final double SLOW_FACTOR = 0.8;
-
-    private double stickCalLeft;
-    private double stickCalRight;
 
     @Override
     public void robotInit() {
@@ -75,14 +73,17 @@ public class Robot extends IterativeRobot {
 //        gear = new Gear();
 //        shooter = new Shooter();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
+
+        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+        cameraSet.enable();
 //
 //        fastRamp = new Ramp(10);
 //        slowRamp = new Ramp(50);
 //
         // AUTON COMMAND
-        turnLeft = new Turn(-ANGLE_TO_PEG, driveTrain, gyroPID);
-        turnRight = new Turn(ANGLE_TO_PEG, driveTrain, gyroPID);
-        straight = new Straight(DISTANCE_TO_BASELINE, driveTrain, gyroPID);
+        turnLeft = new Turn(-Constants.ANGLE_TO_PEG, driveTrain, gyroPID);
+        turnRight = new Turn(Constants.ANGLE_TO_PEG, driveTrain, gyroPID);
+        straight = new Straight(Constants.DISTANCE_TO_BASELINE, driveTrain, gyroPID);
         visionGear = new VisionAuton(visionAutoAlign, Target.GEAR);
         visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER);
         // manualAutonSelect = new ManualAutonSelect();
@@ -118,20 +119,13 @@ public class Robot extends IterativeRobot {
 //            autonScenario = manualAutonSelect.getScenario();
 //        }
 
+        System.out.println("Auton Scenario " + autonScenario);
         switch (autonScenario) {
             case LEFT_SIDE:
-                Scheduler.getInstance().add(straight);
-                // Scheduler.getInstance().add(turnLeft);
-                // Scheduler.getInstance().add(visionGear);
                 break;
             case RIGHT_SIDE:
-                // Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(turnRight);
-                //Scheduler.getInstance().add(visionGear);
                 break;
             case MIDDLE:
-                // Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(visionGear);
                 break;
         }
         System.out.println("AUTON INIT");
@@ -207,8 +201,8 @@ public class Robot extends IterativeRobot {
             // slow down when turning
             if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
                 double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-                leftSpeed /= sens * SLOW_FACTOR;
-                rightSpeed /= sens * SLOW_FACTOR;
+                leftSpeed /= sens * Constants.SLOW_FACTOR;
+                rightSpeed /= sens * Constants.SLOW_FACTOR;
             }
             driveTrain.setLeftMotors(leftSpeed);
             driveTrain.setRightMotors(rightSpeed);

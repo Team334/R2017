@@ -16,7 +16,6 @@ public class VisionData {
 
     private static boolean visionRunning;
     private static boolean foundTarget;
-
     private static double area;
     private static double offset;
     private static double skew;

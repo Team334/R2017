@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
-import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
-import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Turn extends Command {
@@ -16,13 +14,14 @@ public class Turn extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    private final double turnTime = 1;
+    private final double turnTime = 3;
     private Timer time;
 
     public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
         this.angle = angle;
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
+        time = new Timer();
     }
 
     // Called once at start of command
@@ -47,19 +46,20 @@ public class Turn extends Command {
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
 
-//        if (time.get() > turnTime) {
-//            turnDone = true;
-//            return;
-//        }
-
-        double speed = 0.1;
-        double leftSpeed = 0, rightSpeed = 0;
-        if (gyroPID.getController().onTarget()) {
+        if (time.get() > turnTime) {
             turnDone = true;
-        } else {
-            leftSpeed = speed + gyroPID.getOutput();
-            rightSpeed = speed - gyroPID.getOutput();
+            return;
         }
+        System.out.println("TURN");
+//        double speed = 0.1;
+//        double leftSpeed = 0, rightSpeed = 0;
+//        if (gyroPID.getController().onTarget()) {
+//            turnDone = true;
+//        } else {
+//            leftSpeed = speed + gyroPID.getOutput();
+//            rightSpeed = speed - gyroPID.getOutput();
+//
+//        }
 //        driveTrain.setLeftMotors(leftSpeed);
 //        driveTrain.setRightMotors(rightSpeed);
     }

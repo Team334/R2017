@@ -2,7 +2,6 @@ package org.usfirst.frc.team334.robot.auton.sources;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.sensors.BNO055;
 
 public class GyroSource implements PIDSource {

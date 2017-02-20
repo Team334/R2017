@@ -5,13 +5,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
     
     private double distance;
-    private Encoder enc;
-
     private boolean straightDone;
+
+    private Encoder enc;
 
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
@@ -21,8 +22,7 @@ public class Straight extends Command {
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        // update
-        enc = new Encoder(0,1);
+        enc = new Encoder(Constants.ENCODER_1, Constants.ENCODER_2);
     }
 
     // Called once at start of command
@@ -45,7 +45,8 @@ public class Straight extends Command {
 
         double speed = 0.4;
         double leftSpeed = 0, rightSpeed = 0;
-        if (distance >= enc.getDistance()) {
+        if (enc.getDistance() <= distance) {
+            driveTrain.stop();
             straightDone = true;
         } else {
             leftSpeed = speed + gyroPID.getOutput();

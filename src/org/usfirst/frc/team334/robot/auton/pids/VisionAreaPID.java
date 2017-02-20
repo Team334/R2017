@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.auton.pids;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.sources.VisionAreaSource;
 
 public class VisionAreaPID {
@@ -13,7 +14,7 @@ public class VisionAreaPID {
         visionAreaSource = new VisionAreaSource();
         defaultOutput = new DefaultOutput();
         double areaCap = 0.15;
-        double areaP = 0.01;
+        double areaP = 0.001;
         double areaI = 0.0;
         double areaD = 0.0;
 
@@ -21,6 +22,8 @@ public class VisionAreaPID {
         areaPID.setContinuous();
         areaPID.setOutputRange(-areaCap, areaCap);
         areaPID.enable();
+
+        SmartDashboard.putData("AreaPID", areaPID);
     }
 
     public double getInput() {

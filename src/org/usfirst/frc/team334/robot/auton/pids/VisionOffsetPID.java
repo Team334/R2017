@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.auton.pids;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.auton.sources.VisionOffsetSource;
 
@@ -19,9 +20,11 @@ public class VisionOffsetPID {
         double offsetD = 0.0001;
 
         offsetPID = new PIDController(offsetP, offsetI, offsetD, visionOffsetSource, defaultOutput);
+        offsetPID.setSetpoint(0);
         offsetPID.setContinuous();
         offsetPID.setOutputRange(-offsetCap, offsetCap);
         offsetPID.enable();
+        SmartDashboard.putData("OffsetPID", offsetPID);
     }
 
     public double getInput() {

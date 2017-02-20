@@ -45,8 +45,11 @@ public class Robot extends IterativeRobot {
     private ManualAutonSelect manualAutonSelect;
 
     private SendableChooser<AutonScenario> autoChoose;
-
     private AutonScenario autonScenario;
+
+    final double DISTANCE_TO_BASELINE = 9.4;
+    final double ANGLE_TO_PEG = 60;
+    public final double SLOW_FACTOR = 0.8;
 
     private double stickCalLeft;
     private double stickCalRight;
@@ -77,13 +80,11 @@ public class Robot extends IterativeRobot {
 //        slowRamp = new Ramp(50);
 //
         // AUTON COMMAND
-        final double DISTANCE_TO_BASELINE = 9.4;
-        final double ANGLE_TO_PEG = 60;
         turnLeft = new Turn(-ANGLE_TO_PEG, driveTrain, gyroPID);
         turnRight = new Turn(ANGLE_TO_PEG, driveTrain, gyroPID);
         straight = new Straight(DISTANCE_TO_BASELINE, driveTrain, gyroPID);
-        visionGear = new VisionAuton(visionAutoAlign, Target.GEAR, driveTrain);
-        visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER, driveTrain);
+        visionGear = new VisionAuton(visionAutoAlign, Target.GEAR);
+        visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER);
         // manualAutonSelect = new ManualAutonSelect();
 
         // ADD OBJECTS TO SENDABLE CHOOSER
@@ -141,60 +142,56 @@ public class Robot extends IterativeRobot {
         // RUN COMMANDS IF ANY
         Scheduler.getInstance().run();
 
-        SmartDashboard.putNumber("Area", VisionData.getArea());
-        SmartDashboard.putNumber("offset", VisionData.getOffset());
-        SmartDashboard.putNumber("angle", VisionData.getAngle());
-
-        SmartDashboard.putBoolean("Running", VisionData.visionRunning());
-        SmartDashboard.putBoolean("Found Target", VisionData.foundTarget());
+        updateSmartDashboard();
     }
 
     @Override
     public void teleopInit() {
+        // Vision code will update to true if it initialized successfully
+        VisionData.getNt().putBoolean("running", false);
+
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
     }
 
     @Override
     public void teleopPeriodic() {
-        // CLIMBER LISTENER
-        if (controls.getClimbUp() && !controls.getClimbDown()) {
-            climber.climbUp();
-        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
-            climber.climbDown();
-        } else {
-            climber.stop();
-        }
-
-        // INTAKE LISTENER
-        if (controls.getIntakeIn() && !controls.getIntakeOut()) {
-            intake.pull_in();
-        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
-            intake.push_out();
-        } else {
-            intake.stop();
-        }
-
-        // INTAKE LISTENER
-        if (controls.getIndexerIn()) {
-            indexer.pushIntoShooter();
-        } else {
-            indexer.stop();
-        }
-
-        // SHOOTER LISTENER
-        if (controls.getShoot()) {
-            shooter.setShooterSpeed(0.6);
-        } else {
-            shooter.setShooterSpeed(0);
-        }
-
-        // GEAR LISTENER
-        if (controls.getGearOut()) {
-            gear.pushOutGear();
-        } else {
-            gear.resetServos();
-        }
+//        // CLIMBER LISTENER
+//        if (controls.getClimbUp() && !controls.getClimbDown()) {
+//            climber.climbUp();
+//        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
+//            climber.climbDown();
+//        } else {
+//            climber.stop();
+//        }
+//
+//        // INTAKE LISTENER
+//        if (controls.getIntakeIn()) {
+//            intake.pull_in();
+//        } else {
+//            intake.stop();
+//        }
+//
+//        // INTAKE LISTENER
+//        if (controls.getIndexerIn()) {
+//            indexer.pushIntoShooter();
+//        } else {
+//            indexer.stop();
+//        }
+//
+//        // SHOOTER LISTENER
+//        if (controls.getShoot()) {
+//            shooter.setShooterSpeed(0.6);
+//        } else {
+//            shooter.setShooterSpeed(0);
+//        }
+//
+//        // GEAR LISTENER
+//        if (controls.getGearOut()) {
+//            gear.pushOutGear();
+//        } else {
+//            gear.resetServos();
+//        }
 
         // DRIVETRAIN LISTENER
         if (controls.getAutoAlign(Target.GEAR)) {
@@ -205,19 +202,19 @@ public class Robot extends IterativeRobot {
             visionAutoAlign.autoAlign();
         } else {
             // joystick controlled
-            double leftSpeed = controls.getLeftDrive();
-            double rightSpeed = controls.getRightDrive();
+            double leftSpeed = controls.getLeftDrive() - stickCalLeft;
+            double rightSpeed = controls.getRightDrive() - stickCalRight;
+            // slow down when turning
             if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
                 double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-                leftSpeed /= sens;
-                rightSpeed /= sens;
+                leftSpeed /= sens * SLOW_FACTOR;
+                rightSpeed /= sens * SLOW_FACTOR;
             }
             driveTrain.setLeftMotors(leftSpeed);
             driveTrain.setRightMotors(rightSpeed);
-
-            SmartDashboard.putNumber("Left speed", leftSpeed);
-            SmartDashboard.putNumber("Right speed", rightSpeed);
         }
+
+        updateSmartDashboard();
 
 //        fastRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
 //        fastRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
@@ -237,9 +234,6 @@ public class Robot extends IterativeRobot {
 //            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
 //        else
 //            slowRamp.reset(Ramp.SIDE.LEFT);
-
-        SmartDashboard.putNumber("LeftJoy", controls.getLeftDrive());
-        SmartDashboard.putNumber("Right Joy", controls.getRightDrive());
     }
 
     @Override
@@ -259,5 +253,16 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
 
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putNumber("Area", areaPID.getInput());
+        SmartDashboard.putNumber("Offset", VisionData.getOffset());
+        SmartDashboard.putNumber("Vision angle", VisionData.getAngle());
+
+        SmartDashboard.putBoolean("Running", VisionData.visionRunning());
+        SmartDashboard.putBoolean("Found Target", VisionData.foundTarget());
+
+        SmartDashboard.putNumber("Gyro Angle", gyroPID.getInput());
     }
 }

@@ -2,7 +2,6 @@ package org.usfirst.frc.team334.robot.auton.movement;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.components.Target;
 import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
 
@@ -14,7 +13,7 @@ public class VisionAuton extends Command {
 
     private VisionAutoAlign visionAutoAlign;
 
-    public VisionAuton(VisionAutoAlign visionAutoAlign, Target target, DriveTrain driveTrain) {
+    public VisionAuton(VisionAutoAlign visionAutoAlign, Target target) {
         this.visionAutoAlign = visionAutoAlign;
         this.target = target;
     }

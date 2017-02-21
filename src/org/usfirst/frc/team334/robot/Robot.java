@@ -6,91 +6,99 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.AutonScenario;
-import org.usfirst.frc.team334.robot.auton.movement.Straight;
-import org.usfirst.frc.team334.robot.auton.movement.Turn;
-import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToLeftPeg;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToMiddlePeg;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToRightPeg;
+import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
+import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
+import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
+import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
+import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
-import org.usfirst.frc.team334.robot.sensors.BNO055;
-import org.usfirst.frc.team334.robot.sensors.HallEffect;
 import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
     // COMPONENTS
     private DriveTrain driveTrain;
+    private double stickCalLeft;
+    private double stickCalRight;
+
     private Controls controls;
     private Intake intake;
     private Indexer indexer;
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
-    private BumperLEDStrip bumper;
 
-    // SENSORS
-    private HallEffect hallFX;
-    private BNO055 imu;
-
-    private Ramp fastRamp;
-    private Ramp slowRamp;
-
-    // AUTON COMMANDS
-    private Turn turnLeft;
-    private Turn turnRight;
-    private Straight straight;
-    private VisionAuton visionGear;
-    private VisionAuton visionBoiler;
     private ManualAutonSelect manualAutonSelect;
 
+    private BumperLEDStrip bumper;
+
+    private VisionAutoAlign visionAutoAlign;
+    private CameraSet cameraSet;
+
+    // PIDS
+    private GyroPID gyroPID;
+    private VisionAreaPID areaPID;
+    private VisionOffsetPID offsetPID;
+
+    // AUTON COMMANDS
+    private GoToLeftPeg goToLeftPeg;
+    private GoToRightPeg goToRightPeg;
+    private GoToMiddlePeg goToMiddlePeg;
+
     private SendableChooser<AutonScenario> autoChoose;
-
-    AutonScenario autonScenario;
-
-    private double stickCalLeft;
-    private double stickCalRight;
+    private AutonScenario autonScenario;
 
     @Override
     public void robotInit() {
+        // INIT COMPONENETS
+        driveTrain = new DriveTrain();
+        controls = new Controls();
+
         // INIT Team LEDs
         bumper = new BumperLEDStrip(DriverStation.getInstance().getAlliance());
-
-        // INIT SENSORS
-        hallFX = new HallEffect(0);
-        imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
-
-        // INIT SUBSYSTEMS
-        driveTrain = new DriveTrain(0, 1);
-        controls = new Controls(0, 1, 2);
-
-        // UPDATE PORTS AND VALUES
-        intake = new Intake(0);
-        indexer = new Indexer(0);
-        climber = new Climber(0);
-        gear = new Gear(0, 1);
-        shooter = new Shooter(0);
-
-        fastRamp = new Ramp(10);
-        slowRamp = new Ramp(50);
 
         // INIT VISION
         VisionData.init();
 
-        // AUTON COMMAND
-        double distanceToBaseLine = 9.4;
-        double angleToPeg = 60;
-        turnLeft = new Turn(-angleToPeg, driveTrain);
-        turnRight = new Turn(angleToPeg, driveTrain);
-        straight = new Straight(distanceToBaseLine, driveTrain);
-        visionGear = new VisionAuton(VisionAuton.Target.GEAR, driveTrain);
-        visionBoiler = new VisionAuton(VisionAuton.Target.BOILER, driveTrain);
-        manualAutonSelect = new ManualAutonSelect();
+        // INIT CAMERA
+//        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+//        cameraSet.enable();
+
+        // INIT PIDS
+        gyroPID = new GyroPID();
+        areaPID = new VisionAreaPID();
+        offsetPID = new VisionOffsetPID();
+
+//        intake = new Intake();
+//        indexer = new Indexer();
+//        climber = new Climber();
+        gear = new Gear();
+//        shooter = new Shooter();
+//        manualAutonSelect = new ManualAutonSelect();
+        visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
+
+        // AUTON COMMAND GROUPS
+        /**
+         * @param drivetrain = For moving the robot
+         * @param gyroPID = used to keep robot straight or turn
+         * @paran visionAutoAlign = For vision
+         */
+        goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign);
+        goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign);
+        goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign);
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
         autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
         autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
-        autoChoose.addDefault("Default", AutonScenario.MANUAL);
+        autoChoose.addDefault("Nothing", AutonScenario.NOTHING);
+        // autoChoose.addDefault("Default", AutonScenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
@@ -100,28 +108,32 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        // Vision code will update to true if it initialized successfully
+        VisionData.getNt().putBoolean("running", false);
+
+        // reset gyro
+        GyroSource.imu.resetHeading();
+
+        // clear old commands
+        Scheduler.getInstance().removeAll();
+
         bumper.setTeam();
-        Scheduler.getInstance().removeAll(); // clear old command
 
         autonScenario = autoChoose.getSelected();
-        if (autonScenario == AutonScenario.MANUAL) {
-            autonScenario = manualAutonSelect.getScenario();
-        }
+
+//        if (autonScenario == AutonScenario.MANUAL) {
+//            autonScenario = manualAutonSelect.getScenario();
+//        }
 
         switch (autonScenario) {
             case LEFT_SIDE:
-                Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(turnLeft);
-                Scheduler.getInstance().add(visionGear);
+                Scheduler.getInstance().add(goToLeftPeg);
                 break;
             case RIGHT_SIDE:
-                Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(turnRight);
-                Scheduler.getInstance().add(visionGear);
+                Scheduler.getInstance().add(goToRightPeg);
                 break;
             case MIDDLE:
-                Scheduler.getInstance().add(straight);
-                Scheduler.getInstance().add(visionGear);
+                Scheduler.getInstance().add(goToMiddlePeg);
                 break;
         }
     }
@@ -129,94 +141,87 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         // RUN COMMANDS IF ANY
-        Scheduler.getInstance().run();
+//        Scheduler.getInstance().run();
+
+        updateSmartDashboard();
     }
 
     @Override
     public void teleopInit() {
+        // Vision code will update to true if it initialized successfully
+        VisionData.getNt().putBoolean("running", false);
+
         bumper.setTeam();
+        
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
     }
 
     @Override
     public void teleopPeriodic() {
-        // CLIMBER LISTENER
-        if (controls.getClimbUp() && !controls.getClimbDown()) {
-            climber.climbUp();
-        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
-            climber.climbDown();
-        } else {
-            climber.stop();
-        }
-
-        // INTAKE LISTENER
-        if (controls.getIntakeIn() && !controls.getIntakeOut()) {
-            intake.pull_in();
-        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
-            intake.push_out();
-        } else {
-            intake.stop();
-        }
-
-        // INTAKE LISTENER
-        if (controls.getIndexerIn()) {
-            indexer.pushIntoShooter();
-        } else {
-            indexer.stop();
-        }
-
-        // SHOOTER LISTENER
-        if (controls.getShooterButton()) {
-            shooter.setShooterSpeed(0.6);
-        } else {
-            shooter.setShooterSpeed(0);
-        }
-
-        // GEAR LISTENER
-        if (controls.getGearOut()) {
-            gear.pushOutGear();
-        } else {
-            gear.resetServos();
-        }
+//        // CLIMBER LISTENER
+//        if (controls.getClimbUp() && !controls.getClimbDown()) {
+//            climber.climbUp();
+//        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
+//            climber.climbDown();
+//        } else {
+//            climber.stop();
+//        }
+//
+//        // INTAKE LISTENER
+//        if (controls.getIntakeIn()) {
+//            intake.pull_in();
+//        } else {
+//            intake.stop();
+//        }
+//
+//        // INTAKE LISTENER
+//        if (controls.getIndexerIn()) {
+//            indexer.pushIntoShooter();
+//        } else {
+//            indexer.stop();
+//        }
+//
+//        // SHOOTER LISTENER
+//        if (controls.getShoot()) {
+//            shooter.setShooterSpeed(0.6);
+//        } else {
+//            shooter.setShooterSpeed(0);
+//        }
+//
+//        // GEAR LISTENER
+//        if (controls.getGearOut()) {
+//            gear.pushOutGear();
+//        } else if (controls.getHoldGear()) {
+//            gear.gripGear();
+//        } else if (controls.getResetGear()) {
+//            gear.resetServos();
+//        }
 
         // DRIVETRAIN LISTENER
-        double leftSpeed = controls.getLeftDrive();
-        double rightSpeed = controls.getRightDrive();
-
-        if (controls.getSlowRampButton(Ramp.SIDE.LEFT) && controls.getSlowRampButton(Ramp.SIDE.RIGHT)) {
-            double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-            leftSpeed = controls.getLeftDrive() / sens;
-            rightSpeed = controls.getRightDrive() / sens;
+        if (controls.getAutoAlign(Target.GEAR)) {
+            visionAutoAlign.setTarget(Target.GEAR);
+            visionAutoAlign.autoAlign();
+        }
+        else if (controls.getAutoAlign(Target.BOILER)) {
+            visionAutoAlign.setTarget(Target.BOILER);
+            visionAutoAlign.autoAlign();
+        }
+        else {
+            // joystick controlled
+            double leftSpeed = controls.getLeftDrive() - stickCalLeft;
+            double rightSpeed = controls.getRightDrive() - stickCalRight;
+            // slow ramp
+            if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
+                double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
+                leftSpeed /= sens * Constants.SLOW_FACTOR;
+                rightSpeed /= sens * Constants.SLOW_FACTOR;
+            }
+            driveTrain.setLeftMotors(leftSpeed);
+            driveTrain.setRightMotors(rightSpeed);
         }
 
-        driveTrain.setLeftMotors(leftSpeed);
-        driveTrain.setRightMotors(rightSpeed);
-
-//        fastRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
-//        fastRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
-//
-//        slowRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
-//        slowRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
-//
-//        leftSpeed = ((controls.getLeftDrive() - stickCalLeft) * fastRamp.getRamp(Ramp.SIDE.LEFT));
-//        rightSpeed = ((controls.getRightDrive() - stickCalRight) * fastRamp.getRamp(Ramp.SIDE.RIGHT));
-//
-//        if (controls.getSlowRampButton(Ramp.SIDE.LEFT))
-//            leftSpeed = ((controls.getLeftDrive() - stickCalLeft) * slowRamp.getRamp(Ramp.SIDE.LEFT));
-//        else
-//            slowRamp.reset(Ramp.SIDE.LEFT);
-//
-//        if (controls.getSlowRampButton(Ramp.SIDE.RIGHT))
-//            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
-//        else
-//            slowRamp.reset(Ramp.SIDE.LEFT);
-
-        SmartDashboard.putNumber("Left speed", leftSpeed);
-        SmartDashboard.putNumber("Right speed", rightSpeed);
-
-        SmartDashboard.putNumber("LeftJoy", controls.getLeftDrive());
-        SmartDashboard.putNumber("Right Joy", controls.getRightDrive());
+        updateSmartDashboard();
     }
 
     @Override
@@ -236,5 +241,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledPeriodic() {
 
+    }
+
+    public void updateSmartDashboard() {
+        SmartDashboard.putNumber("Gyro Angle", gyroPID.getInput());
+
+        VisionData.displayData();
     }
 }

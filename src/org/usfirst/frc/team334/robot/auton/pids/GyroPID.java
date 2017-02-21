@@ -1,7 +1,9 @@
 package org.usfirst.frc.team334.robot.auton.pids;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class GyroPID {
 
@@ -13,15 +15,12 @@ public class GyroPID {
         gyroSource = new GyroSource();
         defaultOutput = new DefaultOutput();
 
-        double gyroCap = 0.3;
-        double gyroP = 0.015;
-        double gyroI = 0.0;
-        double gyroD = 0.0;
-
-        gyroPID = new PIDController(gyroP, gyroI, gyroD, gyroSource, defaultOutput);
+        gyroPID = new PIDController(Constants.gyroP, Constants.gyroI, Constants.gyroD, gyroSource, defaultOutput);
         gyroPID.setContinuous();
-        gyroPID.setOutputRange(-gyroCap, gyroCap);
+        gyroPID.setOutputRange(-Constants.gyroCap, Constants.gyroCap);
         gyroPID.enable();
+
+        SmartDashboard.putData("GryoPID", gyroPID);
     }
 
     public double getInput() {

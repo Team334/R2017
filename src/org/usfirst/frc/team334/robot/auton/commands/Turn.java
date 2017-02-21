@@ -1,32 +1,34 @@
-package org.usfirst.frc.team334.robot.auton.movement;
+package org.usfirst.frc.team334.robot.auton.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 
 public class Turn extends Command {
 
     private double angle;
-    private boolean turnDone;
 
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Turn(double angle, DriveTrain driveTrain) {
+    public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
+        requires(driveTrain);
+
         this.angle = angle;
-        this.gyroPID = new GyroPID();
+        this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
+
+        setTimeout(2);
     }
 
     // Called once at start of command
     public void initialize() {
-        turnDone = false;
-
         gyroPID.getController().setSetpoint(angle);
         gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
     }
 
-    /*
+    /**
      *  Continues looping until isFinished returns true(non-Javadoc)
      *
      *  Steps:
@@ -35,15 +37,13 @@ public class Turn extends Command {
      *      3) Done
      */
     public void execute() {
-        System.out.println("TURN");
-        double speed = 0.1;
-        double leftSpeed = 0, rightSpeed = 0;
-        if (gyroPID.getController().onTarget()) {
-            turnDone = true;
-        } else {
-            leftSpeed = speed + gyroPID.getOutput();
-            rightSpeed = speed - gyroPID.getOutput();
-        }
+        SmartDashboard.putString("Mode", "TURN");
+        System.out.println("TURN" + gyroPID.getOutput() + "setpoint " + gyroPID.getController().getSetpoint());
+
+        double speed = 0.0;
+        double leftSpeed = speed + gyroPID.getOutput();
+        double rightSpeed = speed - gyroPID.getOutput();
+
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);
     }
@@ -51,7 +51,11 @@ public class Turn extends Command {
     // Stops program when returns true
     @Override
     protected boolean isFinished() {
-        return turnDone;
+        return isTimedOut();
+    }
+
+    protected void end() {
+        driveTrain.stop();
     }
 
 }

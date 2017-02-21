@@ -58,6 +58,7 @@ public class Robot extends IterativeRobot {
         // INIT COMPONENETS
         driveTrain = new DriveTrain();
         controls = new Controls();
+
         // INIT Team LEDs
         bumper = new BumperLEDStrip(DriverStation.getInstance().getAlliance());
 

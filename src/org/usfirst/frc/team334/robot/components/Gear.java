@@ -1,5 +1,7 @@
 package org.usfirst.frc.team334.robot.components;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
@@ -20,13 +22,18 @@ public class Gear extends Subsystem {
     }
 
     public void pushOutGear() {
-        left.setAngle(60);
-        right.setAngle(-60);
+        left.setAngle(Constants.lEFT_SERVO_OUT);
+        right.setAngle(Constants.RIGHT_SERVO_OUT);
+    }
+
+    public void gripGear() {
+        left.setAngle(Constants.LEFT_SERVO_GRIP);
+        right.setAngle(Constants.RIGHT_SERVO_GRIP);
     }
 
     public void resetServos() {
-        left.setAngle(0);
-        right.setAngle(0);
+        left.setAngle(Constants.LEFT_SERVO_RESET);
+        right.setAngle(Constants.RIGHT_SERVO_RESET);
     }
 
 }

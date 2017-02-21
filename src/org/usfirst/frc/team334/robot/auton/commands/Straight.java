@@ -9,7 +9,8 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
 
-    private Encoder enc;
+    private Encoder encLeft;
+    private Encoder encRight;
 
     private boolean straightDone;
 
@@ -22,9 +23,14 @@ public class Straight extends Command {
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-//        enc = new Encoder(Constants.ENCODER_1, Constants.ENCODER_2);
-//        enc.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
-//        enc.reset();
+//        encLeft = new Encoder(Constants.ENCODER_LEFT_1, Constants.ENCODER_LEFT_2);
+//        encLeft.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
+//        encLeft.reset();
+
+//        encRight = new Encoder(Constants.ENCODER_RIGHT_1, Constants.ENCODER_RIGHT_2);
+//        encRight.setDistancePerPulse(Constants.DISTANCE_PER_PULSE)
+//        encRight.reset();
+
 
         setTimeout(2);
         straightDone = false;
@@ -43,16 +49,15 @@ public class Straight extends Command {
         SmartDashboard.putString("Mode", "STRAIGHT");
         System.out.println("STRAIGHT");
 
-        if (enc.getDistance() >= Constants.DISTANCE_TO_BASELINE) {
+        if (encLeft.getDistance() >= Constants.DISTANCE_TO_BASELINE || encRight.getDistance() >= Constants.DISTANCE_TO_BASELINE) {
             straightDone = true;
             return;
         }
 
         double speed = 0.4;
-        double leftSpeed = 0, rightSpeed = 0;
 
-        leftSpeed = speed + gyroPID.getOutput();
-        rightSpeed = speed - gyroPID.getOutput();
+        double leftSpeed = speed + gyroPID.getOutput();
+        double rightSpeed = speed - gyroPID.getOutput();
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);

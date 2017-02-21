@@ -61,6 +61,14 @@ public class Controls {
         return xboxController.getBackButton();
     }
 
+    public boolean getHoldGear() {
+        return xboxController.getBackButton();
+    }
+
+    public boolean getResetGear() {
+        return xboxController.getBackButton();
+    }
+
     public boolean getShoot() {
         return xboxController.getBackButton();
     }
@@ -74,7 +82,7 @@ public class Controls {
         xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
     }
 
-    public void xboxUnRumble() {
+    public void xboxStopRumble() {
         xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
         xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
     }

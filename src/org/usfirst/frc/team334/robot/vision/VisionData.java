@@ -30,6 +30,7 @@ public class VisionData {
         nt.addTableListener(new ITableListener() {
             @Override
             public void valueChanged(ITable source, String key, Object value, boolean isNew) {
+                System.out.println("Value changed. Key = " + key + ", Value = " + value);
                 switch (key) {
                     case FOUND_TARGET_KEY:
                         foundTarget = (Boolean) value;

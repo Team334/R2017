@@ -1,6 +1,5 @@
 package org.usfirst.frc.team334.robot.components;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -33,7 +32,7 @@ public class Climber extends Subsystem {
         if(climberEnc.getRate() < 0.5 && climberMotor.get() >= .5) {
             controls.xboxRumble();
         } else {
-            controls.xboxUnRumble();
+            controls.xboxStopRumble();
         }
     }
 

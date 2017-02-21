@@ -59,8 +59,8 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT CAMERA
-        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
-        cameraSet.enable();
+//        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+//        cameraSet.enable();
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 //        intake = new Intake();
 //        indexer = new Indexer();
 //        climber = new Climber();
-//        gear = new Gear();
+        gear = new Gear();
 //        shooter = new Shooter();
 //        manualAutonSelect = new ManualAutonSelect();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
@@ -133,7 +133,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         // RUN COMMANDS IF ANY
-        Scheduler.getInstance().run();
+//        Scheduler.getInstance().run();
 
         updateSmartDashboard();
     }
@@ -182,7 +182,9 @@ public class Robot extends IterativeRobot {
 //        // GEAR LISTENER
 //        if (controls.getGearOut()) {
 //            gear.pushOutGear();
-//        } else {
+//        } else if (controls.getHoldGear()) {
+//            gear.gripGear();
+//        } else if (controls.getResetGear()) {
 //            gear.resetServos();
 //        }
 

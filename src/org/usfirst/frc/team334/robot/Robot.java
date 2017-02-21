@@ -1,5 +1,6 @@
 package org.usfirst.frc.team334.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,6 +25,7 @@ public class Robot extends IterativeRobot {
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
+    private BumperLEDStrip bumper;
 
     // SENSORS
     private HallEffect hallFX;
@@ -49,6 +51,9 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
+        // INIT Team LEDs
+        bumper = new BumperLEDStrip(DriverStation.getInstance().getAlliance());
+
         // INIT SENSORS
         hallFX = new HallEffect(0);
         imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
@@ -91,11 +96,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-
     }
 
     @Override
     public void autonomousInit() {
+        bumper.setTeam();
         Scheduler.getInstance().removeAll(); // clear old command
 
         autonScenario = autoChoose.getSelected();
@@ -129,6 +134,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        bumper.setTeam();
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
     }
@@ -224,7 +230,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledInit() {
-
+        bumper.setBrown();
     }
 
     @Override

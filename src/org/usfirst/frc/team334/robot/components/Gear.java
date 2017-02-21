@@ -1,7 +1,5 @@
 package org.usfirst.frc.team334.robot.components;
 
-import com.sun.corba.se.impl.orbutil.closure.Constant;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;

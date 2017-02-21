@@ -2,10 +2,10 @@ package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class BumperLEDStrip {
-    DriverStation.Alliance alliance;
+public class BumperLedStrip {
+    private DriverStation.Alliance alliance;
 
-    public BumperLEDStrip(DriverStation.Alliance alliance) {
+    public BumperLedStrip(DriverStation.Alliance alliance) {
         this.alliance = alliance;
     }
 
@@ -38,4 +38,5 @@ public class BumperLEDStrip {
     public void setBrown() {
 
     }
+
 }

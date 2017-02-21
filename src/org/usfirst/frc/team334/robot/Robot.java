@@ -9,7 +9,6 @@ import org.usfirst.frc.team334.robot.auton.AutonScenario;
 import org.usfirst.frc.team334.robot.auton.command_groups.GoToLeftPeg;
 import org.usfirst.frc.team334.robot.auton.command_groups.GoToMiddlePeg;
 import org.usfirst.frc.team334.robot.auton.command_groups.GoToRightPeg;
-import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
@@ -35,7 +34,7 @@ public class Robot extends IterativeRobot {
 
     private ManualAutonSelect manualAutonSelect;
 
-    private BumperLEDStrip bumper;
+    private BumperLedStrip bumper;
 
     private VisionAutoAlign visionAutoAlign;
     private CameraSet cameraSet;
@@ -55,12 +54,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-        // INIT COMPONENETS
+        // INIT COMPONENTS
         driveTrain = new DriveTrain();
         controls = new Controls();
 
-        // INIT Team LEDs
-        bumper = new BumperLEDStrip(DriverStation.getInstance().getAlliance());
+        // INIT TEAM LEDS
+        bumper = new BumperLedStrip(DriverStation.getInstance().getAlliance());
 
         // INIT VISION
         VisionData.init();
@@ -83,11 +82,6 @@ public class Robot extends IterativeRobot {
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
 
         // AUTON COMMAND GROUPS
-        /**
-         * @param drivetrain = For moving the robot
-         * @param gyroPID = used to keep robot straight or turn
-         * @paran visionAutoAlign = For vision
-         */
         goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign);
         goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign);
         goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign);
@@ -111,10 +105,10 @@ public class Robot extends IterativeRobot {
         // Vision code will update to true if it initialized successfully
         VisionData.getNt().putBoolean("running", false);
 
-        // reset gyro
+        // Reset gyro
         GyroSource.imu.resetHeading();
 
-        // clear old commands
+        // Clear old commands
         Scheduler.getInstance().removeAll();
 
         bumper.setTeam();
@@ -141,7 +135,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         // RUN COMMANDS IF ANY
-//        Scheduler.getInstance().run();
+        // Scheduler.getInstance().run();
 
         updateSmartDashboard();
     }
@@ -243,7 +237,7 @@ public class Robot extends IterativeRobot {
 
     }
 
-    public void updateSmartDashboard() {
+    private void updateSmartDashboard() {
         SmartDashboard.putNumber("Gyro Angle", gyroPID.getInput());
 
         VisionData.displayData();

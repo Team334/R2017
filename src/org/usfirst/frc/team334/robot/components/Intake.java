@@ -17,12 +17,12 @@ public class Intake extends Subsystem {
 
     }
 
-    public void pull_in() {
-        intakeMotor.set(.5);
+    public void pullIn() {
+        intakeMotor.set(0.5);
     }
 
-    public void push_out() {
-        intakeMotor.set(-.5);
+    public void pushOut() {
+        intakeMotor.set(-0.5);
     }
 
     public void stop() {

@@ -35,8 +35,8 @@ public class ManualAutonSelect {
     }
 
     /**
-     * Select scenario based on
-     * @return
+     * Select scenario based on selection
+     * @return selected scenario
      */
     public AutonScenario getScenario() {
         int selection = getSelection();

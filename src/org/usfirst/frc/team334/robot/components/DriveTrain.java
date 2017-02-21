@@ -1,6 +1,5 @@
 package org.usfirst.frc.team334.robot.components;
 
-import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;

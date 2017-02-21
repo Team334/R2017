@@ -1,66 +1,80 @@
 package org.usfirst.frc.team334.robot.components;
 
-import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.I2C;
+
+import java.nio.ByteBuffer;
 
 public class LedControl {
 
     private static final int ADDRESS = 8;
 
     // hook up pins A4 to SCL on RoboRio, A5 to SDA on RoboRio, and GND to ground on RoboRio
-    private I2C ledwriter = new I2C(I2C.Port.kOnboard, ADDRESS);
+    private I2C ledWriter = new I2C(I2C.Port.kOnboard, ADDRESS);
 
-    // Bad LED strip methods
+    // BAD LED STRIP
     public void badStripColor(int r, int g, int b) {
-        // ByteBuffer needed to send values to RioDunio
+        // ByteBuffer required to send values to RioDuino
         int bufSize = 5;
+
         ByteBuffer buf = ByteBuffer.allocateDirect(bufSize);
-        int[] message = {2,1, r, g, b};
-        // converts int to byte and puts it in the buffer to be sent
-        for (int n : message) {
-            buf.put((byte) n);
-        }
+        int[] message = {2, 1, r, g, b};
+
+        // Converts int to byte and places in the buffer to be sent
+        writeBytesToBuffer(buf, message);
+
         // Transfers bytes to RioDuino
-        ledwriter.writeBulk(buf, bufSize);
+        ledWriter.writeBulk(buf, bufSize);
     }
-    public void badStripPulse(int r, int g, int b, int dly) {
+
+    public void badStripPulse(int delay, int r, int g, int b) {
         int bufSize = 6;
+
         ByteBuffer buf = ByteBuffer.allocateDirect(bufSize);
-        int[] message = {2,0,r,g,b,dly};
-        for (int n : message) {
-            buf.put((byte) n);
-        }
-        ledwriter.writeBulk(buf, bufSize);
+        int[] message = {2, 0, r, g, b, delay};
+
+        writeBytesToBuffer(buf, message);
+        ledWriter.writeBulk(buf, bufSize);
     }
-    // NeoPixel LED strips methods
-    //The strip number (0,1), the numebr of streaks that chase, the length of each streak, the space in between each streak, r, g, b, and delay in ms
-    public void neoPixelChase(int strip, int numstreaks, int trail, int space, int r, int g, int b, int dly) {
+
+    // NEOPIXEL LED STRIP
+    // The strip number (0, 1), the number of streaks that chase, the length of each streak,
+    // the space in between each streak, delay(ms), and the rgb values
+    public void neoPixelChase(int strip, int numStreaks, int trail, int space, int delay, int r, int g, int b) {
         int bufSize = 10;
+
         ByteBuffer buf = ByteBuffer.allocateDirect(bufSize);
-        int[] message = {1,0,strip,numstreaks,trail,space,dly,r,g,b};
-        for (int n : message) {
-            buf.put((byte) n);
-        }
-        ledwriter.writeBulk(buf, bufSize);
+        int[] message = {1 , 0, strip, numStreaks, trail, space, delay, r, g, b};
+
+        writeBytesToBuffer(buf, message);
+        ledWriter.writeBulk(buf, bufSize);
     }
-    public void neoPixelMarquee(int strip, int r, int g, int b, int dly) {
+
+    public void neoPixelMarquee(int strip, int delay, int r, int g, int b) {
         int bufSize = 7;
+
         ByteBuffer buf = ByteBuffer.allocateDirect(bufSize);
-        int[] message = {1,1,strip,dly,r,g,b};
-        for (int n : message) {
-            buf.put((byte) n);
-        }
-        ledwriter.writeBulk(buf, bufSize);
+        int[] message = {1, 1, strip, delay, r, g, b};
+
+        writeBytesToBuffer(buf, message);
+        ledWriter.writeBulk(buf, bufSize);
     }
-    //Neopixel Ring
-    //Start led number (0-23), stop led number, r, g, b, and delay
-    public void neoPixelRing(int strt, int stp, int r, int g, int b, int dly) {
+
+    // Neopixel Ring
+    // Start led number (0-23), stop led number, delay(ms), and rgb values
+    public void neoPixelRing(int start, int stop, int delay, int r, int g, int b) {
         int bufSize = 7;
+
         ByteBuffer buf = ByteBuffer.allocateDirect(bufSize);
-        int[] message = {0,1,strt,stp,r,g,b,dly};
-        for (int n : message) {
-            buf.put((byte) n);
-        }
-        ledwriter.writeBulk(buf, bufSize);
+        int[] message = {0, 1, start, stop, r, g, b, delay};
+
+        writeBytesToBuffer(buf, message);
+        ledWriter.writeBulk(buf, bufSize);
     }
+
+    public static void writeBytesToBuffer(ByteBuffer buf, int... bytes) {
+        for (int b : bytes) {
+            buf.put((byte) b);
+        }
+    }
+
 }

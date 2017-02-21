@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
-import org.usfirst.frc.team334.robot.components.DriveTrain;
-import org.usfirst.frc.team334.robot.components.Target;
 import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.util.TrackTarget;
 import org.usfirst.frc.team334.robot.vision.VisionData;
@@ -22,7 +20,7 @@ public class VisionAutoAlign {
 
     private TrackTarget tracker;
 
-    // chechk if target was found in last # of frames
+    // check if target was found in last # of frames
     private final int N_FRAMES = 10;
 
     private double areaCap;
@@ -40,8 +38,7 @@ public class VisionAutoAlign {
      * Sets target to auto align with
      * Sets all specifications (setpoint, tolerance, areaCap)
      *
-     * @param target: target to align with
-     *
+     * @param target Target to align with
      */
     public void setTarget(Target target) {
         this.target = target;
@@ -74,13 +71,15 @@ public class VisionAutoAlign {
 
         // stop if no vision, no target, too close, or at destination
         tracker.addTargetFound(VisionData.foundTarget());
+
         if (tracker.lostTarget() || !VisionData.visionRunning() || areaPID.getInput() > areaCap || areaPID.getController().onTarget()) {
             driveTrain.stop();
             SmartDashboard.putString("Mode", "FINISHED");
             return false;
         }
 
-        double div = 0.85 * (1 + Math.abs(offsetPID.getOutput())/30.0);
+        double div = 0.85 * (1 + Math.abs(offsetPID.getOutput()) / 30.0);
+
         double speedLeft = offsetPID.getOutput() - areaPID.getOutput() / div;
         double speedRight = -offsetPID.getOutput() - areaPID.getOutput() / div;
 //        double angle = VisionData.getAngle();
@@ -97,4 +96,5 @@ public class VisionAutoAlign {
 
         return true;
     }
+
 }

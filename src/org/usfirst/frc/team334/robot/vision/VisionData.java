@@ -2,8 +2,6 @@ package org.usfirst.frc.team334.robot.vision;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.tables.ITable;
-import edu.wpi.first.wpilibj.tables.ITableListener;
 
 public class VisionData {
 
@@ -27,27 +25,24 @@ public class VisionData {
     // call once!!!
     public static void init() {
         nt = NetworkTable.getTable("vision");
-        nt.addTableListener(new ITableListener() {
-            @Override
-            public void valueChanged(ITable source, String key, Object value, boolean isNew) {
-                System.out.println("Value changed. Key = " + key + ", Value = " + value);
-                switch (key) {
-                    case FOUND_TARGET_KEY:
-                        foundTarget = (Boolean) value;
-                        break;
-                    case AREA_KEY:
-                        area = (Double) value;
-                        break;
-                    case OFFSET_KEY:
-                        offset = (Double) value;
-                        break;
-                    case SKEW_KEY:
-                        skew = (Double) value;
-                        break;
-                    case ANGLE_KEY:
-                        angle = (Double) value;
-                        break;
-                }
+        nt.addTableListener((source, key, value, isNew) -> {
+            System.out.println("Value changed. Key = " + key + ", Value = " + value);
+            switch (key) {
+                case FOUND_TARGET_KEY:
+                    foundTarget = (Boolean) value;
+                    break;
+                case AREA_KEY:
+                    area = (Double) value;
+                    break;
+                case OFFSET_KEY:
+                    offset = (Double) value;
+                    break;
+                case SKEW_KEY:
+                    skew = (Double) value;
+                    break;
+                case ANGLE_KEY:
+                    angle = (Double) value;
+                    break;
             }
         });
     }

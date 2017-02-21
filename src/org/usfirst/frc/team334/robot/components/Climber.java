@@ -29,7 +29,8 @@ public class Climber extends Subsystem {
 
     public void climbUp() {
         climberMotor.set(.5);
-        if(climberEnc.getRate() < 0.5 && climberMotor.get() >= .5) {
+
+        if (climberEnc.getRate() < 0.5 && climberMotor.get() >= 0.5) {
             controls.xboxRumble();
         } else {
             controls.xboxStopRumble();
@@ -43,4 +44,5 @@ public class Climber extends Subsystem {
     public void stop() {
         climberMotor.set(0);
     }
+
 }

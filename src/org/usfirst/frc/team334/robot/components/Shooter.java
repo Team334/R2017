@@ -6,10 +6,11 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Shooter extends Subsystem {
 
-    private VictorSP shooterMotor;
+    private VictorSP shooterMotor1, shooterMotor2;
 
     public Shooter() {
-        shooterMotor = new VictorSP(Constants.SHOOTER);
+        shooterMotor1 = new VictorSP(Constants.SHOOTER_1);
+        shooterMotor2 = new VictorSP(Constants.SHHOTER_2);
     }
 
     @Override
@@ -18,7 +19,8 @@ public class Shooter extends Subsystem {
     }
 
     public void setShooterSpeed(double speed) {
-        shooterMotor.set(speed);
+        shooterMotor1.set(speed);
+        shooterMotor2.set(speed);
     }
 
 }

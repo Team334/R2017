@@ -1,13 +1,12 @@
 package org.usfirst.frc.team334.robot.components;
 
-import org.opencv.core.Mat;
-import org.usfirst.frc.team334.robot.controls.Controls;
-
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.opencv.core.Mat;
+import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class CameraSet {
 

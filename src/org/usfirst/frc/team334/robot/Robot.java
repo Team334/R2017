@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.AutonScenario;
-import org.usfirst.frc.team334.robot.auton.command_groups.GoToLeftPeg;
-import org.usfirst.frc.team334.robot.auton.command_groups.GoToMiddlePeg;
-import org.usfirst.frc.team334.robot.auton.command_groups.GoToRightPeg;
-import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
+import org.usfirst.frc.team334.robot.auton.commandgroups.GoToLeftPeg;
+import org.usfirst.frc.team334.robot.auton.commandgroups.GoToMiddlePeg;
+import org.usfirst.frc.team334.robot.auton.commandgroups.GoToRightPeg;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
@@ -152,7 +151,7 @@ public class Robot extends IterativeRobot {
         VisionData.getNt().putBoolean("running", false);
 
         bumper.setTeam();
-        
+
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
     }
@@ -189,14 +188,15 @@ public class Robot extends IterativeRobot {
 //            shooter.setShooterSpeed(0);
 //        }
 //
-//        // GEAR LISTENER
-//        if (controls.getGearOut()) {
-//            gear.pushOutGear();
-//        } else if (controls.getHoldGear()) {
-//            gear.gripGear();
-//        } else if (controls.getResetGear()) {
-//            gear.resetServos();
-//        }
+        // GEAR LISTENER
+
+        if (controls.getMoveGear()) {
+            if (gear.isGearOut()) {
+                gear.resetServos();
+            } else {
+                gear.pushOutGear();
+            }
+        }
 
         // DRIVETRAIN LISTENER
         if (controls.getAutoAlign(Target.GEAR)) {

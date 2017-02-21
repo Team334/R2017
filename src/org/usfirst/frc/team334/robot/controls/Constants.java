@@ -10,7 +10,7 @@ public class Constants {
     // -------------------SUBSYSTEMS--------------------------
     public final static int DRIVETRAIN_LEFT = 1,
                             DRIVETRAIN_RIGHT = 2;
-    public static final double SLOW_FACTOR = 0.8;
+    public static final double SLOW_FACTOR = 1;
 
     public final static int CLIMBER_1 = 0;
 
@@ -33,16 +33,18 @@ public class Constants {
 
     public final static int CLIMBER_ENC_1 = 4,
                             CLIMBER_ENC_2 = 5;
+    public final static double CLIMB_SPEED = 0.5;
 
-    public final static int INDEXER = 0;
+    public final static int INDEXER = 5;
 
-    public final static int INTAKE = 0;
+    public final static int SHOOTER_1 = 6,
+                            SHHOTER_2 = 7;
+
+    public final static int INTAKE = 8;
 
     public final static int LED_RINGS = 8;
 
     public final static int RGB_STRIPS = 0;
-
-    public final static int SHOOTER = 0;
 
     public static final double DISTANCE_TO_BASELINE = 9.4;
     public static final double ANGLE_TO_PEG = 60;
@@ -70,19 +72,19 @@ public class Constants {
     public static final double BOILER_AREA_CAP = 350;
 
     // ----------------------PIDS--------------------------------
-    public static final double gyroCap = 0.3,
-                               gyroP = 0.015,
-                               gyroI = 0.0,
-                               gyroD = 0.0;
+    public static final double GYRO_CAP = 0.3,
+                               GYRO_P = 0.015,
+                               GYRO_I = 0.0,
+                               GYRO_D = 0.0;
 
-    public static final double areaCap = 0.15,
-                               areaP = 0.001,
-                               areaI = 0.0,
-                               areaD = 0.0;
+    public static final double AREA_CAP = 0.15,
+                               AREA_P = 0.001,
+                               AREA_I = 0.0,
+                               AREA_D = 0.0;
 
-    public static final double offsetCap = 0.3,
-                               offsetP = 0.0008,
-                               offsetI = 0.0,
-                               offsetD = 0.0001;
+    public static final double OFFSET_CAP = 0.3,
+                               OFFSET_P = 0.0008,
+                               OFFSET_I = 0.0,
+                               OFFSET_D = 0.0001;
 
 }

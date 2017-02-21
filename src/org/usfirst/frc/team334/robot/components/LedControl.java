@@ -1,7 +1,8 @@
 package org.usfirst.frc.team334.robot.components;
 
-import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.I2C;
+
+import java.nio.ByteBuffer;
 
 public class LedControl {
 

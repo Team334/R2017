@@ -15,9 +15,9 @@ public class GyroPID {
         gyroSource = new GyroSource();
         defaultOutput = new DefaultOutput();
 
-        gyroPID = new PIDController(Constants.gyroP, Constants.gyroI, Constants.gyroD, gyroSource, defaultOutput);
+        gyroPID = new PIDController(Constants.GYRO_P, Constants.GYRO_I, Constants.GYRO_D, gyroSource, defaultOutput);
         gyroPID.setContinuous();
-        gyroPID.setOutputRange(-Constants.gyroCap, Constants.gyroCap);
+        gyroPID.setOutputRange(-Constants.GYRO_CAP, Constants.GYRO_CAP);
         gyroPID.enable();
 
         SmartDashboard.putData("GryoPID", gyroPID);

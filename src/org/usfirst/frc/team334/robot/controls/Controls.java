@@ -12,30 +12,43 @@ public class Controls {
     private Joystick rightJoystick;
     private XboxController xboxController;
 
+    private boolean gearButtonHeld = false;
+
     public Controls() {
         leftJoystick = new Joystick(Constants.JOYSTICK_LEFT);
         rightJoystick = new Joystick(Constants.JOYSTICK_RIGHT);
         xboxController = new XboxController(Constants.XBOX);
     }
 
-    // JOYSTICKS
+    // ----------------------JOYSTICKS------------------------------------
     public boolean getSlowRamp(Ramp.SIDE side) {
         return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
     }
 
     public double getLeftDrive() {
-        return -leftJoystick.getY();
+        return leftJoystick.getY();
     }
 
     public double getRightDrive() {
-        return -rightJoystick.getY();
+        return rightJoystick.getY();
     }
 
     public boolean getAutoAlign(Target target) {
         return (target == Target.GEAR) ? leftJoystick.getRawButton(2) : leftJoystick.getRawButton(3);
     }
 
-    // XBOX
+    // -------------------------XBOX-------------------------------------
+
+    public boolean getMoveGear() {
+        boolean gearToggled =  rightJoystick.getRawButton(3) && !gearButtonHeld;
+        gearButtonHeld = rightJoystick.getRawButton(3);
+        return gearToggled;
+    }
+
+    public boolean getHoldGear() {
+        return rightJoystick.getRawButton(2);
+    }
+
     public boolean getClimbUp() {
         return xboxController.getAButton();
     }
@@ -53,19 +66,8 @@ public class Controls {
     }
 
     // ------------------------------ UPDATE VALUES -----------------------------
+
     public boolean getIndexerIn() {
-        return xboxController.getBackButton();
-    }
-
-    public boolean getGearOut() {
-        return xboxController.getBackButton();
-    }
-
-    public boolean getHoldGear() {
-        return xboxController.getBackButton();
-    }
-
-    public boolean getResetGear() {
         return xboxController.getBackButton();
     }
 

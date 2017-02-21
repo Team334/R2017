@@ -1,4 +1,4 @@
-package org.usfirst.frc.team334.robot.auton.command_groups;
+package org.usfirst.frc.team334.robot.auton.commandgroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.usfirst.frc.team334.robot.auton.commands.Straight;

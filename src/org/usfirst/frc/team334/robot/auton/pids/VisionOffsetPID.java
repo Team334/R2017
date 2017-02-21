@@ -15,10 +15,10 @@ public class VisionOffsetPID {
         visionOffsetSource = new VisionOffsetSource();
         defaultOutput = new DefaultOutput();
 
-        offsetPID = new PIDController(Constants.offsetP, Constants.offsetI, Constants.offsetD, visionOffsetSource, defaultOutput);
+        offsetPID = new PIDController(Constants.OFFSET_P, Constants.OFFSET_I, Constants.OFFSET_D, visionOffsetSource, defaultOutput);
         offsetPID.setSetpoint(0);
         offsetPID.setContinuous();
-        offsetPID.setOutputRange(-Constants.offsetCap, Constants.offsetCap);
+        offsetPID.setOutputRange(-Constants.OFFSET_CAP, Constants.OFFSET_CAP);
         offsetPID.enable();
         SmartDashboard.putData("OffsetPID", offsetPID);
     }

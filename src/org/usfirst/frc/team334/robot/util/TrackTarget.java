@@ -12,7 +12,7 @@ public class TrackTarget {
 
     // calculate number of frames target has been lost
     public void addTargetFound(boolean found) {
-        lostFrames = (found) ? 0 : ++lostFrames;
+        lostFrames = found ? 0 : lostFrames + 1;
     }
 
     /**

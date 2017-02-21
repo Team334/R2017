@@ -1,9 +1,10 @@
 package org.usfirst.frc.team334.robot.components;
 
-import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
+
+import java.nio.ByteBuffer;
 
 public class LedRing extends Subsystem {
 

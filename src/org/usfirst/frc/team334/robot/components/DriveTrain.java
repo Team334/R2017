@@ -1,6 +1,5 @@
 package org.usfirst.frc.team334.robot.components;
 
-import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
@@ -15,7 +14,6 @@ public class DriveTrain extends Subsystem {
         leftMotors = new VictorSP(Constants.DRIVETRAIN_LEFT);
 
         rightMotors.setInverted(true);
-        leftMotors.setInverted(true);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.vision;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.ITableListener;
 
@@ -77,5 +78,13 @@ public class VisionData {
 
     public static double getSkew() {
         return skew;
+    }
+
+    public static void displayData() {
+        SmartDashboard.putNumber("Area", area);
+        SmartDashboard.putNumber("Offset", offset);
+        SmartDashboard.putNumber("Angle", angle);
+        SmartDashboard.putBoolean("FoundTarget", foundTarget);
+        SmartDashboard.putBoolean("Vision Running", visionRunning());
     }
 }

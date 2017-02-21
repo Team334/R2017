@@ -38,10 +38,9 @@ public class Turn extends Command {
      */
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
-
         System.out.println("TURN" + gyroPID.getOutput() + "setpoint " + gyroPID.getController().getSetpoint());
-        double speed = 0.0;
 
+        double speed = 0.0;
         double leftSpeed = speed + gyroPID.getOutput();
         double rightSpeed = speed - gyroPID.getOutput();
 

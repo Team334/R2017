@@ -14,7 +14,7 @@ public class CameraSet {
     //	Multiplier to change resolution, default 160x120
     private final double multiplier = 2;
     private boolean isToggled = false;
-    // Make sure toggle only happens once
+    // toggle once for every button click(accounts for button hold)
     private boolean buttonHeld = false;
 
     private Controls controls;

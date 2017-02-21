@@ -1,5 +1,6 @@
 package org.usfirst.frc.team334.robot.controls;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import org.usfirst.frc.team334.robot.components.Ramp;
@@ -64,8 +65,18 @@ public class Controls {
         return xboxController.getBackButton();
     }
 
-    public boolean getToggleCamera() { 
+    public boolean getToggleCamera() {
 	    return rightJoystick.getRawButton(1);
+    }
+
+    public void xboxRumble() {
+        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
+    }
+
+    public void xboxUnRumble() {
+        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
+        xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 0);
     }
 
 }

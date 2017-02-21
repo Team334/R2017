@@ -7,27 +7,15 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class DriveTrain extends Subsystem {
 
-//    private VictorSP rightMotors;
-//    private VictorSP leftMotors;
-
-    private TalonSRX leftA, leftB, rightA, rightB;
+    private VictorSP rightMotors;
+    private VictorSP leftMotors;
 
     public DriveTrain () {
-//        rightMotors = new VictorSP(Constants.DRIVETRAIN_RIGHT);
-//        leftMotors = new VictorSP(Constants.DRIVETRAIN_LEFT);
+        rightMotors = new VictorSP(Constants.DRIVETRAIN_RIGHT);
+        leftMotors = new VictorSP(Constants.DRIVETRAIN_LEFT);
 
-//        rightMotors.setInverted(true);
-//        leftMotors.setInverted(true);
-
-        leftA = new TalonSRX(1);
-        leftB = new TalonSRX(0);
-
-        // invert right
-        rightA = new TalonSRX(2);
-        rightB = new TalonSRX(3);
-        rightA.setInverted(true);
-        rightB.setInverted(true);
-
+        rightMotors.setInverted(true);
+        leftMotors.setInverted(true);
     }
 
     @Override
@@ -36,15 +24,11 @@ public class DriveTrain extends Subsystem {
     }
 
     public void setRightMotors (double speed) {
-//        rightMotors.set(speed);
-        rightA.set(speed);
-        rightB.set(speed);
+        rightMotors.set(speed);
     }
 
     public void setLeftMotors (double speed) {
-//        leftMotors.set(speed);
-        leftA.set(speed);
-        leftB.set(speed);
+        leftMotors.set(speed);
     }
 
     public void stop() {

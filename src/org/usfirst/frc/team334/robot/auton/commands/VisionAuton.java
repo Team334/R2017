@@ -33,6 +33,7 @@ public class VisionAuton extends Command {
 
         boolean running = visionAutoAlign.autoAlign();
         visionDone = !running;
+
         System.out.println("Vision Done = " + visionDone);
     }
 

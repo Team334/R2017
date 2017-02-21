@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
 
@@ -25,7 +26,7 @@ public class Straight extends Command {
 //        enc.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
 //        enc.reset();
 
-        setTimeout(1);
+        setTimeout(2);
         straightDone = false;
     }
 
@@ -36,23 +37,22 @@ public class Straight extends Command {
 
     /**
      * Continues looping until isFinished returns true(non-Javadoc)
-     * Go straight until you reach distance
+     * Go straight until you reach distance or time
      */
     public void execute() {
         SmartDashboard.putString("Mode", "STRAIGHT");
-
         System.out.println("STRAIGHT");
+
+        if (enc.getDistance() >= Constants.DISTANCE_TO_BASELINE) {
+            straightDone = true;
+            return;
+        }
+
         double speed = 0.4;
         double leftSpeed = 0, rightSpeed = 0;
-//        if (enc.getDistance() <= Constants.DISTANCE_TO_BASELINE) {
-//            straightDone = true;
-//        } else {
 
         leftSpeed = speed + gyroPID.getOutput();
         rightSpeed = speed - gyroPID.getOutput();
-
-        System.out.println("gyro pid" + gyroPID.getOutput());
-        //}
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);

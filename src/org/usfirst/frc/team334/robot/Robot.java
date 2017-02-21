@@ -31,6 +31,8 @@ public class Robot extends IterativeRobot {
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
+    private ManualAutonSelect manualAutonSelect;
+
     private VisionAutoAlign visionAutoAlign;
     private CameraSet cameraSet;
 
@@ -44,20 +46,19 @@ public class Robot extends IterativeRobot {
     private GoToRightPeg goToRightPeg;
     private GoToMiddlePeg goToMiddlePeg;
 
-    private ManualAutonSelect manualAutonSelect;
-
     private SendableChooser<AutonScenario> autoChoose;
     private AutonScenario autonScenario;
 
     @Override
     public void robotInit() {
-        // INIT VISION
-        VisionData.init();
-
         // INIT COMPONENETS
         driveTrain = new DriveTrain();
         controls = new Controls();
 
+        // INIT VISION
+        VisionData.init();
+
+        // INIT CAMERA
         cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
         cameraSet.enable();
 
@@ -66,17 +67,20 @@ public class Robot extends IterativeRobot {
         areaPID = new VisionAreaPID();
         offsetPID = new VisionOffsetPID();
 
-//        // UPDATE PORTS AND VALUES
 //        intake = new Intake();
 //        indexer = new Indexer();
 //        climber = new Climber();
 //        gear = new Gear();
 //        shooter = new Shooter();
+//        manualAutonSelect = new ManualAutonSelect();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
 
-        // manualAutonSelect = new ManualAutonSelect();
-
         // AUTON COMMAND GROUPS
+        /**
+         * @param drivetrain = For moving the robot
+         * @param gyroPID = used to keep robot straight or turn
+         * @paran visionAutoAlign = For vision
+         */
         goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign);
         goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign);
         goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign);
@@ -85,7 +89,8 @@ public class Robot extends IterativeRobot {
         autoChoose = new SendableChooser<>();
         autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
-        autoChoose.addDefault("Go Straight", AutonScenario.MIDDLE);
+        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
+        autoChoose.addDefault("Nothing", AutonScenario.NOTHING);
         // autoChoose.addDefault("Default", AutonScenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
@@ -123,7 +128,6 @@ public class Robot extends IterativeRobot {
                 Scheduler.getInstance().add(goToMiddlePeg);
                 break;
         }
-        System.out.println("AUTON INIT");
     }
 
     @Override
@@ -186,14 +190,16 @@ public class Robot extends IterativeRobot {
         if (controls.getAutoAlign(Target.GEAR)) {
             visionAutoAlign.setTarget(Target.GEAR);
             visionAutoAlign.autoAlign();
-        } else if (controls.getAutoAlign(Target.BOILER)) {
+        }
+        else if (controls.getAutoAlign(Target.BOILER)) {
             visionAutoAlign.setTarget(Target.BOILER);
             visionAutoAlign.autoAlign();
-        } else {
+        }
+        else {
             // joystick controlled
             double leftSpeed = controls.getLeftDrive() - stickCalLeft;
             double rightSpeed = controls.getRightDrive() - stickCalRight;
-            // slow down when turning
+            // slow ramp
             if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
                 double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
                 leftSpeed /= sens * Constants.SLOW_FACTOR;
@@ -226,13 +232,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void updateSmartDashboard() {
-        SmartDashboard.putNumber("Area", areaPID.getInput());
-        SmartDashboard.putNumber("Offset", VisionData.getOffset());
-        SmartDashboard.putNumber("Vision angle", VisionData.getAngle());
-
-        SmartDashboard.putBoolean("Running", VisionData.visionRunning());
-        SmartDashboard.putBoolean("Found Target", VisionData.foundTarget());
-
         SmartDashboard.putNumber("Gyro Angle", gyroPID.getInput());
+
+        VisionData.displayData();
     }
 }

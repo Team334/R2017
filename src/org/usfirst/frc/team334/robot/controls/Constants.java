@@ -13,6 +13,10 @@ public class Constants {
 
     public final static int ENCODER_1 = 0,
                             ENCODER_2 = 1;
+
+    public final static int CLIMBER_ENC_1 = 4,
+                            CLIMBER_ENC_2 = 5;
+
     public final static double DISTANCE_PER_PULSE = 0.1; // in feet
 
     public final static int GEAR_LEFT = 0,
@@ -50,5 +54,21 @@ public class Constants {
     public static final double BOILER_TARGET = 300;
     public static final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
     public static final double BOILER_AREA_CAP = 350;
+
+    // ----------------------PIDS--------------------------------
+    public static final double gyroCap = 0.3,
+                               gyroP = 0.015,
+                               gyroI = 0.0,
+                               gyroD = 0.0;
+
+    public static final double areaCap = 0.15,
+                               areaP = 0.001,
+                               areaI = 0.0,
+                               areaD = 0.0;
+
+    public static final double offsetCap = 0.3,
+                               offsetP = 0.0008,
+                               offsetI = 0.0,
+                               offsetD = 0.0001;
 
 }

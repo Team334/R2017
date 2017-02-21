@@ -72,11 +72,10 @@ public class VisionAutoAlign {
         System.out.println("On target " + areaPID.getController().onTarget());
         System.out.println("------------");
 
-        // stop if no target, too close, or at destination
+        // stop if no vision, no target, too close, or at destination
         tracker.addTargetFound(VisionData.foundTarget());
         if (tracker.lostTarget() || !VisionData.visionRunning() || areaPID.getInput() > areaCap || areaPID.getController().onTarget()) {
             driveTrain.stop();
-            System.out.println("Done");
             SmartDashboard.putString("Mode", "FINISHED");
             return false;
         }

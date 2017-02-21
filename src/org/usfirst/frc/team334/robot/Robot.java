@@ -1,5 +1,6 @@
 package org.usfirst.frc.team334.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,7 +32,10 @@ public class Robot extends IterativeRobot {
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
+
     private ManualAutonSelect manualAutonSelect;
+
+    private BumperLEDStrip bumper;
 
     private VisionAutoAlign visionAutoAlign;
     private CameraSet cameraSet;
@@ -54,6 +58,8 @@ public class Robot extends IterativeRobot {
         // INIT COMPONENETS
         driveTrain = new DriveTrain();
         controls = new Controls();
+        // INIT Team LEDs
+        bumper = new BumperLEDStrip(DriverStation.getInstance().getAlliance());
 
         // INIT VISION
         VisionData.init();
@@ -97,7 +103,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-
     }
 
     @Override
@@ -110,6 +115,8 @@ public class Robot extends IterativeRobot {
 
         // clear old commands
         Scheduler.getInstance().removeAll();
+
+        bumper.setTeam();
 
         autonScenario = autoChoose.getSelected();
 
@@ -143,6 +150,8 @@ public class Robot extends IterativeRobot {
         // Vision code will update to true if it initialized successfully
         VisionData.getNt().putBoolean("running", false);
 
+        bumper.setTeam();
+        
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
     }
@@ -225,7 +234,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledInit() {
-
+        bumper.setBrown();
     }
 
     @Override

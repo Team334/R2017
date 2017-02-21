@@ -2,9 +2,10 @@ package org.usfirst.frc.team334.robot.components;
 
 import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
 
-public class LedRing {
+public class LedRing extends Subsystem {
 
     // hook up pins A4 to SCL on RoboRio, A5 to SDA on RoboRio, and GND to ground on RoboRio
     private I2C ringWriter = new I2C(I2C.Port.kOnboard, Constants.LED_RINGS);
@@ -27,4 +28,8 @@ public class LedRing {
         ringWriter.writeBulk(buf, bufSize);
     }
 
+    @Override
+    protected void initDefaultCommand() {
+
+    }
 }

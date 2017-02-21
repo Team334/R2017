@@ -1,6 +1,5 @@
-package org.usfirst.frc.team334.robot.auton.movement;
+package org.usfirst.frc.team334.robot.auton.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
@@ -9,30 +8,24 @@ import org.usfirst.frc.team334.robot.components.DriveTrain;
 public class Turn extends Command {
 
     private double angle;
-    private boolean turnDone;
 
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    private final double turnTime = 3;
-    private Timer time;
-
     public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
+        requires(driveTrain);
+
         this.angle = angle;
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
-        time = new Timer();
+
+        setTimeout(2);
     }
 
     // Called once at start of command
     public void initialize() {
-        turnDone = false;
-
         gyroPID.getController().setSetpoint(angle);
         gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
-
-        time.reset();
-        time.start();
     }
 
     /**
@@ -46,28 +39,24 @@ public class Turn extends Command {
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
 
-        if (time.get() > turnTime) {
-            turnDone = true;
-            return;
-        }
-        System.out.println("TURN");
-//        double speed = 0.1;
-//        double leftSpeed = 0, rightSpeed = 0;
-//        if (gyroPID.getController().onTarget()) {
-//            turnDone = true;
-//        } else {
-//            leftSpeed = speed + gyroPID.getOutput();
-//            rightSpeed = speed - gyroPID.getOutput();
-//
-//        }
-//        driveTrain.setLeftMotors(leftSpeed);
-//        driveTrain.setRightMotors(rightSpeed);
+        System.out.println("TURN" + gyroPID.getOutput() + "setpoint " + gyroPID.getController().getSetpoint());
+        double speed = 0.0;
+
+        double leftSpeed = speed + gyroPID.getOutput();
+        double rightSpeed = speed - gyroPID.getOutput();
+
+        driveTrain.setLeftMotors(leftSpeed);
+        driveTrain.setRightMotors(rightSpeed);
     }
 
     // Stops program when returns true
     @Override
     protected boolean isFinished() {
-        return turnDone;
+        return isTimedOut();
+    }
+
+    protected void end() {
+        driveTrain.stop();
     }
 
 }

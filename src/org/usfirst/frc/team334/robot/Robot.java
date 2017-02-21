@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.AutonScenario;
-import org.usfirst.frc.team334.robot.auton.movement.Straight;
-import org.usfirst.frc.team334.robot.auton.movement.Turn;
-import org.usfirst.frc.team334.robot.auton.movement.VisionAuton;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToLeftPeg;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToMiddlePeg;
+import org.usfirst.frc.team334.robot.auton.command_groups.GoToRightPeg;
+import org.usfirst.frc.team334.robot.components.VisionAutoAlign;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
@@ -33,20 +34,16 @@ public class Robot extends IterativeRobot {
     private VisionAutoAlign visionAutoAlign;
     private CameraSet cameraSet;
 
-    private Ramp fastRamp;
-    private Ramp slowRamp;
-
     // PIDS
     private GyroPID gyroPID;
     private VisionAreaPID areaPID;
     private VisionOffsetPID offsetPID;
 
     // AUTON COMMANDS
-    private Turn turnLeft;
-    private Turn turnRight;
-    private Straight straight;
-    private VisionAuton visionGear;
-    private VisionAuton visionBoiler;
+    private GoToLeftPeg goToLeftPeg;
+    private GoToRightPeg goToRightPeg;
+    private GoToMiddlePeg goToMiddlePeg;
+
     private ManualAutonSelect manualAutonSelect;
 
     private SendableChooser<AutonScenario> autoChoose;
@@ -61,6 +58,9 @@ public class Robot extends IterativeRobot {
         driveTrain = new DriveTrain();
         controls = new Controls();
 
+        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+        cameraSet.enable();
+
         // INIT PIDS
         gyroPID = new GyroPID();
         areaPID = new VisionAreaPID();
@@ -74,19 +74,12 @@ public class Robot extends IterativeRobot {
 //        shooter = new Shooter();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
 
-        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
-        cameraSet.enable();
-//
-//        fastRamp = new Ramp(10);
-//        slowRamp = new Ramp(50);
-//
-        // AUTON COMMAND
-        turnLeft = new Turn(-Constants.ANGLE_TO_PEG, driveTrain, gyroPID);
-        turnRight = new Turn(Constants.ANGLE_TO_PEG, driveTrain, gyroPID);
-        straight = new Straight(Constants.DISTANCE_TO_BASELINE, driveTrain, gyroPID);
-        visionGear = new VisionAuton(visionAutoAlign, Target.GEAR);
-        visionBoiler = new VisionAuton(visionAutoAlign, Target.BOILER);
         // manualAutonSelect = new ManualAutonSelect();
+
+        // AUTON COMMAND GROUPS
+        goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign);
+        goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign);
+        goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign);
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
@@ -119,13 +112,15 @@ public class Robot extends IterativeRobot {
 //            autonScenario = manualAutonSelect.getScenario();
 //        }
 
-        System.out.println("Auton Scenario " + autonScenario);
         switch (autonScenario) {
             case LEFT_SIDE:
+                Scheduler.getInstance().add(goToLeftPeg);
                 break;
             case RIGHT_SIDE:
+                Scheduler.getInstance().add(goToRightPeg);
                 break;
             case MIDDLE:
+                Scheduler.getInstance().add(goToMiddlePeg);
                 break;
         }
         System.out.println("AUTON INIT");
@@ -209,25 +204,6 @@ public class Robot extends IterativeRobot {
         }
 
         updateSmartDashboard();
-
-//        fastRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
-//        fastRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
-//
-//        slowRamp.addJoystickValues(controls.getLeftDrive(), Ramp.SIDE.LEFT);
-//        slowRamp.addJoystickValues(controls.getRightDrive(), Ramp.SIDE.RIGHT);
-//
-//        leftSpeed = ((controls.getLeftDrive() - stickCalLeft) * fastRamp.getRamp(Ramp.SIDE.LEFT));
-//        rightSpeed = ((controls.getRightDrive() - stickCalRight) * fastRamp.getRamp(Ramp.SIDE.RIGHT));
-//
-//        if (controls.getSlowRampButton(Ramp.SIDE.LEFT))
-//            leftSpeed = ((controls.getLeftDrive() - stickCalLeft) * slowRamp.getRamp(Ramp.SIDE.LEFT));
-//        else
-//            slowRamp.reset(Ramp.SIDE.LEFT);
-//
-//        if (controls.getSlowRampButton(Ramp.SIDE.RIGHT))
-//            rightSpeed = ((controls.getRightDrive() - stickCalRight) * slowRamp.getRamp(Ramp.SIDE.RIGHT));
-//        else
-//            slowRamp.reset(Ramp.SIDE.LEFT);
     }
 
     @Override

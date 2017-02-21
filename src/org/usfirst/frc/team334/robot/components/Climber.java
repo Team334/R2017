@@ -1,15 +1,21 @@
 package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
 
-public class Climber {
+public class Climber extends Subsystem {
 
     private VictorSP climberMotor1;
 
     public Climber() {
         climberMotor1 = new VictorSP(Constants.CLIMBER_1);
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+
     }
 
     public void climbUp() {

@@ -2,9 +2,10 @@ package org.usfirst.frc.team334.robot.components;
 
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
 
-public class DriveTrain {
+public class DriveTrain extends Subsystem {
 
 //    private VictorSP rightMotors;
 //    private VictorSP leftMotors;
@@ -19,13 +20,18 @@ public class DriveTrain {
 //        leftMotors.setInverted(true);
 
         leftA = new TalonSRX(1);
-        leftA.setInverted(true);
         leftB = new TalonSRX(0);
-        leftB.setInverted(true);
 
         // invert right
         rightA = new TalonSRX(2);
         rightB = new TalonSRX(3);
+        rightA.setInverted(true);
+        rightB.setInverted(true);
+
+    }
+
+    @Override
+    protected void initDefaultCommand() {
 
     }
 

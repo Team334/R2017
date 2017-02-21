@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
+import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.components.Target;
 import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.util.TrackTarget;
 import org.usfirst.frc.team334.robot.vision.VisionData;

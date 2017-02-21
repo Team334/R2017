@@ -23,11 +23,11 @@ public class Controls {
     }
 
     public double getLeftDrive() {
-        return leftJoystick.getY();
+        return -leftJoystick.getY();
     }
 
     public double getRightDrive() {
-        return rightJoystick.getY();
+        return -rightJoystick.getY();
     }
 
     public boolean getAutoAlign(Target target) {

@@ -25,7 +25,7 @@ public class Turn extends Command {
     // Called once at start of command
     public void initialize() {
         gyroPID.getController().setSetpoint(angle);
-        gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
+       // gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
     }
 
     /**
@@ -38,11 +38,15 @@ public class Turn extends Command {
      */
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
-        System.out.println("TURN" + gyroPID.getOutput() + "setpoint " + gyroPID.getController().getSetpoint());
+        System.out.println("TURN" + gyroPID.getOutput() + " setpoint " + gyroPID.getController().getSetpoint());
 
         double speed = 0.0;
+
+        //System.out.println("gyro out", gyroPID.getOutput());
         double leftSpeed = speed + gyroPID.getOutput();
         double rightSpeed = speed - gyroPID.getOutput();
+
+        System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);
@@ -55,6 +59,7 @@ public class Turn extends Command {
     }
 
     protected void end() {
+        System.out.println("Done");
         driveTrain.stop();
     }
 

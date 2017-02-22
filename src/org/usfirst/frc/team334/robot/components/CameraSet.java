@@ -10,10 +10,11 @@ import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class CameraSet {
 
-    //	Multiplier to change resolution, default 160x120
+    // Multiplier to change resolution, default is 160x120
     private final double multiplier = 2;
     private boolean isToggled = false;
-    // toggle once for every button click(accounts for button hold)
+
+    // Toggle once for every button click(accounts for button hold)
     private boolean buttonHeld = false;
 
     private Controls controls;
@@ -25,7 +26,7 @@ public class CameraSet {
     private Mat source;
     private CvSink cvSink;
 
-    //  The default camera is cam1
+    // The default camera is cam1
     public CameraSet(Controls controls, String devpath1, String devpath2) {
         this.controls = controls;
         this.cam1 = CameraServer.getInstance().startAutomaticCapture("Back", devpath1);
@@ -64,4 +65,5 @@ public class CameraSet {
             }
         }).start();
     }
+
 }

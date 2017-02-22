@@ -18,7 +18,7 @@ public class TrackTarget {
     /**
      * Checks if target was seen in last nFrames
      *
-     * @returns true number of frames lost was more than nFrames
+     * @return true number of frames lost was more than nFrames
       */
     public boolean lostTarget() {
         return lostFrames >= nFrames;

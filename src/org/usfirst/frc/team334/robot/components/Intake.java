@@ -13,16 +13,15 @@ public class Intake extends Subsystem {
     }
 
     @Override
-    protected void initDefaultCommand() {
+    protected void initDefaultCommand() {}
 
+    public void pullIn(double speed) {
+//        intakeMotor.set(-Constants.INTAKE_SPEED);
+        intakeMotor.set(-speed);
     }
 
-    public void pull_in() {
-        intakeMotor.set(.5);
-    }
-
-    public void push_out() {
-        intakeMotor.set(-.5);
+    public void pushOut() {
+        intakeMotor.set(Constants.INTAKE_SPEED);
     }
 
     public void stop() {

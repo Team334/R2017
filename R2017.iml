@@ -10,7 +10,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$wpilib$!/" />
+          <root url="jar://$USER_HOME$/wpilib/java/current/lib/wpilib.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/wpilib/java/current/lib/Networktables.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

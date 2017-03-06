@@ -13,16 +13,15 @@ public class Indexer extends Subsystem {
     }
 
     @Override
-    protected void initDefaultCommand() {
+    protected void initDefaultCommand() {}
 
-    }
-
-    public void pushIntoShooter() {
-        indexerMotor.set(0.5);
+    public void pushIntoShooter(double speed) {
+//        indexerMotor.set(Constants.INDEXER_SPEED);
+        indexerMotor.set(speed);
     }
 
     public void pushOutOfShooter() {
-        indexerMotor.set(-0.5);
+        indexerMotor.set(-Constants.INDEXER_SPEED);
     }
 
     public void stop() {

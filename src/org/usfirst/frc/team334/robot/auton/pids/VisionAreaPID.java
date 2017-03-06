@@ -15,9 +15,9 @@ public class VisionAreaPID {
         visionAreaSource = new VisionAreaSource();
         defaultOutput = new DefaultOutput();
 
-        areaPID = new PIDController(Constants.areaP, Constants.areaI, Constants.areaD, visionAreaSource, defaultOutput);
+        areaPID = new PIDController(Constants.AREA_P, Constants.AREA_I, Constants.AREA_D, visionAreaSource, defaultOutput);
         areaPID.setContinuous();
-        areaPID.setOutputRange(-Constants.areaCap, Constants.areaCap);
+        areaPID.setOutputRange(-Constants.AREA_CAP, Constants.AREA_CAP);
         areaPID.enable();
 
         SmartDashboard.putData("AreaPID", areaPID);

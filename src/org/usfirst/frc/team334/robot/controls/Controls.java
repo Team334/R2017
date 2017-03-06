@@ -12,65 +12,70 @@ public class Controls {
     private Joystick rightJoystick;
     private XboxController xboxController;
 
+    private boolean gearButtonHeld = false;
+    private boolean changeDriveButtonHeld = false;
+
     public Controls() {
         leftJoystick = new Joystick(Constants.JOYSTICK_LEFT);
         rightJoystick = new Joystick(Constants.JOYSTICK_RIGHT);
         xboxController = new XboxController(Constants.XBOX);
     }
 
-    // JOYSTICKS
+    // ----------------------JOYSTICKS------------------------------------
     public boolean getSlowRamp(Ramp.SIDE side) {
         return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
-    }
-
-    public double getLeftDrive() {
-        return -leftJoystick.getY();
-    }
-
-    public double getRightDrive() {
-        return -rightJoystick.getY();
     }
 
     public boolean getAutoAlign(Target target) {
         return (target == Target.GEAR) ? leftJoystick.getRawButton(2) : leftJoystick.getRawButton(3);
     }
 
-    // XBOX
-    public boolean getClimbUp() {
-        return xboxController.getAButton();
+    public double getLeftDrive() {
+        return leftJoystick.getY();
     }
 
-    public boolean getClimbDown() {
-        return xboxController.getBButton();
+    public double getRightDrive() {
+        return rightJoystick.getY();
     }
 
-    public boolean getIntakeIn() {
-        return xboxController.getXButton();
-    }
+    // -------------------------XBOX-------------------------------------
 
-    public boolean getIntakeOut() {
-        return xboxController.getYButton();
-    }
-
-    // ------------------------------ UPDATE VALUES -----------------------------
-    public boolean getIndexerIn() {
-        return xboxController.getBackButton();
-    }
-
-    public boolean getGearOut() {
-        return xboxController.getBackButton();
+    public boolean getMoveGear() {
+        boolean gearToggled =  rightJoystick.getRawButton(1) && !gearButtonHeld;
+        gearButtonHeld = rightJoystick.getRawButton(1);
+        return gearToggled;
     }
 
     public boolean getHoldGear() {
-        return xboxController.getBackButton();
+        return rightJoystick.getRawButton(2);
     }
 
-    public boolean getResetGear() {
-        return xboxController.getBackButton();
+    public boolean getClimbUp() {
+        return rightJoystick.getRawButton(3);
+    }
+
+    public boolean getClimbDown() {
+        return rightJoystick.getRawButton(4);
+    }
+
+    public boolean getIntakeIn() {
+        return rightJoystick.getRawButton(5);
+    }
+
+    public boolean getChangeDriveDirection() {
+        boolean driveDirectionToggled = rightJoystick.getRawButton(10) && !changeDriveButtonHeld;
+        changeDriveButtonHeld = rightJoystick.getRawButton(10);
+        return driveDirectionToggled;
+    }
+
+    // ------------------------------ UPDATE VALUES -----------------------------
+
+    public boolean getIndexerIn() {
+        return rightJoystick.getRawButton(6);
     }
 
     public boolean getShoot() {
-        return xboxController.getBackButton();
+        return rightJoystick.getRawButton(7);
     }
 
     public boolean getToggleCamera() {

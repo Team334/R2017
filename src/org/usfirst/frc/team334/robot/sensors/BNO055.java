@@ -1,9 +1,9 @@
 package org.usfirst.frc.team334.robot.sensors;
 
-import java.util.TimerTask;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
+
+import java.util.TimerTask;
 
 /**
  * BNO055 IMU for the FIRST Robotics Competition.

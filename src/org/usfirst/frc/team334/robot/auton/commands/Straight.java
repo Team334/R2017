@@ -9,30 +9,21 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
 
-    private Encoder encLeft;
-    private Encoder encRight;
-
+    private double distance;
     private boolean straightDone;
 
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Straight(DriveTrain driveTrain, GyroPID gyroPID) {
+    public Straight(double distance, DriveTrain driveTrain, GyroPID gyroPID) {
         requires(driveTrain);
+
+        this.distance = distance;
 
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-//        encLeft = new Encoder(Constants.ENCODER_LEFT_1, Constants.ENCODER_LEFT_2);
-//        encLeft.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
-//        encLeft.reset();
-
-//        encRight = new Encoder(Constants.ENCODER_RIGHT_1, Constants.ENCODER_RIGHT_2);
-//        encRight.setDistancePerPulse(Constants.DISTANCE_PER_PULSE)
-//        encRight.reset();
-
-
-        setTimeout(2);
+        setTimeout(2.5);
         straightDone = false;
     }
 
@@ -49,7 +40,7 @@ public class Straight extends Command {
         SmartDashboard.putString("Mode", "STRAIGHT");
         System.out.println("STRAIGHT");
 
-        if (encLeft.getDistance() >= Constants.DISTANCE_TO_BASELINE || encRight.getDistance() >= Constants.DISTANCE_TO_BASELINE) {
+        if (driveTrain.getDistanceTraveled() >= distance) {
             straightDone = true;
             return;
         }

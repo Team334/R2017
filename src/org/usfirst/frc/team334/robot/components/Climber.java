@@ -17,28 +17,27 @@ public class Climber extends Subsystem {
         this.controls = controls;
 
         climberMotor = new VictorSP(Constants.CLIMBER_1);
-        climberEnc = new Encoder(Constants.CLIMBER_ENC_1, Constants.CLIMBER_ENC_2);
 
-        climberEnc.setDistancePerPulse(1);
+//        climberEnc = new Encoder(Constants.CLIMBER_ENC_1, Constants.CLIMBER_ENC_2);
+//        climberEnc.setDistancePerPulse(Constants.CLIMBWHEEL_CIRCUMFERENCE * (1 / Constants.CLIMB_PULSES_PER_REVOLUTION));
+//        climberEnc.reset();
     }
 
     @Override
-    protected void initDefaultCommand() {
-
-    }
+    protected void initDefaultCommand() {}
 
     public void climbUp() {
-        climberMotor.set(.5);
+        climberMotor.set(Constants.CLIMB_SPEED);
 
-        if (climberEnc.getRate() < 0.5 && climberMotor.get() >= 0.5) {
-            controls.xboxRumble();
-        } else {
-            controls.xboxStopRumble();
-        }
+//        if (climberEnc.getRate() < 0.5 && climberMotor.get() >= 0.5) {
+//            controls.xboxRumble();
+//        } else {
+//            controls.xboxStopRumble();
+//        }
     }
 
     public void climbDown() {
-        climberMotor.set(-0.5);
+        climberMotor.set(-Constants.CLIMB_SPEED);
     }
 
     public void stop() {

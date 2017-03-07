@@ -39,7 +39,6 @@ public class DriveTrain extends Subsystem {
 
     public void setLeftMotors (double speed) {
         leftMotors.set(speed);
-        //System.out.println("THE LEFT MOTORS SET");
     }
 
     public void stop() {

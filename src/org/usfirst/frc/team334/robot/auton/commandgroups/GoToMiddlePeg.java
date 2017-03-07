@@ -14,7 +14,7 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 public class GoToMiddlePeg extends CommandGroup {
 
     /**
-     * Perform task in order
+     * Perform tasks in order
      *
      * Steps:
      *      1) Go straight to baseline

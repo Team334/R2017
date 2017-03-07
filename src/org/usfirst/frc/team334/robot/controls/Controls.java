@@ -12,6 +12,7 @@ public class Controls {
     private Joystick rightJoystick;
     private XboxController xboxController;
 
+    // Only toggle once everytime a button is clicked
     private boolean gearButtonHeld = false;
     private boolean changeDriveButtonHeld = false;
 
@@ -21,7 +22,8 @@ public class Controls {
         xboxController = new XboxController(Constants.XBOX);
     }
 
-    // ----------------------JOYSTICKS------------------------------------
+    // ----------------------JOYSTICKS------------------------------------------------------------------------
+
     public boolean getSlowRamp(Ramp.SIDE side) {
         return (side == Ramp.SIDE.LEFT) ? leftJoystick.getRawButton(1) : rightJoystick.getRawButton(1);
     }
@@ -38,7 +40,7 @@ public class Controls {
         return rightJoystick.getY();
     }
 
-    // -------------------------XBOX-------------------------------------
+    // -------------------------XBOX----------------------------------------------------------------------------
 
     public boolean getMoveGear() {
         boolean gearToggled =  rightJoystick.getRawButton(1) && !gearButtonHeld;
@@ -67,8 +69,6 @@ public class Controls {
         changeDriveButtonHeld = rightJoystick.getRawButton(10);
         return driveDirectionToggled;
     }
-
-    // ------------------------------ UPDATE VALUES -----------------------------
 
     public boolean getIndexerIn() {
         return rightJoystick.getRawButton(6);

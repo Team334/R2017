@@ -33,16 +33,14 @@ public class Turn extends Command {
      *
      *  Steps:
      *      1) Set degrees to turn
-     *      2) Turn to degrees
-     *      3) Done
+     *      2) Turn to degrees for 2 seconds
      */
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
-        System.out.println("TURN" + gyroPID.getOutput() + " setpoint " + gyroPID.getController().getSetpoint());
+        System.out.println("TURN");
 
         double speed = 0.0;
 
-        //System.out.println("gyro out", gyroPID.getOutput());
         double leftSpeed = speed + gyroPID.getOutput();
         double rightSpeed = speed - gyroPID.getOutput();
 
@@ -59,7 +57,7 @@ public class Turn extends Command {
     }
 
     protected void end() {
-        System.out.println("Done");
+        System.out.println("Turn Done");
         driveTrain.stop();
     }
 

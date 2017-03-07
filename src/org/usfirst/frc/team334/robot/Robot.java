@@ -1,7 +1,6 @@
 package org.usfirst.frc.team334.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,38 +21,36 @@ import org.usfirst.frc.team334.robot.util.ManualAutonSelect;
 import org.usfirst.frc.team334.robot.vision.VisionData;
 
 public class Robot extends IterativeRobot {
-    // COMPONENTS
+
     private DriveTrain driveTrain;
     private double stickCalLeft;
     private double stickCalRight;
 
     private Controls controls;
+
+    private BumperLedStrip bumper;
+
+    private CameraSet cameraSet;
+
+    private VisionAutoAlign visionAutoAlign;
+
+    private GyroPID gyroPID;
+    private VisionAreaPID areaPID;
+    private VisionOffsetPID offsetPID;
+
     private Intake intake;
     private Indexer indexer;
     private Climber climber;
     private Gear gear;
     private Shooter shooter;
-
     private ManualAutonSelect manualAutonSelect;
 
-    private BumperLedStrip bumper;
-
-    private VisionAutoAlign visionAutoAlign;
-    private CameraSet cameraSet;
-
-    // PIDS
-    private GyroPID gyroPID;
-    private VisionAreaPID areaPID;
-    private VisionOffsetPID offsetPID;
-
-    // AUTON COMMANDS
     private GoToLeftPeg goToLeftPeg;
     private GoToRightPeg goToRightPeg;
     private GoToMiddlePeg goToMiddlePeg;
 
     private SendableChooser<AutonScenario> autoChoose;
     private AutonScenario autonScenario;
-
 
     @Override
     public void robotInit() {
@@ -63,9 +60,6 @@ public class Robot extends IterativeRobot {
 
         // INIT TEAM LEDS
         bumper = new BumperLedStrip(DriverStation.getInstance().getAlliance());
-
-        // INIT LEDS
-        // leds.neoPixelRing(0,23,10,0,255,0);
 
         // INIT VISION
         VisionData.init();
@@ -84,8 +78,8 @@ public class Robot extends IterativeRobot {
         indexer = new Indexer();
         gear = new Gear();
         shooter = new Shooter();
-//        manualAutonSelect = new ManualAutonSelect();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
+        //manualAutonSelect = new ManualAutonSelect();
 
         // AUTON COMMAND GROUPS
         goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign, gear);
@@ -100,9 +94,6 @@ public class Robot extends IterativeRobot {
         autoChoose.addDefault("Nothing", AutonScenario.NOTHING);
         // autoChoose.addDefault("Default", AutonScenario.MANUAL);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
-
-//        encLeft = new Encoder(Constants.ENCODER_LEFT_1, Constants.ENCODER_LEFT_2);
-//        encRight = new Encoder(Constants.ENCODER_RIGHT_1, Constants.ENCODER_RIGHT_2);
     }
 
     @Override
@@ -111,20 +102,19 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-//        // Assume Vision is not running
-//        VisionData.getNt().putBoolean("running", false);
+        // Assume Vision is not initialized
+        // Will update to true if initialized successfully
+        VisionData.getNt().putBoolean("running", false);
 //
         // Reset gyro
         GyroSource.imu.resetHeading();
-        System.out.println("IMU AT " + GyroSource.imu.getHeading());
-        for (int i = 0; i < 50; i++)
-            System.out.println("started");
-//
+        System.out.println("GYRO AT " + gyroPID.getInput());
+
 //        bumper.setTeam();
-//
+
         // Clear old commands
         Scheduler.getInstance().removeAll();
-//
+
 //        autonScenario = autoChoose.getSelected();
 //
 ////        if (autonScenario == AutonScenario.MANUAL) {
@@ -135,13 +125,14 @@ public class Robot extends IterativeRobot {
 //            case LEFT_SIDE:
 //                Scheduler.getInstance().add(goToLeftPeg);
 //                break;
-////            case RIGHT_SIDE:
-////                Scheduler.getInstance().add(goToRightPeg);
-////                break;
-////            case MIDDLE:
-////                Scheduler.getInstance().add(goToMiddlePeg);
-////                break;
+//            case RIGHT_SIDE:
+//                Scheduler.getInstance().add(goToRightPeg);
+//                break;
+//            case MIDDLE:
+//                Scheduler.getInstance().add(goToMiddlePeg);
+//                break;
 //        }
+
         goToLeftPeg.start();
 //        goToRightPeg.start();
 //        goToMiddlePeg.start();
@@ -152,25 +143,26 @@ public class Robot extends IterativeRobot {
         // RUN COMMANDS IF ANY
         Scheduler.getInstance().run();
 
-//        driveTrain.setLeftMotors(.5);
-//        driveTrain.setRightMotors(.5);
         updateSmartDashboard();
     }
 
-    double shooterSpeed = 0.7;
-    double indexerSpeed = 0.8;
-    double intakeSpeed = 0.55;
+    private double shooterSpeed = 0.7;
+    private double indexerSpeed = 0.8;
+    private double intakeSpeed = 0.55;
 
     @Override
     public void teleopInit() {
-        // Vision code will update to true if it initialized successfully
+        // Assume Vision is not initialized
+        // Will update to true if it initialized successfully
         VisionData.getNt().putBoolean("running", false);
 
         bumper.setTeam();
 
+        // Zeroes joysticks at the beginning
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
 
+        // Test component speeds with SmartDashboard
         SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
         SmartDashboard.putNumber("Indexer Speed", indexerSpeed);
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
@@ -178,13 +170,63 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        // subsystemsListener();
 
+        // INVERTS THE DRIVETRAIN DIRECTIONS (FRONT => BACK, BACK => FRONT)
+        if (controls.getChangeDriveDirection()) {
+            driveTrain.invertDirection();
+        }
+
+        // DRIVETRAIN LISTENER
+        if (controls.getAutoAlign(Target.GEAR)) {
+            visionAutoAlign.setTarget(Target.GEAR);
+            visionAutoAlign.autoAlign();
+        }
+        else if (controls.getAutoAlign(Target.BOILER)) {
+            visionAutoAlign.setTarget(Target.BOILER);
+            visionAutoAlign.autoAlign();
+        }
+        else {
+            // JOYSTICK LISTENER
+            double leftSpeed = controls.getLeftDrive() - stickCalLeft;
+            double rightSpeed = controls.getRightDrive() - stickCalRight;
+
+            if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
+                double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
+                leftSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
+                rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
+            }
+
+            driveTrain.setLeftMotors(leftSpeed);
+            driveTrain.setRightMotors(rightSpeed);
+        }
+
+        updateSmartDashboard();
+    }
+
+    @Override
+    public void testInit() {
+
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
+    @Override
+    public void disabledInit() {
+        bumper.setBrown();
+    }
+
+    @Override
+    public void disabledPeriodic() {
+
+    }
+
+    private void subsystemsListener() {
         shooterSpeed = SmartDashboard.getNumber("Shooter Speed", 0);
-        System.out.println("Shooter Speed = " + shooterSpeed);
         indexerSpeed = SmartDashboard.getNumber("Indexer Speed", 0);
-        System.out.println("Indexer Speed = " + indexerSpeed);
-        intakeSpeed = SmartDashboard.getNumber("Intake Speed", intakeSpeed);
-        System.out.println("Intake Speed = " + intakeSpeed);
+        intakeSpeed = SmartDashboard.getNumber("Intake Speed", 0);
 
         // CLIMBER LISTENER
         if (controls.getClimbUp() && !controls.getClimbDown()) {
@@ -233,63 +275,15 @@ public class Robot extends IterativeRobot {
                 gear.pushOutGear();
             }
         }
-
-        // DRIVETRAIN LISTENER
-//        if (controls.getAutoAlign(Target.GEAR)) {
-//            visionAutoAlign.setTarget(Target.GEAR);
-//            visionAutoAlign.autoAlign();
-//        }
-//        else if (controls.getAutoAlign(Target.BOILER)) {
-//            visionAutoAlign.setTarget(Target.BOILER);
-//            visionAutoAlign.autoAlign();
-//        }
-//        else {
-            // joystick controlled
-        if (controls.getChangeDriveDirection()) {
-            driveTrain.invertDirection();
-        }
-
-        double leftSpeed = controls.getLeftDrive() - stickCalLeft;
-        double rightSpeed = controls.getRightDrive() - stickCalRight;
-        // slow ramp
-        if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
-            double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-            leftSpeed /= sens * Constants.SLOW_FACTOR;
-            rightSpeed /= sens * Constants.SLOW_FACTOR;
-        }
-
-        driveTrain.setLeftMotors(leftSpeed);
-        driveTrain.setRightMotors(rightSpeed);
-//        }
-
-        updateSmartDashboard();
-////        SmartDashboard.putNumber("EncLeft Pulses", encLeft.get());
-////        SmartDashboard.putNumber("EncRight Pulses", encRight.get());
-    }
-
-    @Override
-    public void testInit() {
-
-    }
-
-    @Override
-    public void testPeriodic() {
-    }
-
-    @Override
-    public void disabledInit() {
-        bumper.setBrown();
-    }
-
-    @Override
-    public void disabledPeriodic() {
-
     }
 
     private void updateSmartDashboard() {
         SmartDashboard.putNumber("Gyro Angle", gyroPID.getInput());
         SmartDashboard.putNumber("Hall Effect Rate", shooter.getHallEffectRate());
         SmartDashboard.putNumber("Distance Traveled", driveTrain.getDistanceTraveled());
+
+//        SmartDashboard.putNumber("EncLeft Pulses", encLeft.get());
+//        SmartDashboard.putNumber("EncRight Pulses", encRight.get());
 
         VisionData.displayData();
     }

@@ -1,11 +1,9 @@
 package org.usfirst.frc.team334.robot.auton.commands;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
-import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
 
@@ -61,6 +59,7 @@ public class Straight extends Command {
     }
 
     protected void end() {
+        System.out.println("Straight Done");
         driveTrain.stop();
     }
 }

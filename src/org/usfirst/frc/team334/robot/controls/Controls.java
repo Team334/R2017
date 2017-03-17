@@ -42,13 +42,15 @@ public class Controls {
 
     // -------------------------XBOX----------------------------------------------------------------------------
 
+    // for toggling gear
     public boolean getMoveGear() {
         boolean gearToggled =  rightJoystick.getRawButton(1) && !gearButtonHeld;
         gearButtonHeld = rightJoystick.getRawButton(1);
         return gearToggled;
     }
 
-    public boolean getHoldGear() {
+    // for holding gear
+    public boolean getOutGear() {
         return rightJoystick.getRawButton(2);
     }
 

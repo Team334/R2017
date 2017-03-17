@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Turn extends Command {
 
@@ -19,13 +20,13 @@ public class Turn extends Command {
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        setTimeout(2);
+        setTimeout(Constants.TURN_TIME);
     }
 
     // Called once at start of command
     public void initialize() {
         gyroPID.getController().setSetpoint(angle);
-       // gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
+        gyroPID.resetGyro();
     }
 
     /**
@@ -40,9 +41,8 @@ public class Turn extends Command {
         System.out.println("TURN");
 
         double speed = 0.0;
-
-        double leftSpeed = speed + gyroPID.getOutput();
-        double rightSpeed = speed - gyroPID.getOutput();
+        double leftSpeed = speed - gyroPID.getOutput();
+        double rightSpeed = speed + gyroPID.getOutput();
 
         System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
 

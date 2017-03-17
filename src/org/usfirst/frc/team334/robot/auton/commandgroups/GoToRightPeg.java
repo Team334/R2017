@@ -27,7 +27,7 @@ public class GoToRightPeg extends CommandGroup {
         addSequential(new Turn(-Constants.ANGLE_TO_PEG, driveTrain, gyroPID));
         addSequential(new VisionAuton(visionAutoAlign, Target.GEAR));
         addSequential(new GearOut(gear));
-        addSequential(new Straight(Constants.DISTANCE_FROM_PEG_TO_KEY, driveTrain, gyroPID));
+        addSequential(new Straight(-3, driveTrain, gyroPID));
     }
 
 }

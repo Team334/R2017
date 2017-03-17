@@ -24,6 +24,7 @@ public class GoToMiddlePeg extends CommandGroup {
         addSequential(new Straight(Constants.DISTANCE_TO_BASELINE, driveTrain, gyroPID));
         addSequential(new VisionAuton(visionAutoAlign, Target.GEAR));
         addSequential(new GearOut(gear));
+        addSequential(new Straight(-3, driveTrain, gyroPID));
     }
 
 }

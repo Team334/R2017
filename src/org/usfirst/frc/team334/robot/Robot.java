@@ -13,7 +13,6 @@ import org.usfirst.frc.team334.robot.auton.commandgroups.GoToRightPeg;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionOffsetPID;
-import org.usfirst.frc.team334.robot.auton.sources.GyroSource;
 import org.usfirst.frc.team334.robot.components.*;
 import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
@@ -105,12 +104,8 @@ public class Robot extends IterativeRobot {
         // Assume Vision is not initialized
         // Will update to true if initialized successfully
         VisionData.getNt().putBoolean("running", false);
-//
-        // Reset gyro
-        GyroSource.imu.resetHeading();
-        System.out.println("GYRO AT " + gyroPID.getInput());
 
-//        bumper.setTeam();
+        bumper.setTeam();
 
         // Clear old commands
         Scheduler.getInstance().removeAll();
@@ -158,6 +153,8 @@ public class Robot extends IterativeRobot {
 
         bumper.setTeam();
 
+        gyroPID.resetGyro();
+
         // Zeroes joysticks at the beginning
         stickCalLeft = controls.getLeftDrive();
         stickCalRight = controls.getRightDrive();
@@ -170,12 +167,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        // subsystemsListener();
-
-        // INVERTS THE DRIVETRAIN DIRECTIONS (FRONT => BACK, BACK => FRONT)
-        if (controls.getChangeDriveDirection()) {
-            driveTrain.invertDirection();
-        }
+         subsystemsListener();
 
         // DRIVETRAIN LISTENER
         if (controls.getAutoAlign(Target.GEAR)) {
@@ -259,21 +251,29 @@ public class Robot extends IterativeRobot {
 
         // SHOOTER LISTENER
         if (controls.getShoot()) {
-            System.out.println("SHOOTING");
+//            System.out.println("SHOOTING");
 //            shooter.setShooterSpeed(shooterSpeed);
             shooter.setShooterSpeed(Constants.SHOOTER_SPEED);
         } else {
             shooter.setShooterSpeed(0);
         }
 
-        // GEAR LISTENER
-        if (controls.getMoveGear()) {
+        // GEAR LISTENER TOGGLE
+//        if (controls.getMoveGear()) {
+//            System.out.println("GEAR");
+//            if (gear.isGearOut()) {
+//                gear.resetServos();
+//            } else {
+//                gear.pushOutGear();
+//            }
+//        }
+
+        // GEAR LISTENER HOLD
+        if (controls.getOutGear()) {
             System.out.println("GEAR");
-            if (gear.isGearOut()) {
-                gear.resetServos();
-            } else {
-                gear.pushOutGear();
-            }
+            gear.pushOutGear();
+        } else {
+            gear.resetServos();
         }
     }
 
@@ -282,9 +282,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Hall Effect Rate", shooter.getHallEffectRate());
         SmartDashboard.putNumber("Distance Traveled", driveTrain.getDistanceTraveled());
 
-//        SmartDashboard.putNumber("EncLeft Pulses", encLeft.get());
-//        SmartDashboard.putNumber("EncRight Pulses", encRight.get());
-
-        VisionData.displayData();
+//        VisionData.displayData();
     }
 }

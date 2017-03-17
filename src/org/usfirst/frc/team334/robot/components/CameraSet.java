@@ -11,7 +11,7 @@ import org.usfirst.frc.team334.robot.controls.Controls;
 public class CameraSet {
 
     // Multiplier to change resolution, default is 160x120
-    private final double multiplier = 2;
+    private final double multiplier = 1;
     private boolean isToggled = false;
 
     // Toggle once for every button click(accounts for button hold)

@@ -19,7 +19,7 @@ public class Climber extends Subsystem {
         climberMotor = new VictorSP(Constants.CLIMBER_1);
 
 //        climberEnc = new Encoder(Constants.CLIMBER_ENC_1, Constants.CLIMBER_ENC_2);
-//        climberEnc.setDistancePerPulse(Constants.CLIMBWHEEL_CIRCUMFERENCE * (1 / Constants.CLIMB_PULSES_PER_REVOLUTION));
+//        climberEnc.setDistancePerPulse(Constants.CLIMBWHEEL_CIRCUMFERENCE / Constants.CLIMB_PULSES_PER_REVOLUTION));
 //        climberEnc.reset();
     }
 

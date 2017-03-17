@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Straight extends Command {
 
     private double distance;
+    private double direction;
     private boolean straightDone;
 
     private GyroPID gyroPID;
@@ -17,17 +19,19 @@ public class Straight extends Command {
         requires(driveTrain);
 
         this.distance = distance;
-
+        this.direction = (distance < 0) ? -1 : 1; // -1 is backwards, 1 is forward
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        setTimeout(2.5);
+        setTimeout(Constants.STRAIGHT_TIME);
         straightDone = false;
     }
 
     // Called once at start of command
     public void initialize() {
         gyroPID.getController().setSetpoint(0);
+        gyroPID.resetGyro();
+        driveTrain.resetEncoders();
     }
 
     /**
@@ -38,18 +42,16 @@ public class Straight extends Command {
         SmartDashboard.putString("Mode", "STRAIGHT");
         System.out.println("STRAIGHT");
 
-        if (driveTrain.getDistanceTraveled() >= distance) {
-            straightDone = true;
-            return;
-        }
+        double speed = Constants.STRAIGHT_SPEED * direction;
 
-        double speed = 0.4;
-
-        double leftSpeed = speed + gyroPID.getOutput();
-        double rightSpeed = speed - gyroPID.getOutput();
+        double leftSpeed = speed - gyroPID.getOutput();
+        double rightSpeed = speed + gyroPID.getOutput();
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);
+
+        // stop if traveled distance
+        straightDone = Math.abs(driveTrain.getDistanceTraveled()) >= Math.abs(distance);
     }
 
     // Stops program when returns true
@@ -59,7 +61,7 @@ public class Straight extends Command {
     }
 
     protected void end() {
-        System.out.println("Straight Done");
+        System.out.println("Straight Done: " + straightDone);
         driveTrain.stop();
     }
 }

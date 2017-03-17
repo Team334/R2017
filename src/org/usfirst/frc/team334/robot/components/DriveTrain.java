@@ -24,10 +24,10 @@ public class DriveTrain extends Subsystem {
         leftMotors.setInverted(leftInverted);
 
         encLeft = new Encoder(Constants.ENCODER_LEFT_1, Constants.ENCODER_LEFT_2);
-        encLeft.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE * (1 / Constants.DRIVE_PULSES_PER_REVOLUTION));
+        encLeft.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE / Constants.DRIVE_PULSES_PER_REVOLUTION);
 
         encRight = new Encoder(Constants.ENCODER_RIGHT_1, Constants.ENCODER_RIGHT_2);
-        encRight.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE * (1 / Constants.DRIVE_PULSES_PER_REVOLUTION));
+        encRight.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE / Constants.DRIVE_PULSES_PER_REVOLUTION);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class DriveTrain extends Subsystem {
         setRightMotors(0);
     }
 
+    public void resetEncoders() {
+        encLeft.reset();
+        encRight.reset();
+    }
+
     public double getDistanceTraveled() {
         return (encLeft.getDistance() + encRight.getDistance()) / 2;
     }
@@ -57,4 +62,5 @@ public class DriveTrain extends Subsystem {
         leftMotors.setInverted(leftInverted);
         rightMotors.setInverted(rightInverted);
     }
+
 }

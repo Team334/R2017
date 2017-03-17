@@ -79,9 +79,9 @@ public class VisionAutoAlign {
         }
 
         double div = 0.85 * (1 + Math.abs(offsetPID.getOutput()) / 30.0);
+        double speedLeft = offsetPID.getOutput() + areaPID.getOutput() / div;
+        double speedRight = -offsetPID.getOutput() + areaPID.getOutput() / div;
 
-        double speedLeft = offsetPID.getOutput() - areaPID.getOutput() / div;
-        double speedRight = -offsetPID.getOutput() - areaPID.getOutput() / div;
 //        double angle = VisionData.getAngle();
 //        gyroPID.getController().setPID(0.005, 0.0, 0.0);
 //        gyroPID.getController().setSetpoint(gyroPID.getInput() + angle);

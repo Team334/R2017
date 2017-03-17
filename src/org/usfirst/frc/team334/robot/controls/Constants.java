@@ -33,45 +33,15 @@ public class Constants {
     public final static int CLIMBER_ENC_1 = 4,
                             CLIMBER_ENC_2 = 5;
 
-//-------------------------COMPONENT SPEEDS-----------------------------------------
-    public final static double CLIMB_SPEED = 1;
-    public final static double INDEXER_SPEED = 0.8;
-    public final static double INTAKE_SPEED = 0.55;
-    public final static double SHOOTER_SPEED = 0.8;
-
-    public final static int lEFT_SERVO_OUT = 125,
-                            RIGHT_SERVO_OUT = 45;
-    public final static int LEFT_SERVO_GRIP = 180,
-                            RIGHT_SERVO_GRIP = 0;
-    public final static int LEFT_SERVO_RESET = 170,
-                            RIGHT_SERVO_RESET = 10;
-
-    public static final double DRIVE_SLOW_FACTOR = 0.6; // UPDATE
-
-//-------------------------COMPONENT DETAILS----------------------------------------
-
-    public final static double DRIVEWHEEL_CIRCUMFERENCE = 4 * Math.PI;
-    public final static int DRIVE_PULSES_PER_REVOLUTION = 100; // UPDATE
-
-    public final static double CLIMBWHEEL_CIRCUMFERENCE = 1 * Math.PI; // UPDATE
-    public final static double CLIMB_PULSES_PER_REVOLUTION = 0.1; // UPDATE
-
-
-//--------------------FIELD MEASUREMENTS (IN FEET)-----------------------------------
-
-    public static final double DISTANCE_TO_BASELINE = 9.4;
-    public static final double DISTANCE_FROM_PEG_TO_KEY = 6.0;
-
-    public static final double ANGLE_TO_PEG = 90;
-
-//-----------------------------LEDS---------------------------------------------------
+//-------------------------------LEDS PORTS---------------------------------------------------
 
     public final static int LED_RINGS = 8;
 
     public final static int RGB_STRIPS = 0;
 
-//--------------------------SENSORS---------------------------------------------------
+//--------------------------SENSORS PORTS-------------------------------------------------
 
+    public final static int GYRO_PORT = 0;
     public final static int HALL_EFFECT = 6;
 
     // MANUAL AUTON SELECT
@@ -84,20 +54,10 @@ public class Constants {
     public final static String VIDEO_1 = "/dev/video0",
                                VIDEO_2 = "/dev/video1";
 
-//-----------------------VISION TARGETS SPECS----------------------------------------
-
-    public static final double GEAR_TARGET = 300;
-    public static final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
-    public static final double GEAR_AREA_CAP = 350;
-
-    public static final double BOILER_TARGET = 300;
-    public static final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
-    public static final double BOILER_AREA_CAP = 350;
-
 //----------------------------PID VALUES----------------------------------------------
 
     public static final double GYRO_CAP = 1,
-                               GYRO_P = 0.1,
+                               GYRO_P = 0.005,
                                GYRO_I = 0.0,
                                GYRO_D = 0.0;
 
@@ -110,5 +70,60 @@ public class Constants {
                                OFFSET_P = 0.0008,
                                OFFSET_I = 0.0,
                                OFFSET_D = 0.0001;
+
+    //--------------------FIELD MEASUREMENTS (IN FEET)-----------------------------------
+
+    public static final double DISTANCE_TO_BASELINE = 93.3 / 12;
+    //    public static final double DISTANCE_TO_BASELINE = 9.4;
+    public static final double DISTANCE_FROM_PEG_TO_KEY = -6.0;
+
+    public static final double ANGLE_TO_PEG = 60;
+
+    //-----------------------VISION TARGETS SPECS----------------------------------------
+
+    public static final double GEAR_TARGET = 300;
+    public static final double GEAR_TOLERANCE = GEAR_TARGET * 0.05;
+    public static final double GEAR_AREA_CAP = 350;
+
+    public static final double BOILER_TARGET = 300;
+    public static final double BOILER_TOLERANCE = BOILER_TARGET * 0.05;
+    public static final double BOILER_AREA_CAP = 350;
+
+    //-------------------------COMPONENT SPEEDS-----------------------------------------
+
+    public final static double CLIMB_SPEED = 1;
+    public final static double INDEXER_SPEED = 0.8;
+    public final static double INTAKE_SPEED = 0.55;
+    public final static double SHOOTER_SPEED = 0.8;
+
+    // PRACTICE ROBOT
+    public final static int LEFT_SERVO_OUT = 180,
+                            RIGHT_SERVO_OUT = 0;
+    public final static int LEFT_SERVO_RESET = 120,
+                            RIGHT_SERVO_RESET = 60;
+
+    // REAL ROBOT
+//    public final static int lEFT_SERVO_OUT = 125,
+//                            RIGHT_SERVO_OUT = 45;
+//    public final static int LEFT_SERVO_GRIP = 180,
+//                            RIGHT_SERVO_GRIP = 0;
+//    public final static int LEFT_SERVO_RESET = 170,
+//                            RIGHT_SERVO_RESET = 10;
+
+    public static final double DRIVE_SLOW_FACTOR = 0.6; // UPDATE
+
+//-------------------------COMPONENT DETAILS----------------------------------------
+
+    public final static double DRIVEWHEEL_CIRCUMFERENCE = 4.1 * Math.PI / 12 ; // in feet
+    public final static int DRIVE_PULSES_PER_REVOLUTION = 76;
+
+    public final static double CLIMBWHEEL_CIRCUMFERENCE = 1 * Math.PI; // UPDATE
+    public final static double CLIMB_PULSES_PER_REVOLUTION = 0.1; // UPDATE
+
+//-----------------------------AUTON DRIVE TIMES--------------------------------------
+
+    public static final double STRAIGHT_TIME = 2.5;
+    public static final double STRAIGHT_SPEED = 0.3;
+    public static final double TURN_TIME = 1;
 
 }

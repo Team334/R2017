@@ -64,8 +64,8 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT CAMERA
-//        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
-//        cameraSet.enable();
+        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+        cameraSet.enable();
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -110,27 +110,28 @@ public class Robot extends IterativeRobot {
         // Clear old commands
         Scheduler.getInstance().removeAll();
 
-//        autonScenario = autoChoose.getSelected();
-//
-////        if (autonScenario == AutonScenario.MANUAL) {
-////            autonScenario = manualAutonSelect.getScenario();
-////        }
-//
-//        switch (autonScenario) {
-//            case LEFT_SIDE:
-//                Scheduler.getInstance().add(goToLeftPeg);
-//                break;
-//            case RIGHT_SIDE:
-//                Scheduler.getInstance().add(goToRightPeg);
-//                break;
-//            case MIDDLE:
-//                Scheduler.getInstance().add(goToMiddlePeg);
-//                break;
+        autonScenario = autoChoose.getSelected();
+        autonScenario = AutonScenario.MIDDLE;
+
+//        if (autonScenario == AutonScenario.MANUAL) {
+//            autonScenario = manualAutonSelect.getScenario();
 //        }
 
-        goToLeftPeg.start();
-//        goToRightPeg.start();
-//        goToMiddlePeg.start();
+        switch (autonScenario) {
+            case LEFT_SIDE:
+                Scheduler.getInstance().add(goToLeftPeg);
+                break;
+            case RIGHT_SIDE:
+                Scheduler.getInstance().add(goToRightPeg);
+                break;
+            case MIDDLE:
+                Scheduler.getInstance().add(goToMiddlePeg);
+                break;
+        }
+
+        //goToLeftPeg.start();
+        //goToRightPeg.start();
+        //goToMiddlePeg.start();
     }
 
     @Override

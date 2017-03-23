@@ -29,16 +29,15 @@ public class CameraSet {
     // The default camera is cam1
     public CameraSet(Controls controls, String devpath1, String devpath2) {
         this.controls = controls;
-        this.cam1 = CameraServer.getInstance().startAutomaticCapture("Back", devpath1);
-        this.cam2 = CameraServer.getInstance().startAutomaticCapture("Front", devpath2);
+        this.cam1 = CameraServer.getInstance().startAutomaticCapture("Back", devpath2);
+        this.cam2 = CameraServer.getInstance().startAutomaticCapture("Front", devpath1);
 
-        cam1.setResolution((int) (this.multiplier * 160), (int) (this.multiplier * 120));
-        cam2.setResolution((int) (this.multiplier * 160), (int) (this.multiplier * 120));
+//        cam1.setResolution((int) (this.multiplier * 160), (int) (this.multiplier * 120));
+//        cam2.setResolution((int) (this.multiplier * 160), (int) (this.multiplier * 120));
 
         outputStream = CameraServer.getInstance().putVideo("camera_set", (int) (multiplier * 160), (int) (multiplier * 120));
         source = new Mat();
 
-        cvSink = CameraServer.getInstance().getVideo(cam1);
     }
 
     public void setResolution(int multiplier) {
@@ -48,6 +47,7 @@ public class CameraSet {
 
     public void enable() {
         new Thread(() -> {
+            cvSink = CameraServer.getInstance().getVideo(cam2);
             while (!Thread.interrupted()) {
                 SmartDashboard.putString("Camera", cvSink.getSource().getName());
 
@@ -57,9 +57,11 @@ public class CameraSet {
                 if (controls.getToggleCamera() && !buttonHeld && !isToggled) {
                     isToggled = true;
                     cvSink = CameraServer.getInstance().getVideo(cam2);
+                    System.out.println("toggled");
                 } else if (controls.getToggleCamera() && !buttonHeld && isToggled) {
                     isToggled = false;
                     cvSink = CameraServer.getInstance().getVideo(cam1);
+                    System.out.println("toggled");
                 }
                 buttonHeld = controls.getToggleCamera();
             }

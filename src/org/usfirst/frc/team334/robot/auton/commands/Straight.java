@@ -61,7 +61,6 @@ public class Straight extends Command {
     }
 
     protected void end() {
-        System.out.println("Straight Done: " + straightDone);
         driveTrain.stop();
     }
 }

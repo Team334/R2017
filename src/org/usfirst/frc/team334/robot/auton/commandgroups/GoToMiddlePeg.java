@@ -1,6 +1,7 @@
 package org.usfirst.frc.team334.robot.auton.commandgroups;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import org.usfirst.frc.team334.robot.auton.commands.GearIn;
 import org.usfirst.frc.team334.robot.auton.commands.GearOut;
 import org.usfirst.frc.team334.robot.auton.commands.Straight;
 import org.usfirst.frc.team334.robot.auton.commands.VisionAuton;
@@ -21,10 +22,11 @@ public class GoToMiddlePeg extends CommandGroup {
      *      2) Vision to get close
      */
     public GoToMiddlePeg(DriveTrain driveTrain, GyroPID gyroPID, VisionAutoAlign visionAutoAlign, Gear gear) {
-        addSequential(new Straight(Constants.DISTANCE_TO_BASELINE, driveTrain, gyroPID));
-        addSequential(new VisionAuton(visionAutoAlign, Target.GEAR));
+        addSequential(new Straight(Constants.DISTANCE_TO_BASELINE - 5/12.0 - 2.9, driveTrain, gyroPID));
+        //addSequential(new VisionAuton(visionAutoAlign, Target.GEAR));
         addSequential(new GearOut(gear));
         addSequential(new Straight(-3, driveTrain, gyroPID));
+        addSequential(new GearIn(gear));
     }
 
 }

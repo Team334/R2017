@@ -25,10 +25,10 @@ public class Constants {
 
     public final static int INTAKE = 8;
 
-    public final static int ENCODER_RIGHT_1 = 0,
-                            ENCODER_RIGHT_2 = 1,
-                            ENCODER_LEFT_1 = 2,
-                            ENCODER_LEFT_2 = 3;
+    public final static int ENCODER_RIGHT_1 = 6,
+                            ENCODER_RIGHT_2 = 7,
+                            ENCODER_LEFT_1 = 8,
+                            ENCODER_LEFT_2 = 9;
 
     public final static int CLIMBER_ENC_1 = 4,
                             CLIMBER_ENC_2 = 5;
@@ -42,7 +42,7 @@ public class Constants {
 //--------------------------SENSORS PORTS-------------------------------------------------
 
     public final static int GYRO_PORT = 0;
-    public final static int HALL_EFFECT = 6;
+    public final static int HALL_EFFECT = 5;
 
     // MANUAL AUTON SELECT
     public final static int DI_1_CHANNEL = 0,
@@ -97,10 +97,10 @@ public class Constants {
     public final static double SHOOTER_SPEED = 0.8;
 
     // PRACTICE ROBOT
-    public final static int LEFT_SERVO_OUT = 180,
-                            RIGHT_SERVO_OUT = 0;
-    public final static int LEFT_SERVO_RESET = 120,
-                            RIGHT_SERVO_RESET = 60;
+    public final static int LEFT_SERVO_OUT = 100,
+                            RIGHT_SERVO_OUT = 60;
+    public final static int LEFT_SERVO_RESET = 175,
+                            RIGHT_SERVO_RESET = 0;
 
     // REAL ROBOT
 //    public final static int lEFT_SERVO_OUT = 125,
@@ -114,7 +114,9 @@ public class Constants {
 
 //-------------------------COMPONENT DETAILS----------------------------------------
 
-    public final static double DRIVEWHEEL_CIRCUMFERENCE = 4.1 * Math.PI / 12 ; // in feet
+    public final static double ROBOT_WIDTH = 2.9; // feet
+
+    public final static double DRIVEWHEEL_CIRCUMFERENCE = 4.1 * Math.PI / 12; // in feet
     public final static int DRIVE_PULSES_PER_REVOLUTION = 76;
 
     public final static double CLIMBWHEEL_CIRCUMFERENCE = 1 * Math.PI; // UPDATE

@@ -3,11 +3,11 @@ package org.usfirst.frc.team334.robot.auton.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team334.robot.components.Gear;
 
-public class GearOut extends Command {
+public class GearIn extends Command {
 
     private Gear gear;
 
-    public GearOut(Gear gear) {
+    public GearIn(Gear gear) {
         requires(gear);
         this.gear = gear;
     }
@@ -15,7 +15,7 @@ public class GearOut extends Command {
     @Override
     public void initialize() {
         setTimeout(1);
-        gear.pushOutGear();
+        gear.resetServos();
     }
 
     public void execute() {}

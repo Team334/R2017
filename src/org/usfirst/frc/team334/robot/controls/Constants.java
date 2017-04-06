@@ -91,7 +91,7 @@ public class Constants {
 
     //-------------------------COMPONENT SPEEDS-----------------------------------------
 
-    public final static double CLIMB_SPEED = 1;
+    public final static double CLIMB_INTAKE_SPEED = 1;
     public final static double INDEXER_SPEED = 0.8;
     public final static double INTAKE_SPEED = 0.55;
     public final static double SHOOTER_SPEED = 0.8;

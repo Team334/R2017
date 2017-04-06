@@ -42,8 +42,8 @@ public class GyroPID {
     }
 
     public void resetGyro() {
-//        gyroSource.getGyro().resetHeading();
-        gyroSource.getGyro().reset();
+        gyroSource.getGyro().resetHeading();
+//        gyroSource.getGyro().reset();
     }
 
 }

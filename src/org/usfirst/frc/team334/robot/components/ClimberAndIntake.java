@@ -6,17 +6,17 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team334.robot.controls.Constants;
 import org.usfirst.frc.team334.robot.controls.Controls;
 
-public class Climber extends Subsystem {
+public class ClimberAndIntake extends Subsystem {
 
-    private VictorSP climberMotor;
+    private VictorSP climberIntakeMotor;
     private Encoder climberEnc;
 
     private Controls controls;
 
-    public Climber(Controls controls) {
+    public ClimberAndIntake(Controls controls) {
         this.controls = controls;
 
-        climberMotor = new VictorSP(Constants.CLIMBER_1);
+        climberIntakeMotor = new VictorSP(Constants.CLIMBER_1);
 
 //        climberEnc = new Encoder(Constants.CLIMBER_ENC_1, Constants.CLIMBER_ENC_2);
 //        climberEnc.setDistancePerPulse(Constants.CLIMBWHEEL_CIRCUMFERENCE / Constants.CLIMB_PULSES_PER_REVOLUTION));
@@ -26,22 +26,22 @@ public class Climber extends Subsystem {
     @Override
     protected void initDefaultCommand() {}
 
-    public void climbUp() {
-        climberMotor.set(Constants.CLIMB_SPEED);
+    public void climbUpAndIntake() {
+        climberIntakeMotor.set(Constants.CLIMB_INTAKE_SPEED);
 
-//        if (climberEnc.getRate() < 0.5 && climberMotor.get() >= 0.5) {
+//        if (climberEnc.getRate() < 0.5 && climberIntakerMotor.get() >= 0.5) {
 //            controls.xboxRumble();
 //        } else {
 //            controls.xboxStopRumble();
 //        }
     }
 
-    public void climbDown() {
-        climberMotor.set(-Constants.CLIMB_SPEED);
+    public void climbDownAndSpitBalls() {
+        climberIntakeMotor.set(-Constants.CLIMB_INTAKE_SPEED);
     }
 
     public void stop() {
-        climberMotor.set(0);
+        climberIntakeMotor.set(0);
     }
 
 }

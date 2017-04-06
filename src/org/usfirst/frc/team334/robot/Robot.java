@@ -37,9 +37,8 @@ public class Robot extends IterativeRobot {
     private VisionAreaPID areaPID;
     private VisionOffsetPID offsetPID;
 
-    private Intake intake;
     private Indexer indexer;
-    private Climber climber;
+    private ClimberAndIntake climberIntake;
     private Gear gear;
     private Shooter shooter;
     private ManualAutonSelect manualAutonSelect;
@@ -64,21 +63,20 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT CAMERA
-        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
-        cameraSet.enable();
+//        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
+//        cameraSet.enable();
 
         // INIT PIDS
         gyroPID = new GyroPID();
         areaPID = new VisionAreaPID();
         offsetPID = new VisionOffsetPID();
 
-        climber = new Climber(controls);
-        intake = new Intake();
+        climberIntake = new ClimberAndIntake(controls);
         indexer = new Indexer();
         gear = new Gear();
         shooter = new Shooter();
         visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
-        //manualAutonSelect = new ManualAutonSelect();
+        manualAutonSelect = new ManualAutonSelect();
 
         // AUTON COMMAND GROUPS
         goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign, gear);
@@ -128,10 +126,6 @@ public class Robot extends IterativeRobot {
                 Scheduler.getInstance().add(goToMiddlePeg);
                 break;
         }
-
-        //goToLeftPeg.start();
-        //goToRightPeg.start();
-        //goToMiddlePeg.start();
     }
 
     @Override
@@ -168,7 +162,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-         subsystemsListener();
+        subsystemsListener();
 
         // DRIVETRAIN LISTENER
         if (controls.getAutoAlign(Target.GEAR)) {
@@ -184,7 +178,7 @@ public class Robot extends IterativeRobot {
             double leftSpeed = controls.getLeftDrive() - stickCalLeft;
             double rightSpeed = controls.getRightDrive() - stickCalRight;
 
-            if (controls.getSlowRamp(Ramp.SIDE.LEFT) && controls.getSlowRamp(Ramp.SIDE.RIGHT)) {
+            if (controls.getSlowRamp()) {
                 double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
                 leftSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
                 rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
@@ -222,23 +216,14 @@ public class Robot extends IterativeRobot {
         intakeSpeed = SmartDashboard.getNumber("Intake Speed", 0);
 
         // CLIMBER LISTENER
-        if (controls.getClimbUp() && !controls.getClimbDown()) {
+        if (controls.getClimbUpAndIntake() && !controls.getClimbDownAndReverseIntake()) {
             System.out.println("CLIMBING UP");
-            climber.climbUp();
-        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
+            climberIntake.climbUpAndIntake();
+        } else if (controls.getClimbDownAndReverseIntake() && !controls.getClimbUpAndIntake()) {
             System.out.println("CLIMBING DOWN");
-            climber.climbDown();
+            climberIntake.climbDownAndSpitBalls();
         } else {
-            climber.stop();
-        }
-
-        // INTAKE LISTENER
-        if (controls.getIntakeIn()) {
-            System.out.println("INTAKING");
-//            intake.pullIn(intakeSpeed);
-            intake.pullIn(Constants.INTAKE_SPEED);
-        } else {
-            intake.stop();
+            climberIntake.stop();
         }
 
         // INDEXER LISTENER
@@ -283,6 +268,6 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Hall Effect Rate", shooter.getHallEffectRate());
         SmartDashboard.putNumber("Distance Traveled", driveTrain.getDistanceTraveled());
 
-//        VisionData.displayData();
+        VisionData.displayData();
     }
 }

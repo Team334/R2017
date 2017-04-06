@@ -29,6 +29,8 @@ public class ManualAutonSelect {
         int bit2 = di2.get() ? 1 : 0;
         int bit3 = di3.get() ? 1 : 0;
 
+        System.out.println("bit1 = " + bit1 + "bit2 = " + bit2 + "bit3 = " + bit3);
+
         int selection = bit1 | (bit2 << 1) | (bit3 << 2);
 
         return selection;

@@ -9,11 +9,11 @@ import org.usfirst.frc.team334.robot.sensors.BNO055;
 public class GyroSource implements PIDSource {
 
     public static BNO055 imu;
-    public AnalogGyro gyro;
+//    public AnalogGyro gyro;
 
     public GyroSource () {
         imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
-        gyro = new AnalogGyro(Constants.GYRO_PORT);
+//        gyro = new AnalogGyro(Constants.GYRO_PORT);
     }
 
     @Override
@@ -27,16 +27,17 @@ public class GyroSource implements PIDSource {
 
     @Override
     public double pidGet() {
-//        return imu.getHeading();
-        return gyro.pidGet();
+//        System.out.println("imu " + imu.getHeading());
+        return imu.getHeading();
+//        return gyro.pidGet();
     }
 
-//    public BNO055 getGyro() {
-//        return imu;
+    public BNO055 getGyro() {
+        return imu;
+    }
+
+//    public AnalogGyro getGyro() {
+//        return gyro;
 //    }
-
-    public AnalogGyro getGyro() {
-        return gyro;
-    }
 
 }

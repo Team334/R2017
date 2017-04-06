@@ -76,9 +76,9 @@ public class Controls {
         return xboxController.getRawAxis(2) > .75;
     }
 
-//    public boolean getToggleCamera() {
-//	    return rightJoystick.getRawButton(3);
-//    }
+    public boolean getToggleCamera() {
+	    return rightJoystick.getRawButton(8);
+    }
 
     public void xboxRumble() {
         xboxController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);

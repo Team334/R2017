@@ -45,9 +45,9 @@ public class Constants {
     public final static int HALL_EFFECT = 5;
 
     // MANUAL AUTON SELECT
-    public final static int DI_1_CHANNEL = 0,
-                            DI_2_CHANNEL = 1,
-                            DI_3_CHANNEL = 2;
+    public final static int DI_1_CHANNEL = 0, // a
+                            DI_2_CHANNEL = 1, // b
+                            DI_3_CHANNEL = 2; // c
 
 //------------------------CAMERA LOCATIONS-------------------------------------------
 

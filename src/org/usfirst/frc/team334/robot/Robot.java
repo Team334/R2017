@@ -1,5 +1,7 @@
 package org.usfirst.frc.team334.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -29,7 +31,8 @@ public class Robot extends IterativeRobot {
 
     private BumperLedStrip bumper;
 
-    private CameraSet cameraSet;
+    private UsbCamera cam;
+//    private CameraSet cameraSet;
 
     private VisionAutoAlign visionAutoAlign;
 
@@ -63,8 +66,9 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT CAMERA
-//        cameraSet = new CameraSet(controls, Constants.VIDEO_1, Constants.VIDEO_2);
-//        cameraSet.enable();
+        this.cam = CameraServer.getInstance().startAutomaticCapture("cam", "/dev/video0");
+        cam.setResolution(320, 240);
+        cam.setFPS(24);
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -85,11 +89,11 @@ public class Robot extends IterativeRobot {
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
+        autoChoose.addDefault("Manual", AutonScenario.MANUAL);
         autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
         autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
-        autoChoose.addDefault("Nothing", AutonScenario.NOTHING);
-        // autoChoose.addDefault("Default", AutonScenario.MANUAL);
+        autoChoose.addObject("Nothing", AutonScenario.NOTHING);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
@@ -109,20 +113,23 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().removeAll();
 
         autonScenario = autoChoose.getSelected();
-        autonScenario = AutonScenario.MIDDLE;
+//        autonScenario = AutonScenario.MIDDLE;
 
-//        if (autonScenario == AutonScenario.MANUAL) {
-//            autonScenario = manualAutonSelect.getScenario();
-//        }
+        if (autonScenario == AutonScenario.MANUAL) {
+            autonScenario = manualAutonSelect.getScenario();
+        }
 
         switch (autonScenario) {
             case LEFT_SIDE:
+                System.out.println("LEFT AUTON");
                 Scheduler.getInstance().add(goToLeftPeg);
                 break;
             case RIGHT_SIDE:
+                System.out.println("RIGHT AUTON");
                 Scheduler.getInstance().add(goToRightPeg);
                 break;
             case MIDDLE:
+                System.out.println("MIDDLE AUTON");
                 Scheduler.getInstance().add(goToMiddlePeg);
                 break;
         }
@@ -142,8 +149,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        // Assume Vision is not initialized
-        // Will update to true if it initialized successfully
         VisionData.getNt().putBoolean("running", false);
 
         bumper.setTeam();
@@ -237,7 +242,7 @@ public class Robot extends IterativeRobot {
 
         // SHOOTER LISTENER
         if (controls.getShoot()) {
-//            System.out.println("SHOOTING");
+            System.out.println("SHOOTING");
 //            shooter.setShooterSpeed(shooterSpeed);
             shooter.setShooterSpeed(Constants.SHOOTER_SPEED);
         } else {

@@ -6,7 +6,8 @@ import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
 import org.usfirst.frc.team334.robot.controls.Constants;
 
-public class Straight extends Command {
+public class
+Straight extends Command {
 
     private double distance;
     private double direction;
@@ -15,7 +16,7 @@ public class Straight extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Straight(double distance, DriveTrain driveTrain, GyroPID gyroPID) {
+    public Straight(double distance, double time, DriveTrain driveTrain, GyroPID gyroPID) {
         requires(driveTrain);
 
         this.distance = distance;
@@ -23,7 +24,7 @@ public class Straight extends Command {
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        setTimeout(Constants.STRAIGHT_TIME);
+        setTimeout(time);
         straightDone = false;
     }
 
@@ -40,11 +41,12 @@ public class Straight extends Command {
      */
     public void execute() {
         SmartDashboard.putString("Mode", "STRAIGHT");
-        System.out.println("STRAIGHT");
+//        System.out.println("STRAIGHT");
 
         double speed = Constants.STRAIGHT_SPEED * direction;
 
-        double leftSpeed = speed - gyroPID.getOutput();
+//        double leftSpeed = speed - gyroPID.getOutput();
+        double leftSpeed = speed;
         double rightSpeed = speed + gyroPID.getOutput();
 
         driveTrain.setLeftMotors(leftSpeed);
@@ -52,12 +54,14 @@ public class Straight extends Command {
 
         // stop if traveled distance
         straightDone = Math.abs(driveTrain.getDistanceTraveled()) >= Math.abs(distance);
+        SmartDashboard.putBoolean("EncoderStoppedStraight", straightDone);
+        SmartDashboard.putBoolean("TimeStoppedStraight", isTimedOut());
     }
 
     // Stops program when returns true
     @Override
     protected boolean isFinished() {
-        return isTimedOut() || straightDone;
+        return isTimedOut(); // || straightDone;
     }
 
     protected void end() {

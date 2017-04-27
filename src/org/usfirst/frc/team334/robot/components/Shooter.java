@@ -7,13 +7,12 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Shooter extends Subsystem {
 
-    private VictorSP shooterMotor1, shooterMotor2;
+    private VictorSP shooterMotor;
 
     private Counter hallEffect;
 
     public Shooter() {
-        shooterMotor1 = new VictorSP(Constants.SHOOTER_1);
-        shooterMotor2 = new VictorSP(Constants.SHOOTER_2);
+        shooterMotor = new VictorSP(Constants.SHOOTER);
 
         hallEffect = new Counter(Constants.HALL_EFFECT);
         hallEffect.setDistancePerPulse(1);
@@ -22,9 +21,12 @@ public class Shooter extends Subsystem {
     @Override
     protected void initDefaultCommand() {}
 
+//    public void setShooterSpeed() {
+//        shooterMotor.set(Constants.SHOOTER_SPEED);
+//    }
+
     public void setShooterSpeed(double speed) {
-        shooterMotor1.set(-speed);
-        shooterMotor2.set(-speed);
+        shooterMotor.set(speed);
     }
 
     public double getHallEffectRate() {

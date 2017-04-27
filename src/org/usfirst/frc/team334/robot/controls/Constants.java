@@ -10,28 +10,27 @@ public class Constants {
 
 //-----------------------COMPONENT PORTS---------------------------------------------
 
-    public final static int CLIMBER_1 = 0;
+    public final static int DRIVETRAIN_LEFT = 0,
+                            DRIVETRAIN_RIGHT = 1;
 
-    public final static int DRIVETRAIN_LEFT = 1,
-                            DRIVETRAIN_RIGHT = 2;
+    public final static int INDEXER_BELT = 2;
+    public final static int INDEXER2_ROLLER = 3;
 
-    public final static int GEAR_RIGHT = 3,
-                            GEAR_LEFT = 4;
+    public final static int GEAR_RIGHT = 4,
+                            GEAR_LEFT = 5;
 
-    public final static int INDEXER = 5;
+    public final static int CLIMBER_INTAKE = 6;
 
-    public final static int SHOOTER_1 = 6,
-                            SHOOTER_2 = 7;
+    public final static int ANGLER = 7;
 
-    public final static int INTAKE = 8;
+    public final static int SHOOTER = 8;
 
-    public final static int ENCODER_RIGHT_1 = 6,
-                            ENCODER_RIGHT_2 = 7,
-                            ENCODER_LEFT_1 = 8,
-                            ENCODER_LEFT_2 = 9;
+    public final static int HALL_EFFECT = 5;
 
-    public final static int CLIMBER_ENC_1 = 4,
-                            CLIMBER_ENC_2 = 5;
+    public final static int ENCODER_LEFT_1 = 6,
+                            ENCODER_LEFT_2 = 7,
+                            ENCODER_RIGHT_1 = 8,
+                            ENCODER_RIGHT_2 = 9;
 
 //-------------------------------LEDS PORTS---------------------------------------------------
 
@@ -39,25 +38,20 @@ public class Constants {
 
     public final static int RGB_STRIPS = 0;
 
-//--------------------------SENSORS PORTS-------------------------------------------------
+//---------0-----------------SENSORS PORTS-------------------------------------------------
 
     public final static int GYRO_PORT = 0;
-    public final static int HALL_EFFECT = 5;
+//    public final static int HALL_EFFECT = 5;
 
     // MANUAL AUTON SELECT
     public final static int DI_1_CHANNEL = 0, // a
                             DI_2_CHANNEL = 1, // b
                             DI_3_CHANNEL = 2; // c
 
-//------------------------CAMERA LOCATIONS-------------------------------------------
-
-    public final static String VIDEO_1 = "/dev/video0",
-                               VIDEO_2 = "/dev/video1";
-
 //----------------------------PID VALUES----------------------------------------------
 
     public static final double GYRO_CAP = 1,
-                               GYRO_P = 0.005,
+                               GYRO_P = 0.01,
                                GYRO_I = 0.0,
                                GYRO_D = 0.0;
 
@@ -91,24 +85,25 @@ public class Constants {
 
     //-------------------------COMPONENT SPEEDS-----------------------------------------
 
-    public final static double CLIMB_INTAKE_SPEED = 1;
-    public final static double INDEXER_SPEED = 0.8;
-    public final static double INTAKE_SPEED = 0.55;
-    public final static double SHOOTER_SPEED = 0.8;
+    public final static double INTAKE_SPEED = 0.5;
+    public final static double CLIMB_SPEED = 1;
+    public final static double INDEXER_BELT_SPEED = -.7;
+    public final static double INDEXER_ROLLER_SPEED = -0.4;
+    public final static double SHOOTER_SPEED = 0.74;
+
+    public final static double ANGLER_ANGLE = 90;
 
     // PRACTICE ROBOT
-    public final static int LEFT_SERVO_OUT = 100,
-                            RIGHT_SERVO_OUT = 60;
-    public final static int LEFT_SERVO_RESET = 175,
-                            RIGHT_SERVO_RESET = 0;
+//    public final static int LEFT_SERVO_OUT = 100,
+//                            RIGHT_SERVO_OUT = 60;
+//    public final static int LEFT_SERVO_RESET = 175,
+//                            RIGHT_SERVO_RESET = 0;
 
     // REAL ROBOT
-//    public final static int lEFT_SERVO_OUT = 125,
-//                            RIGHT_SERVO_OUT = 45;
-//    public final static int LEFT_SERVO_GRIP = 180,
-//                            RIGHT_SERVO_GRIP = 0;
-//    public final static int LEFT_SERVO_RESET = 170,
-//                            RIGHT_SERVO_RESET = 10;
+    public final static int LEFT_SERVO_OUT = 140, // 150
+                            RIGHT_SERVO_OUT = 40; // 40
+    public final static int LEFT_SERVO_RESET = 180,
+                            RIGHT_SERVO_RESET = 10;
 
     public static final double DRIVE_SLOW_FACTOR = 0.6; // UPDATE
 
@@ -119,12 +114,12 @@ public class Constants {
     public final static double DRIVEWHEEL_CIRCUMFERENCE = 4.1 * Math.PI / 12; // in feet
     public final static int DRIVE_PULSES_PER_REVOLUTION = 76;
 
-    public final static double CLIMBWHEEL_CIRCUMFERENCE = 1 * Math.PI; // UPDATE
-    public final static double CLIMB_PULSES_PER_REVOLUTION = 0.1; // UPDATE
-
 //-----------------------------AUTON DRIVE TIMES--------------------------------------
 
-    public static final double STRAIGHT_TIME = 2.5;
+    public static final double STRAIGHT_TIME_GEAR = 3.75;
+    public static final double STRAIGHT_TIME_BASELINE = 2;
+    public static final double STRAIGHT_TIME_BACK = 3;
+
     public static final double STRAIGHT_SPEED = 0.3;
     public static final double TURN_TIME = 1;
 

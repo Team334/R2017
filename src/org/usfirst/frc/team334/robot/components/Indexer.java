@@ -6,26 +6,35 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Indexer extends Subsystem {
 
-    private VictorSP indexerMotor;
+    private VictorSP indexerMotorBelt;
+    private VictorSP indexerMotorRoller;
 
     public Indexer() {
-        indexerMotor = new VictorSP(Constants.INDEXER);
+        indexerMotorBelt = new VictorSP(Constants.INDEXER_BELT);
+        indexerMotorRoller = new VictorSP(Constants.INDEXER2_ROLLER);
     }
 
     @Override
     protected void initDefaultCommand() {}
 
-    public void pushIntoShooter(double speed) {
-//        indexerMotor.set(Constants.INDEXER_SPEED);
-        indexerMotor.set(speed);
+//    public void pushIntoShooter(double speed, double indexerRoller) {
+//        indexerMotor.set(-speed);
+//        indexerMotor2.set(-indexerRoller);
+//    }
+
+    public void pushIntoShooter() {
+        indexerMotorBelt.set(Constants.INDEXER_BELT_SPEED);
+        indexerMotorRoller.set(Constants.INDEXER_ROLLER_SPEED);
     }
 
     public void pushOutOfShooter() {
-        indexerMotor.set(-Constants.INDEXER_SPEED);
+        indexerMotorBelt.set(-Constants.INDEXER_BELT_SPEED);
+        indexerMotorRoller.set(Constants.INDEXER_ROLLER_SPEED);
     }
 
     public void stop() {
-        indexerMotor.set(0);
+        indexerMotorBelt.set(0);
+        indexerMotorRoller.set(0);
     }
 
 }

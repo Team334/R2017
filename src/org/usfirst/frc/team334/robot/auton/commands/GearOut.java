@@ -14,7 +14,7 @@ public class GearOut extends Command {
 
     @Override
     public void initialize() {
-        setTimeout(1);
+        setTimeout(0.5);
         gear.pushOutGear();
     }
 

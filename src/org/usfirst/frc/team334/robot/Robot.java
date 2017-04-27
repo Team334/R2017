@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.AutonScenario;
-import org.usfirst.frc.team334.robot.auton.commandgroups.GoToLeftPeg;
-import org.usfirst.frc.team334.robot.auton.commandgroups.GoToMiddlePeg;
-import org.usfirst.frc.team334.robot.auton.commandgroups.GoToRightPeg;
+import org.usfirst.frc.team334.robot.auton.commandgroups.*;
 
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.auton.pids.VisionAreaPID;
@@ -32,7 +30,6 @@ public class Robot extends IterativeRobot {
     private BumperLedStrip bumper;
 
     private UsbCamera cam;
-//    private CameraSet cameraSet;
 
     private VisionAutoAlign visionAutoAlign;
 
@@ -49,6 +46,8 @@ public class Robot extends IterativeRobot {
     private GoToLeftPeg goToLeftPeg;
     private GoToRightPeg goToRightPeg;
     private GoToMiddlePeg goToMiddlePeg;
+    private LeftNoGear leftNoGear;
+    private RightNoGear rightNoGear;
 
     private SendableChooser<AutonScenario> autoChoose;
     private AutonScenario autonScenario;
@@ -67,8 +66,8 @@ public class Robot extends IterativeRobot {
 
         // INIT CAMERA
         this.cam = CameraServer.getInstance().startAutomaticCapture("cam", "/dev/video0");
-        cam.setResolution(320, 240);
-        cam.setFPS(24);
+        this.cam.setResolution(320, 240);
+        this.cam.setFPS(24);
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -86,6 +85,8 @@ public class Robot extends IterativeRobot {
         goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign, gear);
         goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign, gear);
         goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign, gear);
+        leftNoGear = new LeftNoGear(driveTrain, gyroPID);
+        rightNoGear = new RightNoGear(driveTrain, gyroPID);
 
         // ADD OBJECTS TO SENDABLE CHOOSER
         autoChoose = new SendableChooser<>();
@@ -93,6 +94,8 @@ public class Robot extends IterativeRobot {
         autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
         autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
         autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
+        autoChoose.addObject("LeftNoGear", AutonScenario.LEFT_NO_GEAR);
+        autoChoose.addObject("RightNoGear", AutonScenario.RIGHT_NO_GEAR);
         autoChoose.addObject("Nothing", AutonScenario.NOTHING);
         SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
@@ -132,6 +135,14 @@ public class Robot extends IterativeRobot {
                 System.out.println("MIDDLE AUTON");
                 Scheduler.getInstance().add(goToMiddlePeg);
                 break;
+            case LEFT_NO_GEAR:
+                System.out.println("LEFT STRAIGHT, TURN ONLY");
+                Scheduler.getInstance().add(leftNoGear);
+                break;
+            case RIGHT_NO_GEAR:
+                System.out.println("RIGHT STRAIGHT, TURN ONLY");
+                Scheduler.getInstance().add(rightNoGear);
+                break;
         }
     }
 
@@ -146,6 +157,7 @@ public class Robot extends IterativeRobot {
     private double shooterSpeed = 0.7;
     private double indexerSpeed = 0.8;
     private double intakeSpeed = 0.55;
+    private double indexerRollerSpeed = 0.5;
 
     @Override
     public void teleopInit() {
@@ -167,7 +179,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        subsystemsListener();
+       subsystemsListener();
 
         // DRIVETRAIN LISTENER
         if (controls.getAutoAlign(Target.GEAR)) {
@@ -189,8 +201,9 @@ public class Robot extends IterativeRobot {
                 rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
             }
 
-            driveTrain.setLeftMotors(leftSpeed);
-            driveTrain.setRightMotors(rightSpeed);
+            double slow = 0.8;
+            driveTrain.setLeftMotors(leftSpeed * slow);
+            driveTrain.setRightMotors(rightSpeed * slow * 2/3);
         }
 
         updateSmartDashboard();
@@ -219,23 +232,32 @@ public class Robot extends IterativeRobot {
         shooterSpeed = SmartDashboard.getNumber("Shooter Speed", 0);
         indexerSpeed = SmartDashboard.getNumber("Indexer Speed", 0);
         intakeSpeed = SmartDashboard.getNumber("Intake Speed", 0);
+        indexerRollerSpeed = SmartDashboard.getNumber("IntakeRoller Speed", 0);
 
         // CLIMBER LISTENER
-        if (controls.getClimbUpAndIntake() && !controls.getClimbDownAndReverseIntake()) {
+        if (controls.getClimbUp() && !controls.getClimbDown()) {
             System.out.println("CLIMBING UP");
-            climberIntake.climbUpAndIntake();
-        } else if (controls.getClimbDownAndReverseIntake() && !controls.getClimbUpAndIntake()) {
+            climberIntake.climbUp();
+        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
             System.out.println("CLIMBING DOWN");
-            climberIntake.climbDownAndSpitBalls();
+            climberIntake.climbDown();
         } else {
             climberIntake.stop();
+        }
+
+        // INTAKE LISTENER
+        if (controls.getIntakeIn() && !controls.getIntakeOut()) {
+            System.out.println("INTAKE");
+            climberIntake.intakeIn();
+        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
+            climberIntake.intakeOut();
         }
 
         // INDEXER LISTENER
         if (controls.getIndexerIn()) {
             System.out.println("INDEXING");
-//            indexer.pushIntoShooter(indexerSpeed);
-            indexer.pushIntoShooter(Constants.INDEXER_SPEED);
+            indexer.pushIntoShooter();
+//            indexer.pushIntoShooter(Constants.INDEXER_SPEED);
         } else {
             indexer.stop();
         }
@@ -244,7 +266,7 @@ public class Robot extends IterativeRobot {
         if (controls.getShoot()) {
             System.out.println("SHOOTING");
 //            shooter.setShooterSpeed(shooterSpeed);
-            shooter.setShooterSpeed(Constants.SHOOTER_SPEED);
+            shooter.setShooterSpeed(Constants.SHOOTER_SPEED + controls.getShooterSpeedAdjustment());
         } else {
             shooter.setShooterSpeed(0);
         }

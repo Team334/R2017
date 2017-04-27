@@ -13,14 +13,14 @@ public class Turn extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
+    public Turn(double angle, double time, DriveTrain driveTrain, GyroPID gyroPID) {
         requires(driveTrain);
 
         this.angle = angle;
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        setTimeout(Constants.TURN_TIME);
+        setTimeout(time);
     }
 
     // Called once at start of command
@@ -38,13 +38,13 @@ public class Turn extends Command {
      */
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
-        System.out.println("TURN");
+//        System.out.println("TURN");
 
         double speed = 0.0;
         double leftSpeed = speed - gyroPID.getOutput();
         double rightSpeed = speed + gyroPID.getOutput();
 
-        System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
+//        System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);

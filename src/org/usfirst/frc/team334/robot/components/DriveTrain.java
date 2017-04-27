@@ -52,6 +52,9 @@ public class DriveTrain extends Subsystem {
     }
 
     public double getDistanceTraveled() {
+//        System.out.println("EncLeft = " + encLeft.getDistance() + " EncRight = " + encRight.getDistance());
+//        System.out.println("EncLeftRate = " + encLeft.getRate());
+//        System.out.println("EncRightRate = " + encRight.getRate());
         return (encLeft.getDistance() + encRight.getDistance()) / 2;
     }
 

@@ -22,14 +22,14 @@ public class Indexer extends Subsystem {
 //        indexerMotor2.set(-indexerRoller);
 //    }
 
-    public void pushIntoShooter() {
-        indexerMotorBelt.set(Constants.INDEXER_BELT_SPEED);
-        indexerMotorRoller.set(Constants.INDEXER_ROLLER_SPEED);
+    public void pushIntoShooter(double beltSpeed, double rollerSpeed) {
+        indexerMotorBelt.set(beltSpeed);
+        indexerMotorRoller.set(rollerSpeed);
     }
 
-    public void pushOutOfShooter() {
-        indexerMotorBelt.set(-Constants.INDEXER_BELT_SPEED);
-        indexerMotorRoller.set(Constants.INDEXER_ROLLER_SPEED);
+    public void pushOutOfShooter(double beltSpeed, double rollerSpeed) {
+        indexerMotorBelt.set(-beltSpeed);
+        indexerMotorRoller.set(-rollerSpeed);
     }
 
     public void stop() {

@@ -8,7 +8,7 @@ public class Angler {
     private Servo angler;
 
     public Angler() {
-        angler = new Servo(Constants.ANGLER);
+//        angler = new Servo(Constants.ANGLER);
     }
 
 //    public void setAngle() {

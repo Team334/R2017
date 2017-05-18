@@ -65,9 +65,9 @@ public class Robot extends IterativeRobot {
         VisionData.init();
 
         // INIT CAMERA
-        this.cam = CameraServer.getInstance().startAutomaticCapture("cam", "/dev/video0");
-        this.cam.setResolution(320, 240);
-        this.cam.setFPS(24);
+//        this.cam = CameraServer.getInstance().startAutomaticCapture("cam", "/dev/video0");
+//        this.cam.setResolution(320, 240);
+//        this.cam.setFPS(24);
 
         // INIT PIDS
         gyroPID = new GyroPID();
@@ -78,26 +78,26 @@ public class Robot extends IterativeRobot {
         indexer = new Indexer();
         gear = new Gear();
         shooter = new Shooter();
-        visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
-        manualAutonSelect = new ManualAutonSelect();
-
-        // AUTON COMMAND GROUPS
-        goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign, gear);
-        goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign, gear);
-        goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign, gear);
-        leftNoGear = new LeftNoGear(driveTrain, gyroPID);
-        rightNoGear = new RightNoGear(driveTrain, gyroPID);
-
-        // ADD OBJECTS TO SENDABLE CHOOSER
-        autoChoose = new SendableChooser<>();
-        autoChoose.addDefault("Manual", AutonScenario.MANUAL);
-        autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
-        autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
-        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
-        autoChoose.addObject("LeftNoGear", AutonScenario.LEFT_NO_GEAR);
-        autoChoose.addObject("RightNoGear", AutonScenario.RIGHT_NO_GEAR);
-        autoChoose.addObject("Nothing", AutonScenario.NOTHING);
-        SmartDashboard.putData("Choose Auton Mode", autoChoose);
+//        visionAutoAlign = new VisionAutoAlign(driveTrain, gyroPID, areaPID, offsetPID);
+//        manualAutonSelect = new ManualAutonSelect();
+//
+//        // AUTON COMMAND GROUPS
+//        goToLeftPeg = new GoToLeftPeg(driveTrain, gyroPID, visionAutoAlign, gear);
+//        goToRightPeg = new GoToRightPeg(driveTrain, gyroPID, visionAutoAlign, gear);
+//        goToMiddlePeg = new GoToMiddlePeg(driveTrain, gyroPID, visionAutoAlign, gear);
+//        leftNoGear = new LeftNoGear(driveTrain, gyroPID);
+//        rightNoGear = new RightNoGear(driveTrain, gyroPID);
+//
+//        // ADD OBJECTS TO SENDABLE CHOOSER
+//        autoChoose = new SendableChooser<>();
+//        autoChoose.addDefault("Manual", AutonScenario.MANUAL);
+//        autoChoose.addObject("Turn Left", AutonScenario.LEFT_SIDE);
+//        autoChoose.addObject("Turn Right", AutonScenario.RIGHT_SIDE);
+//        autoChoose.addObject("Go Straight", AutonScenario.MIDDLE);
+//        autoChoose.addObject("LeftNoGear", AutonScenario.LEFT_NO_GEAR);
+//        autoChoose.addObject("RightNoGear", AutonScenario.RIGHT_NO_GEAR);
+//        autoChoose.addObject("Nothing", AutonScenario.NOTHING);
+//        SmartDashboard.putData("Choose Auton Mode", autoChoose);
     }
 
     @Override
@@ -115,35 +115,35 @@ public class Robot extends IterativeRobot {
         // Clear old commands
         Scheduler.getInstance().removeAll();
 
-        autonScenario = autoChoose.getSelected();
-//        autonScenario = AutonScenario.MIDDLE;
-
-        if (autonScenario == AutonScenario.MANUAL) {
-            autonScenario = manualAutonSelect.getScenario();
-        }
-
-        switch (autonScenario) {
-            case LEFT_SIDE:
-                System.out.println("LEFT AUTON");
-                Scheduler.getInstance().add(goToLeftPeg);
-                break;
-            case RIGHT_SIDE:
-                System.out.println("RIGHT AUTON");
-                Scheduler.getInstance().add(goToRightPeg);
-                break;
-            case MIDDLE:
-                System.out.println("MIDDLE AUTON");
-                Scheduler.getInstance().add(goToMiddlePeg);
-                break;
-            case LEFT_NO_GEAR:
-                System.out.println("LEFT STRAIGHT, TURN ONLY");
-                Scheduler.getInstance().add(leftNoGear);
-                break;
-            case RIGHT_NO_GEAR:
-                System.out.println("RIGHT STRAIGHT, TURN ONLY");
-                Scheduler.getInstance().add(rightNoGear);
-                break;
-        }
+//        autonScenario = autoChoose.getSelected();
+////        autonScenario = AutonScenario.MIDDLE;
+//
+//        if (autonScenario == AutonScenario.MANUAL) {
+//            autonScenario = manualAutonSelect.getScenario();
+//        }
+//
+//        switch (autonScenario) {
+//            case LEFT_SIDE:
+//                System.out.println("LEFT AUTON");
+//                Scheduler.getInstance().add(goToLeftPeg);
+//                break;
+//            case RIGHT_SIDE:
+//                System.out.println("RIGHT AUTON");
+//                Scheduler.getInstance().add(goToRightPeg);
+//                break;
+//            case MIDDLE:
+//                System.out.println("MIDDLE AUTON");
+//                Scheduler.getInstance().add(goToMiddlePeg);
+//                break;
+//            case LEFT_NO_GEAR:
+//                System.out.println("LEFT STRAIGHT, TURN ONLY");
+//                Scheduler.getInstance().add(leftNoGear);
+//                break;
+//            case RIGHT_NO_GEAR:
+//                System.out.println("RIGHT STRAIGHT, TURN ONLY");
+//                Scheduler.getInstance().add(rightNoGear);
+//                break;
+//        }
     }
 
     @Override
@@ -181,16 +181,16 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
        subsystemsListener();
 
-        // DRIVETRAIN LISTENER
-        if (controls.getAutoAlign(Target.GEAR)) {
-            visionAutoAlign.setTarget(Target.GEAR);
-            visionAutoAlign.autoAlign();
-        }
-        else if (controls.getAutoAlign(Target.BOILER)) {
-            visionAutoAlign.setTarget(Target.BOILER);
-            visionAutoAlign.autoAlign();
-        }
-        else {
+//        // DRIVETRAIN LISTENER
+//        if (controls.getAutoAlign(Target.GEAR)) {
+//            visionAutoAlign.setTarget(Target.GEAR);
+//            visionAutoAlign.autoAlign();
+//        }
+//        else if (controls.getAutoAlign(Target.BOILER)) {
+//            visionAutoAlign.setTarget(Target.BOILER);
+//            visionAutoAlign.autoAlign();
+//        }
+//        else {
             // JOYSTICK LISTENER
             double leftSpeed = controls.getLeftDrive() - stickCalLeft;
             double rightSpeed = controls.getRightDrive() - stickCalRight;
@@ -201,10 +201,10 @@ public class Robot extends IterativeRobot {
                 rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
             }
 
-            double slow = 0.8;
+            double slow = 1;
             driveTrain.setLeftMotors(leftSpeed * slow);
-            driveTrain.setRightMotors(rightSpeed * slow * 2/3);
-        }
+            driveTrain.setRightMotors(rightSpeed * slow);
+//        }
 
         updateSmartDashboard();
     }
@@ -256,8 +256,8 @@ public class Robot extends IterativeRobot {
         // INDEXER LISTENER
         if (controls.getIndexerIn()) {
             System.out.println("INDEXING");
-            indexer.pushIntoShooter();
-//            indexer.pushIntoShooter(Constants.INDEXER_SPEED);
+//            indexer.pushIntoShooter(indexerSpeed, indexerRollerSpeed);
+            indexer.pushIntoShooter(Constants.INDEXER_BELT_SPEED, Constants.INDEXER_ROLLER_SPEED);
         } else {
             indexer.stop();
         }
@@ -270,16 +270,16 @@ public class Robot extends IterativeRobot {
         } else {
             shooter.setShooterSpeed(0);
         }
-
-        // GEAR LISTENER TOGGLE
-//        if (controls.getMoveGear()) {
-//            System.out.println("GEAR");
-//            if (gear.isGearOut()) {
-//                gear.resetServos();
-//            } else {
-//                gear.pushOutGear();
-//            }
-//        }
+//
+//        // GEAR LISTENER TOGGLE
+////        if (controls.getMoveGear()) {
+////            System.out.println("GEAR");
+////            if (gear.isGearOut()) {
+////                gear.resetServos();
+////            } else {
+////                gear.pushOutGear();
+////            }
+////        }
 
         // GEAR LISTENER HOLD
         if (controls.getOutGear()) {

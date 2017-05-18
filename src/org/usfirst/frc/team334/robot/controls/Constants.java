@@ -13,17 +13,19 @@ public class Constants {
     public final static int DRIVETRAIN_LEFT = 0,
                             DRIVETRAIN_RIGHT = 1;
 
-    public final static int INDEXER_BELT = 2;
-    public final static int INDEXER2_ROLLER = 3;
+    public final static int INDEXER_BELT = 3;
+    public final static int INDEXER2_ROLLER = 2;
 
-    public final static int GEAR_RIGHT = 4,
-                            GEAR_LEFT = 5;
+    public final static int GEAR_LEFT = 4,
+                            GEAR_RIGHT = 5;
 
-    public final static int CLIMBER_INTAKE = 6;
+    public final static int SHOOTER = 6;
+    public final static int SHOOTER_2 = 7;
 
-    public final static int ANGLER = 7;
+    public final static int CLIMBER_INTAKE = 8;
+    public final static int CLIMBER_INTAKE_2 = 9;
 
-    public final static int SHOOTER = 8;
+//    public final static int ANGLER = 7;
 
     public final static int HALL_EFFECT = 5;
 
@@ -100,9 +102,9 @@ public class Constants {
 //                            RIGHT_SERVO_RESET = 0;
 
     // REAL ROBOT
-    public final static int LEFT_SERVO_OUT = 140, // 150
+    public final static int LEFT_SERVO_OUT = 120, // 150
                             RIGHT_SERVO_OUT = 40; // 40
-    public final static int LEFT_SERVO_RESET = 180,
+    public final static int LEFT_SERVO_RESET = 160,
                             RIGHT_SERVO_RESET = 10;
 
     public static final double DRIVE_SLOW_FACTOR = 0.6; // UPDATE

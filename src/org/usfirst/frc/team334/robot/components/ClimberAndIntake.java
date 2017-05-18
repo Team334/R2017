@@ -8,7 +8,7 @@ import org.usfirst.frc.team334.robot.controls.Controls;
 
 public class ClimberAndIntake extends Subsystem {
 
-    private VictorSP climberIntakeMotor;
+    private VictorSP climberIntakeMotor, climberIntakeMotor2;
 
     private Controls controls;
 
@@ -16,6 +16,7 @@ public class ClimberAndIntake extends Subsystem {
         this.controls = controls;
 
         climberIntakeMotor = new VictorSP(Constants.CLIMBER_INTAKE);
+        climberIntakeMotor2 = new VictorSP(Constants.CLIMBER_INTAKE_2);
     }
 
     @Override
@@ -27,10 +28,12 @@ public class ClimberAndIntake extends Subsystem {
 
     public void climbUp() {
         climberIntakeMotor.set(Constants.CLIMB_SPEED);
+        climberIntakeMotor2.set(-Constants.CLIMB_SPEED);
     }
 
     public void climbDown() {
         climberIntakeMotor.set(-Constants.CLIMB_SPEED);
+        climberIntakeMotor2.set(Constants.CLIMB_SPEED);
     }
 
 //    public void climbDownAndSpitBalls() {
@@ -39,14 +42,17 @@ public class ClimberAndIntake extends Subsystem {
 
     public void intakeIn() {
         climberIntakeMotor.set(Constants.INTAKE_SPEED);
+        climberIntakeMotor2.set(-Constants.INTAKE_SPEED);
     }
 
     public void intakeOut() {
         climberIntakeMotor.set(-Constants.INTAKE_SPEED);
+        climberIntakeMotor2.set(Constants.INTAKE_SPEED);
     }
 
     public void stop() {
         climberIntakeMotor.set(0);
+        climberIntakeMotor2.set(0);
     }
 
 }

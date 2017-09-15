@@ -7,8 +7,8 @@ public class HallEffect {
 
     private Counter hallEffect;
 
-    public HallEffect() {
-        hallEffect = new Counter(Constants.HALL_EFFECT);
+    public HallEffect(int i) {
+//        hallEffect = new Counter(Constants.HALL_EFFECT);
     }
 
     public double getRPM() {

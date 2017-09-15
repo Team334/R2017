@@ -24,10 +24,10 @@ public class DriveTrain extends Subsystem {
         leftMotors.setInverted(leftInverted);
 
         encLeft = new Encoder(Constants.ENCODER_LEFT_1, Constants.ENCODER_LEFT_2);
-        encLeft.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE * (1 / Constants.DRIVE_PULSES_PER_REVOLUTION));
+        encLeft.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE / Constants.DRIVE_PULSES_PER_REVOLUTION);
 
         encRight = new Encoder(Constants.ENCODER_RIGHT_1, Constants.ENCODER_RIGHT_2);
-        encRight.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE * (1 / Constants.DRIVE_PULSES_PER_REVOLUTION));
+        encRight.setDistancePerPulse(Constants.DRIVEWHEEL_CIRCUMFERENCE / Constants.DRIVE_PULSES_PER_REVOLUTION);
     }
 
     @Override
@@ -39,7 +39,6 @@ public class DriveTrain extends Subsystem {
 
     public void setLeftMotors (double speed) {
         leftMotors.set(speed);
-        //System.out.println("THE LEFT MOTORS SET");
     }
 
     public void stop() {
@@ -47,7 +46,15 @@ public class DriveTrain extends Subsystem {
         setRightMotors(0);
     }
 
+    public void resetEncoders() {
+        encLeft.reset();
+        encRight.reset();
+    }
+
     public double getDistanceTraveled() {
+//        System.out.println("EncLeft = " + encLeft.getDistance() + " EncRight = " + encRight.getDistance());
+//        System.out.println("EncLeftRate = " + encLeft.getRate());
+//        System.out.println("EncRightRate = " + encRight.getRate());
         return (encLeft.getDistance() + encRight.getDistance()) / 2;
     }
 
@@ -58,4 +65,5 @@ public class DriveTrain extends Subsystem {
         leftMotors.setInverted(leftInverted);
         rightMotors.setInverted(rightInverted);
     }
+
 }

@@ -5,5 +5,7 @@ public enum AutonScenario {
     LEFT_SIDE,
     RIGHT_SIDE,
     MIDDLE,
+    LEFT_NO_GEAR,
+    RIGHT_NO_GEAR,
     NOTHING
 }

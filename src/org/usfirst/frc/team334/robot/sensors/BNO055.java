@@ -758,24 +758,24 @@ public class BNO055 {
 	 * @return heading in degrees
 	 */
 	public double getHeading() {
-		return (xyz[0] + turns * 360) - headingOffset;
+		return xyz[0] + turns * 360 - headingOffset;
 	}
 
 	/**
 	 * Resets the heading to 0 degrees
 	 */
 	public void resetHeading() {
-		this.headingOffset = getHeading();
+		this.headingOffset = xyz[0] + turns * 360;
 	}
 
 	/**
 	 * Changes the heading back to its true value (as if
-	 * resetHeading() was never called).
+	 * resetHeading() was never called)
 	 */
 	public void trueHeading() {
 		this.headingOffset = 0.0;
 	}
-	
+
 	/**
 	 * Writes an 8 bit value over I2C
 	 * @param reg the register to write the data to

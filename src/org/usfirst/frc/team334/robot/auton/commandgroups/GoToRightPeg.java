@@ -15,7 +15,7 @@ import org.usfirst.frc.team334.robot.controls.Constants;
 public class GoToRightPeg extends CommandGroup {
 
     /**
-     * Perform task in order
+     * Perform tasks in order
      *
      * Steps:
      *      1) Go straight to baseline
@@ -23,11 +23,11 @@ public class GoToRightPeg extends CommandGroup {
      *      3) Vision to get close
      */
     public GoToRightPeg(DriveTrain driveTrain, GyroPID gyroPID, VisionAutoAlign visionAutoAlign, Gear gear) {
-        addSequential(new Straight(Constants.DISTANCE_TO_BASELINE, driveTrain, gyroPID));
-        addSequential(new Turn(-Constants.ANGLE_TO_PEG, driveTrain, gyroPID));
+        addSequential(new Straight(Constants.DISTANCE_TO_BASELINE, Constants.STRAIGHT_TIME_GEAR, driveTrain, gyroPID));
+        addSequential(new Turn(Constants.ANGLE_TO_PEG, Constants.TURN_TIME, driveTrain, gyroPID));
         addSequential(new VisionAuton(visionAutoAlign, Target.GEAR));
         addSequential(new GearOut(gear));
-        addSequential(new Straight(Constants.DISTANCE_FROM_PEG_TO_KEY, driveTrain, gyroPID));
+        addSequential(new Straight(-3, Constants.STRAIGHT_TIME_BACK, driveTrain, gyroPID));
     }
 
 }

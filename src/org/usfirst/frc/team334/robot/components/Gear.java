@@ -24,16 +24,16 @@ public class Gear extends Subsystem {
     }
 
     public void pushOutGear() {
-        left.setAngle(Constants.lEFT_SERVO_OUT);
+        left.setAngle(Constants.LEFT_SERVO_OUT);
         right.setAngle(Constants.RIGHT_SERVO_OUT);
         isGearOut = true;
     }
 
-    public void gripGear() {
-        left.setAngle(Constants.LEFT_SERVO_GRIP);
-        right.setAngle(Constants.RIGHT_SERVO_GRIP);
-        isGearOut = false;
-    }
+//    public void gripGear() {
+//        left.setAngle(Constants.LEFT_SERVO_GRIP);
+//        right.setAngle(Constants.RIGHT_SERVO_GRIP);
+//        isGearOut = false;
+//    }
 
     public void resetServos() {
         left.setAngle(Constants.LEFT_SERVO_RESET);

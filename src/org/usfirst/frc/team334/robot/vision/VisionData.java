@@ -26,7 +26,7 @@ public class VisionData {
     public static void init() {
         nt = NetworkTable.getTable("vision");
         nt.addTableListener((source, key, value, isNew) -> {
-            System.out.println("Value changed. Key = " + key + ", Value = " + value);
+//          System.out.println("Value changed. Key = " + key + ", Value = " + value);
             switch (key) {
                 case FOUND_TARGET_KEY:
                     foundTarget = (Boolean) value;
@@ -57,7 +57,8 @@ public class VisionData {
     }
 
     public static boolean foundTarget() {
-        return foundTarget;
+        return VisionData.getNt().getBoolean(FOUND_TARGET_KEY, false);
+//        return foundTarget;
     }
 
     public static double getArea() {

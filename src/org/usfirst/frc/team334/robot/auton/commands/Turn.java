@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team334.robot.auton.pids.GyroPID;
 import org.usfirst.frc.team334.robot.components.DriveTrain;
+import org.usfirst.frc.team334.robot.controls.Constants;
 
 public class Turn extends Command {
 
@@ -12,20 +13,20 @@ public class Turn extends Command {
     private GyroPID gyroPID;
     private DriveTrain driveTrain;
 
-    public Turn(double angle, DriveTrain driveTrain, GyroPID gyroPID) {
+    public Turn(double angle, double time, DriveTrain driveTrain, GyroPID gyroPID) {
         requires(driveTrain);
 
         this.angle = angle;
         this.gyroPID = gyroPID;
         this.driveTrain = driveTrain;
 
-        setTimeout(2);
+        setTimeout(time);
     }
 
     // Called once at start of command
     public void initialize() {
         gyroPID.getController().setSetpoint(angle);
-       // gyroPID.getController().setAbsoluteTolerance(angle * .05); // 5% tolerance
+        gyroPID.resetGyro();
     }
 
     /**
@@ -33,20 +34,17 @@ public class Turn extends Command {
      *
      *  Steps:
      *      1) Set degrees to turn
-     *      2) Turn to degrees
-     *      3) Done
+     *      2) Turn to degrees for 2 seconds
      */
     public void execute() {
         SmartDashboard.putString("Mode", "TURN");
-        System.out.println("TURN" + gyroPID.getOutput() + " setpoint " + gyroPID.getController().getSetpoint());
+//        System.out.println("TURN");
 
         double speed = 0.0;
+        double leftSpeed = speed - gyroPID.getOutput();
+        double rightSpeed = speed + gyroPID.getOutput();
 
-        //System.out.println("gyro out", gyroPID.getOutput());
-        double leftSpeed = speed + gyroPID.getOutput();
-        double rightSpeed = speed - gyroPID.getOutput();
-
-        System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
+//        System.out.println("left speed " + leftSpeed + " right speed " + rightSpeed);
 
         driveTrain.setLeftMotors(leftSpeed);
         driveTrain.setRightMotors(rightSpeed);
@@ -59,7 +57,7 @@ public class Turn extends Command {
     }
 
     protected void end() {
-        System.out.println("Done");
+        System.out.println("Turn Done");
         driveTrain.stop();
     }
 

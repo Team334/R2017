@@ -23,16 +23,27 @@ public class GyroPID {
         SmartDashboard.putData("GryoPID", gyroPID);
     }
 
+    /**
+     * @return Gyro angle
+     */
     public double getInput() {
         return gyroSource.pidGet();
     }
 
+    /**
+     * @return Values to set motors
+     */
     public double getOutput() {
         return gyroPID.get();
     }
 
     public PIDController getController() {
         return gyroPID;
+    }
+
+    public void resetGyro() {
+        gyroSource.getGyro().resetHeading();
+//        gyroSource.getGyro().reset();
     }
 
 }

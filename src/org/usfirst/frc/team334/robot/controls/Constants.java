@@ -13,8 +13,8 @@ public class Constants {
     public final static int DRIVETRAIN_LEFT = 0,
                             DRIVETRAIN_RIGHT = 1;
 
-    public final static int INDEXER_BELT = 3;
     public final static int INDEXER2_ROLLER = 2;
+    public final static int INDEXER_BELT = 3;
 
     public final static int GEAR_LEFT = 4,
                             GEAR_RIGHT = 5;
@@ -89,8 +89,8 @@ public class Constants {
 
     public final static double INTAKE_SPEED = 0.5;
     public final static double CLIMB_SPEED = 1;
-    public final static double INDEXER_BELT_SPEED = -.7;
-    public final static double INDEXER_ROLLER_SPEED = -0.4;
+    public final static double INDEXER_BELT_SPEED = -1;
+    public final static double INDEXER_ROLLER_SPEED = -0.3;
     public final static double SHOOTER_SPEED = 0.74;
 
     public final static double ANGLER_ANGLE = 90;
@@ -104,7 +104,7 @@ public class Constants {
     // REAL ROBOT
     public final static int LEFT_SERVO_OUT = 120, // 150
                             RIGHT_SERVO_OUT = 40; // 40
-    public final static int LEFT_SERVO_RESET = 160,
+    public final static int LEFT_SERVO_RESET = 170,
                             RIGHT_SERVO_RESET = 10;
 
     public static final double DRIVE_SLOW_FACTOR = 0.6; // UPDATE

@@ -14,10 +14,10 @@ public class Shooter extends Subsystem {
 
     public Shooter() {
         shooterMotor = new VictorSP(Constants.SHOOTER);
-        shooterMotor2 = new VictorSP(Constants.SHOOTER_2);
+        // shooterMotor2 = new VictorSP(Constants.SHOOTER_2);
 
         shooterMotor.setInverted(true);
-        shooterMotor2.setInverted(true);
+        // shooterMotor2.setInverted(true);
 
         hallEffect = new Counter(Constants.HALL_EFFECT);
         hallEffect.setDistancePerPulse(1);
@@ -32,7 +32,7 @@ public class Shooter extends Subsystem {
 
     public void setShooterSpeed(double speed) {
         shooterMotor.set(speed);
-        shooterMotor2.set(speed);
+        // shooterMotor2.set(speed);
     }
 
     public double getHallEffectRate() {

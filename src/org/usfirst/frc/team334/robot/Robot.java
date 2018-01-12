@@ -195,15 +195,26 @@ public class Robot extends IterativeRobot {
             double leftSpeed = controls.getLeftDrive() - stickCalLeft;
             double rightSpeed = controls.getRightDrive() - stickCalRight;
 
-            if (controls.getSlowRamp()) {
-                double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
-                leftSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
-                rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
+//            if (controls.getSlowRamp()) {
+//                double sens = 1 + Math.abs(controls.getLeftDrive() - controls.getRightDrive());
+//                leftSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
+//                rightSpeed /= sens * Constants.DRIVE_SLOW_FACTOR;
+//            }
+            double slow = 0;
+            if (controls.getSecret()){
+                slow = 0.6;
             }
-
-            double slow = 1;
-            driveTrain.setLeftMotors(leftSpeed * slow);
-            driveTrain.setRightMotors(rightSpeed * slow);
+            else {
+                slow = 0.35;
+            }
+            //if(controls.getXboxEstop()) slow = 0;
+            if(controls.getDriveControl()){
+                driveTrain.setLeftMotors(leftSpeed * slow);
+                driveTrain.setRightMotors(rightSpeed * slow);
+            }
+            else {
+                driveTrain.stop();
+            }
 //        }
 
         updateSmartDashboard();
@@ -234,23 +245,27 @@ public class Robot extends IterativeRobot {
         intakeSpeed = SmartDashboard.getNumber("Intake Speed", 0);
         indexerRollerSpeed = SmartDashboard.getNumber("IntakeRoller Speed", 0);
 
-        // CLIMBER LISTENER
-        if (controls.getClimbUp() && !controls.getClimbDown()) {
-            System.out.println("CLIMBING UP");
-            climberIntake.climbUp();
-        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
-            System.out.println("CLIMBING DOWN");
-            climberIntake.climbDown();
-        } else {
-            climberIntake.stop();
-        }
+//        // CLIMBER LISTENER
+//        if (controls.getClimbUp() && !controls.getClimbDown()) {
+//            System.out.println("CLIMBING UPP");
+//            climberIntake.climbUp();
+//        } else if (controls.getClimbDown() && !controls.getClimbUp()) {
+//            System.out.println("CLIMBING DOWN");
+//            climberIntake.climbDown();
+//        } else {
+//            climberIntake.stop();
+//        }
 
         // INTAKE LISTENER
         if (controls.getIntakeIn() && !controls.getIntakeOut()) {
             System.out.println("INTAKE");
             climberIntake.intakeIn();
-        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
-            climberIntake.intakeOut();
+        }
+//        } else if (controls.getIntakeOut() && !controls.getIntakeIn()) {
+//            climberIntake.intakeOut();
+//        }
+        else {
+            climberIntake.stop();
         }
 
         // INDEXER LISTENER
@@ -265,9 +280,11 @@ public class Robot extends IterativeRobot {
         // SHOOTER LISTENER
         if (controls.getShoot()) {
             System.out.println("SHOOTING");
-//            shooter.setShooterSpeed(shooterSpeed);
-            shooter.setShooterSpeed(Constants.SHOOTER_SPEED + controls.getShooterSpeedAdjustment());
+//            shooter.setShooterSpeed(shooterSpeed);s
+            shooter.setShooterSpeed(Constants.SHOOTER_SPEED); // + controls.getShooterSpeedAdjustment());
+            // climberIntake.intakeIn();
         } else {
+            // climberIntake.stop();
             shooter.setShooterSpeed(0);
         }
 //

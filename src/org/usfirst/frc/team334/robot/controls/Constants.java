@@ -20,12 +20,11 @@ public class Constants {
                             GEAR_RIGHT = 5;
 
     public final static int SHOOTER = 6;
-    public final static int SHOOTER_2 = 7;
+    public final static int ANGLER = 7;
+    // public final static int SHOOTER_2 = 7;
 
     public final static int CLIMBER_INTAKE = 8;
     public final static int CLIMBER_INTAKE_2 = 9;
-
-//    public final static int ANGLER = 7;
 
     public final static int HALL_EFFECT = 5;
 
@@ -91,7 +90,7 @@ public class Constants {
     public final static double CLIMB_SPEED = 1;
     public final static double INDEXER_BELT_SPEED = -1;
     public final static double INDEXER_ROLLER_SPEED = -0.3;
-    public final static double SHOOTER_SPEED = 0.74;
+    public final static double SHOOTER_SPEED = 0.65; //0.74;
 
     public final static double ANGLER_ANGLE = 90;
 
@@ -124,5 +123,26 @@ public class Constants {
 
     public static final double STRAIGHT_SPEED = 0.3;
     public static final double TURN_TIME = 1;
+
+    // ----------------------- JOYSSTSICK MAPPINGS -----------------------------------
+
+    // LEFT JOYSTICK
+    public static final int CLIMB_UP_B = 4;
+    public static final int CLIMB_DOWN_B = 5;
+    public static final int INTAKE_IN_B = 2;
+    public static final int DRIVE_CONTROL_B = 3;
+    public static final int GEAR_OUT_B = 1;
+
+    public static final int INTAKE_OUT_B = 2;
+
+    // RIGHT JOYSTICK
+    public static final int INDEXER_IN_B = 1;
+    public static final int INDEXER_OUT_B = -1;
+    public static final int SHOOT_B = 3;
+    public static final int TOGGLE_CAMERA_B = 8;
+    public static final int SECRET_B = 5;
+
+    //XBOX CONTROLS
+    public static final int XBOX_E_STOP = 1;
 
 }

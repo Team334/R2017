@@ -17,13 +17,13 @@ public class DriveTrain extends Subsystem {
     private Encoder encLeft;
     private Encoder encRight;
 
-    private boolean leftInverted = false;
-    private boolean rightInverted = true;
+    private boolean leftInverted = true;
+    private boolean rightInverted = false;
 
     public DriveTrain () {
         rightMotors = new VictorSP(Constants.DRIVETRAIN_RIGHT);
         leftMotors = new VictorSP(Constants.DRIVETRAIN_LEFT);
-        kangs:
+
         rightMotors.setInverted(rightInverted);
         leftMotors.setInverted(leftInverted);
 
